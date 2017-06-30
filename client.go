@@ -6,7 +6,9 @@ import (
 
 	"github.com/tim-online/go-mews/accountingcategories"
 	"github.com/tim-online/go-mews/accountingitems"
+	"github.com/tim-online/go-mews/companies"
 	"github.com/tim-online/go-mews/json"
+	"github.com/tim-online/go-mews/reservations"
 )
 
 const (
@@ -27,7 +29,7 @@ var (
 	}
 )
 
-// NewClient returns a new Nmbrs API client
+// NewClient returns a new MEWS API client
 func NewClient(httpClient *http.Client, token string) *Client {
 	if httpClient == nil {
 		httpClient = http.DefaultClient
@@ -39,7 +41,7 @@ func NewClient(httpClient *http.Client, token string) *Client {
 	jsonClient.Debug = false
 
 	c := &Client{
-		client:  jsonClient,
+		client: jsonClient,
 	}
 
 	c.SetBaseURL(BaseURL)
@@ -49,11 +51,15 @@ func NewClient(httpClient *http.Client, token string) *Client {
 	c.AccountingItems.Client = c.client
 	c.AccountingCategories = accountingcategories.NewService()
 	c.AccountingCategories.Client = c.client
+	c.Companies = companies.NewService()
+	c.Companies.Client = c.client
+	c.Reservations = reservations.NewService()
+	c.Reservations.Client = c.client
 
 	return c
 }
 
-// Client manages communication with Nmbrs API
+// Client manages communication with MEWS API
 type Client struct {
 	// HTTP client used to communicate with the API.
 	client *json.Client
@@ -61,6 +67,8 @@ type Client struct {
 	// Services used for communicating with the API
 	AccountingItems      *accountingitems.Service
 	AccountingCategories *accountingcategories.Service
+	Companies            *companies.Service
+	Reservations         *reservations.Service
 }
 
 func (c *Client) SetDebug(debug bool) {
