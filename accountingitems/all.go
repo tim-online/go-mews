@@ -75,16 +75,18 @@ type AllRequest struct {
 // }
 
 type AccountingItem struct {
-	AccountingCategoryId string             `json:"AccountingCategoryId"`
-	Amount               Amount             `json:"Amount"`
-	BillID               string             `json:"BillId"`
-	ConsumptionUtc       time.Time          `json:"ConsumptionUtc"`
-	ID                   string             `json:"Id"`
-	Name                 string             `json:"Name"`
-	Notes                string             `json:"Notes"`
-	OrderID              string             `json:"OrderId"`
-	ProductID            string             `json:"ProductId"`
-	Type                 AccountingItemType `json:"Type"`
+	ID                   string             `json:"Id"`                   // Unique identifier of the item.
+	CustomerID           string             `json:"CustomerId"`           // Unique identifier of the Customer whose account the item belongs to.
+	ProductID            string             `json:"ProductId"`            // Unique identifier of the Product.
+	ServiceID            string             `json:"ServiceId"`            // Unique identifier of the Service the item belongs to.
+	OrderID              string             `json:"OrderId"`              // Unique identifier of the order (or Reservation) the item belongs to.
+	BillID               string             `json:"BillId"`               // Unique identifier of the bill the item is assigned to.
+	AccountingCategoryID string             `json:"AccountingCategoryId"` // Unique identifier of the Accounting Category the item belongs to.
+	Amount               Amount             `json:"Amount"`               // Amount the item costs, negative amount represents either rebate or a payment.
+	Type                 AccountingItemType `json:"Type"`                 // Type of the item.
+	Name                 string             `json:"Name"`                 // Name of the item.
+	Notes                string             `json:"Notes"`                // Additional notes.
+	ConsumptionUtc       time.Time          `json:"ConsumptionUtc"`       // Date and time of the item consumption in UTC timezone in ISO 8601 format.
 }
 
 type Amount struct {
