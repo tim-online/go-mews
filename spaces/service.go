@@ -1,4 +1,4 @@
-package reservations
+package spaces
 
 import "github.com/tim-online/go-mews/json"
 
