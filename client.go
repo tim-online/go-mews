@@ -58,6 +58,8 @@ func NewClient(httpClient *http.Client, token string) *Client {
 	c.Customers.Client = c.client
 	c.Reservations = reservations.NewService()
 	c.Reservations.Client = c.client
+	c.Spaces = spaces.NewService()
+	c.Spaces.Client = c.client
 
 	return c
 }
@@ -73,6 +75,7 @@ type Client struct {
 	Companies            *companies.Service
 	Customers            *customers.Service
 	Reservations         *reservations.Service
+	Spaces               *spaces.Service
 }
 
 func (c *Client) SetDebug(debug bool) {
