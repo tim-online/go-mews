@@ -80,7 +80,7 @@ type SpaceFeature struct {
 	Description string `json:"Description"` // Description of the feature.
 }
 
-type SpaceFeatureAssignments struct {
+type SpaceFeatureAssignment struct {
 	SpaceID        string `json:"SpaceId"`        // Unique identifier Space.
 	SpaceFeatureID string `json:"SpaceFeatureId"` // Unique identifier Space Feature.
 }
