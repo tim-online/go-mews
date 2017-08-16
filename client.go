@@ -10,6 +10,7 @@ import (
 	"github.com/tim-online/go-mews/customers"
 	"github.com/tim-online/go-mews/json"
 	"github.com/tim-online/go-mews/reservations"
+	"github.com/tim-online/go-mews/spaces"
 )
 
 const (
@@ -60,6 +61,8 @@ func NewClient(httpClient *http.Client, token string) *Client {
 	c.Reservations.Client = c.client
 	c.Spaces = spaces.NewService()
 	c.Spaces.Client = c.client
+	c.Bills = bills.NewService()
+	c.Bills.Client = c.client
 
 	return c
 }
@@ -76,6 +79,7 @@ type Client struct {
 	Customers            *customers.Service
 	Reservations         *reservations.Service
 	Spaces               *spaces.Service
+	Bills                *bills.Service
 }
 
 func (c *Client) SetDebug(debug bool) {
