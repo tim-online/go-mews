@@ -1,4 +1,4 @@
-package spaces
+package bills
 
 import (
 	"errors"
@@ -44,8 +44,8 @@ func (s *Service) NewAllRequest() *AllRequest {
 
 type AllRequest struct {
 	AccessToken string     `json:"AccessToken"`
-	StartUtc    *time.Time `json:"StartUtc,omitempty"`
-	EndUtc      *time.Time `json:"EndUtc,omitempty`
+	StartUTC    *time.Time `json:"StartUtc,omitempty"`
+	EndUTC      *time.Time `json:"EndUtc,omitempty"`
 }
 
 type AllResponse struct {
@@ -64,9 +64,16 @@ type Bill struct {
 	Payments  Payments  `json:"Payments"`  // The payments on the bill.
 }
 
+type BillType string
+
+const (
+	BillTypeReceipt BillType = "Receipt"
+	BillTypeInvoice BillType = "Invoice"
+)
+
 type Revenue []AccountingItem
 
-type AccountingItems struct {
+type AccountingItem struct {
 	ID                   string             `json:"Id"`                   // Unique identifier of the item.
 	CustomerID           string             `json:"CustomerId"`           // Unique identifier of the Customer whose account the item belongs to.
 	ProductID            string             `json:"ProductId"`            // Unique identifier of the Product.
@@ -95,7 +102,7 @@ type Payments []AccountingItem
 type Amount struct {
 	Currency string  `json:"Currency"` // ISO-4217 currency code, e.g. EUR or USD.
 	Net      float64 `json:"Net"`      // Net value in case the item is taxed.
-	Tax      int     `json:"Tax"`      // Tax value in case the item is taxed.
-	TaxRate  int     `json:"TaxRate"`  // Tax rate in case the item is taxed (e.g. 0.21).
+	Tax      float64 `json:"Tax"`      // Tax value in case the item is taxed.
+	TaxRate  float64 `json:"TaxRate"`  // Tax rate in case the item is taxed (e.g. 0.21).
 	Value    float64 `json:"Value"`    // Amount in the currency (including tax if taxed).
 }

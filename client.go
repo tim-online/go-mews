@@ -6,6 +6,7 @@ import (
 
 	"github.com/tim-online/go-mews/accountingcategories"
 	"github.com/tim-online/go-mews/accountingitems"
+	"github.com/tim-online/go-mews/bills"
 	"github.com/tim-online/go-mews/companies"
 	"github.com/tim-online/go-mews/customers"
 	"github.com/tim-online/go-mews/json"
