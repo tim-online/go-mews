@@ -40,7 +40,7 @@ func (s *Service) NewAllRequest() *AllRequest {
 }
 
 type AllRequest struct {
-	AccessToken string                `json:"AccessToken"`
+	AccessToken string `json:"AccessToken"`
 }
 
 type AllResponse struct {
@@ -48,6 +48,7 @@ type AllResponse struct {
 }
 
 type Company struct {
-	ID   string `json:"Id"`
-	Name string `json:"Name"`
+	ID                      string `json:"Id"`                      // Unique identifier of the company.
+	Name                    string `json:"Name"`                    // Name of the company.
+	TaxIdentificationNumber string `json:"TaxIdentificationNumber"` // Tax identification number of the company.
 }
