@@ -54,6 +54,7 @@ type AllByIDsResponse struct {
 
 type Customer struct {
 	ID              string           `json:"Id"`              // Unique identifier of the customer.
+	Number          string           `json:"Number"`          // Number of the customer.
 	FirstName       string           `json:"FirstName"`       // First name of the customer.
 	LastName        string           `json:"LastName"`        // Last name of the customer.
 	SecondLastName  string           `json:"SecondLastName"`  // Second last name of the customer.
