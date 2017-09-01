@@ -62,7 +62,7 @@ type Customer struct {
 	Gender          Gender           `json:"Gender"`          // Gender of the customer.
 	NationalityCode string           `json:"NationalityCode"` // ISO 3166-1 alpha-2 country code (two letter country code) of the nationality.
 	LanguageCode    string           `json:"LanguageCode"`    // Language and culture code of the customers preferred language. E.g. en-US or fr-FR.
-	BirthDate       Date             `json:"BirthDate"`       // Date of birth in ISO 8601 format.
+	BirthDate       string           `json:"BirthDate"`       // Date of birth in ISO 8601 format.
 	BirthPlace      string           `json:"BirthPlace"`      // Place of birth.
 	Email           string           `json:"Email"`           // Email address of the customer.
 	Phone           string           `json:"Phone"`           // Phone number of the customer (possibly mobile).
@@ -94,7 +94,13 @@ type Address struct {
 	CountryCode string `json:"CountryCode"` // ISO 3166-1 alpha-2 country code (two letter country code).
 }
 
-type Date time.Time
+type Date struct {
+	time.Time
+}
+
+func (d Date) MarshalJSON() ([]byte, error) {
+	return json.Marshal(d.Time.Format("2006-01-02"))
+}
 
 func (d *Date) UnmarshalJSON(data []byte) error {
 	var value string
@@ -107,11 +113,11 @@ func (d *Date) UnmarshalJSON(data []byte) error {
 		return nil
 	}
 
-	t, err := time.Parse("2006-01-02", value)
-	if err != nil {
+	d.Time, err = time.Parse("2006-01-02", value)
+	if err == nil {
 		return err
 	}
 
-	*d = Date(t)
-	return nil
+	d.Time, err = time.Parse(time.RFC3339, value)
+	return err
 }
