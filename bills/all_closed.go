@@ -55,16 +55,16 @@ type AllResponse struct {
 type Bills []Bill
 
 type Bill struct {
-	CompanyID  string    `json:"CompanyId"`
-	CustomerID string    `json:"CompanyId"`
-	DueUTC     time.Time `json:"DueUtc"`    // @TODO
-	ID         string    `json:"Id"`        // Unique identifier of the bill.
-	Type       BillType  `json:"Type"`      // Type of the bill.
-	Number     string    `json:"Number"`    // Number of the bill.
-	IssuedUTC  time.Time `json:"IssuedUtc"` // Date and time of the bill issuance in UTC timezone in ISO 8601 format.
-	Notes      string    `json:"Notes"`     // Additional notes.
-	Revenue    Revenue   `json:"Revenue"`   // The revenue items on the bill.
-	Payments   Payments  `json:"Payments"`  // The payments on the bill.
+	ID         string    `json:"Id"`         // Unique identifier of the bill.
+	CustomerID string    `json:"CustomerId"` // Unique identifier of the Customer the bill is issued to.
+	CompanyID  string    `json:"CompanyId"`  // Unique identifier of the Company the bill is issued to.
+	Type       BillType  `json:"Type"`       // Type of the bill.
+	Number     string    `json:"Number"`     // Number of the bill.
+	IssuedUTC  time.Time `json:"IssuedUtc"`  // Date and time of the bill issuance in UTC timezone in ISO 8601 format.
+	DueUTC     time.Time `json:"DueUtc"`     // Bill due date and time in UTC timezone in ISO 8601 format.
+	Notes      string    `json:"Notes"`      // Additional notes.
+	Revenue    Revenue   `json:"Revenue"`    // The revenue items on the bill.
+	Payments   Payments  `json:"Payments"`   // The payments on the bill.
 }
 
 type BillType string
