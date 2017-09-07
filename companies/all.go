@@ -48,7 +48,8 @@ type AllResponse struct {
 }
 
 type Company struct {
-	ID                      string `json:"Id"`                      // Unique identifier of the company.
-	Name                    string `json:"Name"`                    // Name of the company.
+	ID                      string `json:"Id"`   // Unique identifier of the company.
+	Name                    string `json:"Name"` // Name of the company.
+	Identifier              string `json:"Identifier"`
 	TaxIdentificationNumber string `json:"TaxIdentificationNumber"` // Tax identification number of the company.
 }
