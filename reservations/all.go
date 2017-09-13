@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"errors"
 	"time"
+
+	"github.com/tim-online/go-mews/customers"
 )
 
 const (
@@ -40,17 +42,17 @@ func (s *Service) All(requestBody *AllRequest) (*AllResponse, error) {
 }
 
 type AllResponse struct {
-	BusinessSegments  BusinessSegments  `json:"BusinessSegments"`  //  Business segments of the reservations.
-	Customers         Customers         `json:"Customers"`         // Customers that are members of the reservations.
-	Items             AccountingItems   `json:"Items"`             // Revenue items of the reservations.
-	Products          Products          `json:"Products"`          // Products orderable with reservations.
-	RateGroups        RateGroups        `json:"RateGroups"`        // Rate groups of the reservation rates.
-	Rates             Rates             `json:"Rates"`             // Rates of the reservations.
-	ReservationGroups ReservationGroups `json:"ReservationGroups"` // Reservation groups that the reservations are members of.
-	Reservations      Reservations      `json:"Reservations"`      // The reservations that collide with the specified interval.
-	Services          Services          `json:"Services"`          // Services that have been reserved.
-	SpaceCategories   SpaceCategories   `json:"SpaceCategories"`   // Space categories of the spaces.
-	Spaces            Spaces            `json:"Spaces"`            // Assigned spaces of the reservations.
+	BusinessSegments  BusinessSegments    `json:"BusinessSegments"`  //  Business segments of the reservations.
+	Customers         customers.Customers `json:"Customers"`         // Customers that are members of the reservations.
+	Items             AccountingItems     `json:"Items"`             // Revenue items of the reservations.
+	Products          Products            `json:"Products"`          // Products orderable with reservations.
+	RateGroups        RateGroups          `json:"RateGroups"`        // Rate groups of the reservation rates.
+	Rates             Rates               `json:"Rates"`             // Rates of the reservations.
+	ReservationGroups ReservationGroups   `json:"ReservationGroups"` // Reservation groups that the reservations are members of.
+	Reservations      Reservations        `json:"Reservations"`      // The reservations that collide with the specified interval.
+	Services          Services            `json:"Services"`          // Services that have been reserved.
+	SpaceCategories   SpaceCategories     `json:"SpaceCategories"`   // Space categories of the spaces.
+	Spaces            Spaces              `json:"Spaces"`            // Assigned spaces of the reservations.
 }
 
 type Reservations []Reservation
@@ -130,27 +132,6 @@ const (
 	ReservationTimeFilterOverlapping ReservationTimeFilter = "Overlapping"
 	ReservationTimeFilterCancelled   ReservationTimeFilter = "Cancelled"
 )
-
-type Customers []Customer
-
-type Customer struct {
-	ID              string    `json"Id"`              // Unique identifier of the customer.
-	FirstName       string    `json"FirstName"`       // First name of the customer.
-	LastName        string    `json"LastName"`        // Last name of the customer.
-	Title           Title     `json"Title"`           // Title prefix of the customer.
-	Gender          Gender    `json"Gender"`          // Gender of the customer.
-	NationalityCode string    `json"NationalityCode"` // ISO 3166-1 alpha-2 country code (two letter country code) of the nationality.
-	LanguageCode    string    `json"LanguageCode"`    // Language and culture code of the customers preferred language. E.g. en-US or fr-FR.
-	BirthDate       string    `json"BirthDate"`       // Date of birth in ISO 8601 format.
-	BirthPlace      string    `json"BirthPlace"`      // Place of birth.
-	Email           string    `json"Email"`           // Email address of the customer.
-	Phone           string    `json"Phone"`           // Phone number of the customer (possibly mobile).
-	CategoryId      string    `json"CategoryId"`      // Unique identifier of the customer category.
-	Passport        Document  `json"Passport"`        // Passport details of the customer.
-	Address         Address   `json"Address"`         // Address of the customer.
-	CreatedUTC      time.Time `json"CreatedUtc"`      // Creation date and time of the customer in UTC timezone in ISO 8601 format.
-	UpdatedUTC      time.Time `json"UpdatedUtc"`      // Last update date and time of the customer in UTC timezone in ISO 8601 format.
-}
 
 type Title string
 

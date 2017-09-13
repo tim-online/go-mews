@@ -49,8 +49,10 @@ type AllByIDsRequest struct {
 }
 
 type AllByIDsResponse struct {
-	Customers []Customer `json:"customers"`
+	Customers Customers `json:"customers"`
 }
+
+type Customers []Customer
 
 type Customer struct {
 	ID              string           `json:"Id"`              // Unique identifier of the customer.
@@ -76,7 +78,18 @@ type Customer struct {
 
 type Title string
 
+const (
+	TitleMister Title = "Mister"
+	TitleMiss   Title = "Miss"
+	TitleMisses Title = "Missed"
+)
+
 type Gender string
+
+const (
+	GenderMale   Gender = "Male"
+	GenderFemale Gender = "Female"
+)
 
 type Document struct {
 	Number     string `json:"Number"`     // Number of the document (e.g. passport number).
