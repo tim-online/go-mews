@@ -151,7 +151,7 @@ const (
 type BusinessSegments []BusinessSegment
 
 type BusinessSegment struct {
-	Id       string `json:"ID"`       // Unique identifier of the segment.
+	ID       string `json:"Id"`       // Unique identifier of the segment.
 	IsActive bool   `json:"IsActive"` // Whether the business segment is still active.
 	Name     string `json:"Name"`     // Name of the segment.
 }
