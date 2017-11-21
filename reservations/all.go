@@ -68,10 +68,10 @@ type AllRequest struct {
 	StartUTC    *time.Time            `json:"StartUtc,omitempty"`
 	EndUTC      *time.Time            `json:"EndUtc,omitempty"`
 	States      []ReservationState    `json:"States"`
-	Extent      AllExtent             `json:"Extent,omitempty"`
+	Extent      ReservationExtent     `json:"Extent,omitempty"`
 }
 
-type AllExtent struct {
+type ReservationExtent struct {
 	BusinessSegments  bool `json:"BusinessSegments"`  // Whether the response should contain business segmentation.
 	Customers         bool `json:"Customers"`         // Whether the response should contain customers of the reservations.
 	Items             bool `json:"Items"`             // Whether the response should contain reservation items.
