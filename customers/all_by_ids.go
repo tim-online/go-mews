@@ -49,7 +49,7 @@ type AllByIDsRequest struct {
 }
 
 type AllByIDsResponse struct {
-	Customers Customers `json:"customers"`
+	Customers Customers `json:"Customers"`
 }
 
 type Customers []Customer
