@@ -5,7 +5,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/tim-online/go-mews/accountingcategories"
+	"github.com/tim-online/go-mews/bills"
 )
 
 func TestDing(t *testing.T) {
@@ -15,17 +15,18 @@ func TestDing(t *testing.T) {
 	// build client
 	client := NewClient(nil, token)
 	client.SetDebug(true)
-	client.SetBaseURL(baseURLDemo)
+	client.SetBaseURL(BaseURL)
 
-	requestBody := &accountingcategories.AllRequest{}
-	resp, err := client.AccountingCategories.All(requestBody)
+	requestBody := &bills.AllByIDsRequest{}
+	requestBody.BillIDs = []string{"79931cf5-e483-4738-bbc9-8835009db19c"}
+	resp, err := client.Bills.AllByIDs(requestBody)
 	if err != nil {
 		panic(err)
 	}
 
-	categories := resp.AccountingCategories
-	for _, cat := range categories {
-		fmt.Printf("%+v\n", cat)
+	bills := resp.Bills
+	for _, bill := range bills {
+		fmt.Printf("%+v\n", bill)
 	}
 
 	// // request all companies this token has access to
