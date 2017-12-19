@@ -53,8 +53,8 @@ func (s *Service) NewAllRequest() *AllRequest {
 
 type AllRequest struct {
 	AccessToken string     `json:"AccessToken"`
-	StartUtc    *time.Time `json:"StartUtc,omitempty"`
-	EndUtc      *time.Time `json:"EndUtc,omitempty`
+	StartUTC    *time.Time `json:"StartUtc,omitempty"`
+	EndUTC      *time.Time `json:"EndUtc,omitempty"`
 }
 
 // 	"AccountingCategoryId": "4ac8ce68-5732-4f1d-bf0d-e557072c926f",
@@ -86,7 +86,7 @@ type AccountingItem struct {
 	Type                 AccountingItemType `json:"Type"`                 // Type of the item.
 	Name                 string             `json:"Name"`                 // Name of the item.
 	Notes                string             `json:"Notes"`                // Additional notes.
-	ConsumptionUtc       time.Time          `json:"ConsumptionUtc"`       // Date and time of the item consumption in UTC timezone in ISO 8601 format.
+	ConsumptionUTC       time.Time          `json:"ConsumptionUtc"`       // Date and time of the item consumption in UTC timezone in ISO 8601 format.
 }
 
 type Amount struct {
