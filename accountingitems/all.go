@@ -74,6 +74,8 @@ type AllRequest struct {
 // 	"Type": "ServiceRevenue"
 // }
 
+type AccountingItems []AccountingItem
+
 type AccountingItem struct {
 	ID                   string             `json:"Id"`                   // Unique identifier of the item.
 	CustomerID           string             `json:"CustomerId"`           // Unique identifier of the Customer whose account the item belongs to.
@@ -81,6 +83,7 @@ type AccountingItem struct {
 	ServiceID            string             `json:"ServiceId"`            // Unique identifier of the Service the item belongs to.
 	OrderID              string             `json:"OrderId"`              // Unique identifier of the order (or Reservation) the item belongs to.
 	BillID               string             `json:"BillId"`               // Unique identifier of the bill the item is assigned to.
+	InvoiceID            string             `json:"InvoiceId"`            // Unique identifier of the invoiced Bill the item is receivable for.
 	AccountingCategoryID string             `json:"AccountingCategoryId"` // Unique identifier of the Accounting Category the item belongs to.
 	Amount               Amount             `json:"Amount"`               // Amount the item costs, negative amount represents either rebate or a payment.
 	Type                 AccountingItemType `json:"Type"`                 // Type of the item.
@@ -90,10 +93,11 @@ type AccountingItem struct {
 }
 
 type Amount struct {
-	Currency string  `json:"Currency"`
-	Tax      float64 `json:"Tax"`
-	TaxRate  float64 `json:"TaxRate"`
-	Value    float64 `json:"Value"`
+	Currency string  `json:"Currency"` // ISO-4217 code of the Currency.
+	Net      float64 `json:"Net"`      // Net value in case the item is taxed.
+	Tax      float64 `json:"Tax"`      // Tax value in case the item is taxed.
+	TaxRate  float64 `json:"TaxRate"`  // Tax rate in case the item is taxed (e.g. 0.21).
+	Value    float64 `json:"Value"`    // Amount in the currency (including tax if taxed).
 }
 
 type AccountingItemType string

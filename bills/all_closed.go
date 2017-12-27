@@ -95,9 +95,9 @@ type AccountingItem struct {
 	Amount               Amount             `json:"Amount"`               // Amount the item costs, negative amount represents either rebate or a payment.
 	Type                 AccountingItemType `json:"Type"`                 // Type of the item.
 	Name                 string             `json:"Name"`                 // Name of the item.
-	InvoiceID            string             `json:"InvoiceId"`
-	Notes                string             `json:"Notes"`          // Additional notes.
-	ConsumptionUTC       time.Time          `json:"ConsumptionUtc"` // Date and time of the item consumption in UTC timezone in ISO 8601 format.
+	InvoiceID            string             `json:"InvoiceId"`            // Unique identifier of the invoiced Bill the item is receivable for.
+	Notes                string             `json:"Notes"`                // Additional notes.
+	ConsumptionUTC       time.Time          `json:"ConsumptionUtc"`       // Date and time of the item consumption in UTC timezone in ISO 8601 format.
 }
 
 type AccountingItemType string

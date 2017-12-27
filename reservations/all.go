@@ -5,6 +5,7 @@ import (
 	"errors"
 	"time"
 
+	"github.com/tim-online/go-mews/accountingitems"
 	"github.com/tim-online/go-mews/customers"
 )
 
@@ -17,7 +18,7 @@ var (
 )
 
 // List all products
-func (s *Service) All(requestBody *AllRequest) (*AllResponse, error) {
+func (s *APIService) All(requestBody *AllRequest) (*AllResponse, error) {
 	// @TODO: create wrapper?
 	// Set request token
 	requestBody.AccessToken = s.Client.Token
@@ -42,23 +43,32 @@ func (s *Service) All(requestBody *AllRequest) (*AllResponse, error) {
 }
 
 type AllResponse struct {
-	BusinessSegments  BusinessSegments    `json:"BusinessSegments"`  //  Business segments of the reservations.
-	Customers         customers.Customers `json:"Customers"`         // Customers that are members of the reservations.
-	Items             AccountingItems     `json:"Items"`             // Revenue items of the reservations.
-	Products          Products            `json:"Products"`          // Products orderable with reservations.
-	RateGroups        RateGroups          `json:"RateGroups"`        // Rate groups of the reservation rates.
-	Rates             Rates               `json:"Rates"`             // Rates of the reservations.
-	ReservationGroups ReservationGroups   `json:"ReservationGroups"` // Reservation groups that the reservations are members of.
-	Reservations      Reservations        `json:"Reservations"`      // The reservations that collide with the specified interval.
-	Services          Services            `json:"Services"`          // Services that have been reserved.
-	SpaceCategories   SpaceCategories     `json:"SpaceCategories"`   // Space categories of the spaces.
-	Spaces            Spaces              `json:"Spaces"`            // Assigned spaces of the reservations.
+	BusinessSegments  BusinessSegments                `json:"BusinessSegments"`  //  Business segments of the reservations.
+	Customers         customers.Customers             `json:"Customers"`         // Customers that are members of the reservations.
+	Items             accountingitems.AccountingItems `json:"Items"`             // Revenue items of the reservations.
+	Products          Products                        `json:"Products"`          // Products orderable with reservations.
+	RateGroups        RateGroups                      `json:"RateGroups"`        // Rate groups of the reservation rates.
+	Rates             Rates                           `json:"Rates"`             // Rates of the reservations.
+	ReservationGroups ReservationGroups               `json:"ReservationGroups"` // Reservation groups that the reservations are members of.
+	Reservations      Reservations                    `json:"Reservations"`      // The reservations that collide with the specified interval.
+	Services          Services                        `json:"Services"`          // Services that have been reserved.
+	SpaceCategories   SpaceCategories                 `json:"SpaceCategories"`   // Space categories of the spaces.
+	Spaces            Spaces                          `json:"Spaces"`            // Assigned spaces of the reservations.
 }
 
 type Reservations []Reservation
 type Services []Service
 
-func (s *Service) NewAllRequest() *AllRequest {
+type Service struct {
+	ID         string     `json:"Id"`         // Unique identifier of the service.
+	IsActive   bool       `json:"IsActive"`   // Whether the service is still active.
+	Name       string     `json:"Name"`       // Whether the service is still active.
+	StartTime  string     `json:"StartTime"`  // Default start time of the service orders in ISO 8601 duration format.
+	EndTime    string     `json:"EndTime"`    // Default end time of the service orders in ISO 8601 duration format.
+	Promotions Promotions `json:"Promotions"` // Promotions of the service.
+}
+
+func (s *APIService) NewAllRequest() *AllRequest {
 	return &AllRequest{}
 }
 
@@ -93,12 +103,15 @@ type Reservation struct {
 	ChannelManagerGroupNumber string           `json:"ChannelManagerGroupNumber"` // Number of the reservation group within a Channel manager that transferred the reservation from Channel to Mews.
 	ChannelManager            string           `json:"ChannelManager"`            // Name of the Channel manager (e.g. AvailPro, SiteMinder, TravelClick, etc).
 	State                     ReservationState `json:"State"`                     // State of the reservation.
+	Origin                    string           `json:"Origin"`                    // Origin of the reservation.
 	CreatedUTC                time.Time        `json:"CreatedUtc"`                // Creation date and time of the reservation in UTC timezone in ISO 8601 format.
 	UpdatedUTC                time.Time        `json:"UpdatedUtc"`                // Last update date and time of the reservation in UTC timezone in ISO 8601 format.
 	StartUTC                  time.Time        `json:"StartUtc"`                  // Start of the reservation (arrival) in UTC timezone in ISO 8601 format.
 	EndUTC                    time.Time        `json:"EndUtc"`                    // End of the reservation (departure) in UTC timezone in ISO 8601 format.
+	CancelledUTC              time.Time        `json:"CancelledUtc"`              // Cancellation date and time in UTC timezone in ISO 8601 format.
 	RequestedCategoryID       string           `json:"RequestedCategoryId"`       // Identifier of the requested Space Category.
 	AssignedSpaceID           string           `json:"AssignedSpaceId"`           // Identifier of the assigned Space.
+	AssignedSpaceLocked       bool             `json:"AssignedSpaceLocked"`       // Whether the reservation is locked in the assigned Space and cannot be moved.
 	BusinessSegmentID         string           `json:"BusinessSegmentId"`         // Identifier of the reservation Business Segment.
 	CompanyID                 string           `json:"CompanyId"`                 // Identifier of the Company on behalf of which the reservation was made.
 	TravelAgencyID            string           `json:"TravelAgencyId"`            // Identifier of the Company that mediated the reservation.
@@ -107,6 +120,7 @@ type Reservation struct {
 	ChildCount                int              `json:"ChildCount"`                // Count of children the reservation was booked for.
 	CustomerID                string           `json:"Customerid"`                // required	Unique identifier of the Customer who owns the reservation.
 	CompanionIDs              []string         `json:"CompanionIds"`              // Unique identifiers of Customers that will occupy the space.
+	ChannelManagerID          string           `json:"ChannelManagerId"`          // ??
 }
 
 type ReservationState string
@@ -170,22 +184,6 @@ type Address struct {
 	CountryCode string `json:"CountryCode"` // ISO 3166-1 alpha-2 country code (two letter country code).
 }
 
-type AccountingItems []AccountingItem
-
-type AccountingItem struct {
-	ID                   string        `json:"Id"`                   // Unique identifier of the item.
-	ProductID            string        `json:"ProductId"`            // Unique identifier of the Product.
-	ServiceID            string        `json:"ServiceId"`            // Unique identifier of the Service the item belongs to.
-	OrderID              string        `json:"OrderId"`              // Unique identifier of the order (or Reservation) the item belongs to.
-	BillId               string        `json:"BillId"`               // Unique identifier of the bill the item is assigned to.
-	AccountingCategoryID string        `json:"AccountingCategoryId"` // Unique identifier of the Accounting Category the item belongs to.
-	Amount               CurrencyValue `json:"Amount"`               // Amount the item costs, negative amount represents either rebate or a payment.
-	Type                 string        `json:"Type"`                 // Type of the item.
-	Name                 string        `json:"Name"`                 // Name of the item.
-	Notes                string        `json:"Notes"`                // Additional notes.
-	ConsumptionUTC       time.Time     `json:"ConsumptionUtc"`       // Date and time of the item consumption in UTC timezone in ISO 8601 format.
-}
-
 type CurrencyValue struct {
 	Currency string  `json:"Currency"` // ISO-4217 currency code, e.g. EUR or USD.
 	Value    float64 `json:"Value"`    // Amount in the currency (including tax if taxed).
@@ -196,11 +194,13 @@ type CurrencyValue struct {
 type Products []Product
 
 type Product struct {
-	ID        string `json:"Id"`        // Unique identifier of the product.
-	ServiceID string `json:"ServiceId"` // Unique identifier of the Service.
-	IsActive  bool   `json:"IsActive"`  // Whether the product is still active.
-	Name      string `json:"Name"`      // Name of the product.
-	ShortName string `json:"ShortName"` // Short name of the product.
+	ID         string                 `json:"Id"`         // Unique identifier of the product.
+	ServiceID  string                 `json:"ServiceId"`  // Unique identifier of the Service.
+	IsActive   bool                   `json:"IsActive"`   // Whether the product is still active.
+	Name       string                 `json:"Name"`       // Name of the product.
+	ShortName  string                 `json:"ShortName"`  // Short name of the product.
+	Promotions Promotions             `json:"Promotions"` // Promotions of the service.
+	Price      accountingitems.Amount `json:"Price"`      // Price of the product.
 }
 
 type RateGroups []RateGroup
@@ -218,6 +218,7 @@ type Rate struct {
 	GroupID    string `json:"GroupId"`    // Unique identifier of Rate Group where the rate belongs.
 	BaseRateID string `json:"BaseRateId"` // Unique identifier of the base Rate.
 	IsActive   bool   `json:"IsActive"`   // Whether the rate is still active.
+	IsPublic   bool   `json:"IsPublic"`   // Whether the rate is publicly available.
 	Name       string `json:"Name"`       // Name of the rate.
 	ShortName  string `json:"ShortName"`  // Short name of the rate.
 }
@@ -232,20 +233,26 @@ type ReservationGroup struct {
 type SpaceCategories []SpaceCategory
 
 type SpaceCategory struct {
-	ID        string `json:"Id"`        // Unique identifier of the category.
-	Name      string `json:"Name"`      // Name of the category.
-	ShortName string `json:"ShortName"` // Short name (e.g. code) of the category.
+	ID          string   `json:"Id"`          // Unique identifier of the category.
+	Name        string   `json:"Name"`        // Name of the category.
+	ShortName   string   `json:"ShortName"`   // Short name (e.g. code) of the category.
+	Description string   `json:"Description"` // Description of the category.
+	Ordering    int      `json:"Ordering"`    // Ordering of the category, lower number corresponds to lower category (note that uniqueness nor continuous sequence is guaranteed).
+	UnitCount   int      `json:"Unitcount"`   // Count of units that can be accommodated (e.g. bed count).
+	ImageIDs    []string `json:"ImageIds"`    // Unique identifiers of the space category images.
 }
 
 type Spaces []Space
 
 type Space struct {
-	ID            string     `json:"Id"`            // Unique identifier of the space.
-	Type          SpaceType  `json:"Type"`          // Type of the space.
-	Number        string     `json:"Number"`        // Number of the space (e.g. room number).
-	ParentSpaceID string     `json:"ParentSpaceId"` // Identifier of the parent Space (e.g. room of a bed).
-	CategoryID    string     `json:"CategoryId"`    // Identifier of the Space Category assigned to the space.
-	State         SpaceState `json:"State"`         // State of the room.
+	ID             string     `json:"Id"`             // Unique identifier of the space.
+	Type           SpaceType  `json:"Type"`           // Type of the space.
+	Number         string     `json:"Number"`         // Number of the space (e.g. room number).
+	FloorNumber    string     `json:"FloorNumber"`    // Number of the floor the space is on.
+	BuildingNumber string     `json:"BuildingNumber"` // Number of the building the space is in.
+	ParentSpaceID  string     `json:"ParentSpaceId"`  // Identifier of the parent Space (e.g. room of a bed).
+	CategoryID     string     `json:"CategoryId"`     // Identifier of the Space Category assigned to the space.
+	State          SpaceState `json:"State"`          // State of the room.
 }
 
 type SpaceType string
@@ -286,4 +293,12 @@ func (d *Date) UnmarshalJSON(data []byte) error {
 
 	d.Time, err = time.Parse(time.RFC3339, value)
 	return err
+}
+
+type Promotions struct {
+	BeforeCheckIn  bool `json:"BeforeCheckIn"`  // Whether it can be promoted before check-in.
+	AfterCheckIn   bool `json:"AfterCheckIn"`   // Whether it can be promoted after check-in.
+	DuringStay     bool `json:"DuringStay"`     // Whether it can be promoted during stay.
+	BeforeCheckOut bool `json:"BeforeCheckout"` // Whether it can be promoted before check-out.
+	AfterCheckOut  bool `json:"AfterCheckout"`  // Whether it can be promoted after check-out.
 }

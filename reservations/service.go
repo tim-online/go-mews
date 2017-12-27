@@ -2,10 +2,10 @@ package reservations
 
 import "github.com/tim-online/go-mews/json"
 
-type Service struct {
+type APIService struct {
 	Client *json.Client
 }
 
-func NewService() *Service {
-	return &Service{}
+func NewAPIService() *APIService {
+	return &APIService{}
 }

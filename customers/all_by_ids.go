@@ -65,6 +65,7 @@ type Customer struct {
 	NationalityCode string           `json:"NationalityCode"` // ISO 3166-1 alpha-2 country code (two letter country code) of the nationality.
 	LanguageCode    string           `json:"LanguageCode"`    // Language and culture code of the customers preferred language. E.g. en-US or fr-FR.
 	BirthDate       string           `json:"BirthDate"`       // Date of birth in ISO 8601 format.
+	BirthDateUTC    time.Time        `json:"BirthDateUtc"`    // ??
 	BirthPlace      string           `json:"BirthPlace"`      // Place of birth.
 	Email           string           `json:"Email"`           // Email address of the customer.
 	Phone           string           `json:"Phone"`           // Phone number of the customer (possibly mobile).
@@ -74,6 +75,12 @@ type Customer struct {
 	Address         Address          `json:"Address"`         // Address of the customer.
 	CreatedUTC      time.Time        `json:"CreatedUtc"`      // Creation date and time of the customer in UTC timezone in ISO 8601 format.
 	UpdatedUTC      time.Time        `json:"UpdatedUtc"`      // Last update date and time of the customer in UTC timezone in ISO 8601 format.
+	CategoryID      string           `json:"CategoryId"`      // ??
+	CitizenNumber   string           `json:"CitizenNumber"`   // ??
+	FatherName      string           `json:"FatherName"`      // ??
+	MotherName      string           `json:"MotherName"`      // ??
+	Notes           string           `json:"Notes"`           // ??
+	Occupation      string           `json:"Occupation"`      // ??
 }
 
 type Title string
@@ -92,9 +99,11 @@ const (
 )
 
 type Document struct {
-	Number     string `json:"Number"`     // Number of the document (e.g. passport number).
-	Issuance   Date   `json:"Issuance"`   // Date of issuance in ISO 8601 format.
-	Expiration Date   `json:"Expiration"` // Expiration date in ISO 8601 format.
+	Number        string    `json:"Number"`        // Number of the document (e.g. passport number).
+	Issuance      Date      `json:"Issuance"`      // Date of issuance in ISO 8601 format.
+	Expiration    Date      `json:"Expiration"`    // Expiration date in ISO 8601 format.
+	ExpirationUTC time.Time `json:"ExpirationUtc"` // ??
+	IssuanceUTC   time.Time `json:"IssuanceUtc"`   // ??
 }
 
 type Classification string

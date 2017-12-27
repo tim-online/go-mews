@@ -5,7 +5,7 @@ const (
 )
 
 // List all products
-func (s *Service) AllByIDs(requestBody *AllByIDsRequest) (*AllResponse, error) {
+func (s *APIService) AllByIDs(requestBody *AllByIDsRequest) (*AllResponse, error) {
 	// @TODO: create wrapper?
 	// Set request token
 	requestBody.AccessToken = s.Client.Token
@@ -29,7 +29,7 @@ func (s *Service) AllByIDs(requestBody *AllByIDsRequest) (*AllResponse, error) {
 	return responseBody, err
 }
 
-func (s *Service) NewAllByIDsRequest() *AllByIDsRequest {
+func (s *APIService) NewAllByIDsRequest() *AllByIDsRequest {
 	return &AllByIDsRequest{}
 }
 

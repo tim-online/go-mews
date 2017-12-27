@@ -60,7 +60,7 @@ func NewClient(httpClient *http.Client, token string) *Client {
 	c.Companies.Client = c.client
 	c.Customers = customers.NewService()
 	c.Customers.Client = c.client
-	c.Reservations = reservations.NewService()
+	c.Reservations = reservations.NewAPIService()
 	c.Reservations.Client = c.client
 	c.Spaces = spaces.NewService()
 	c.Spaces.Client = c.client
@@ -84,7 +84,7 @@ type Client struct {
 	AccountingCategories *accountingcategories.Service
 	Companies            *companies.Service
 	Customers            *customers.Service
-	Reservations         *reservations.Service
+	Reservations         *reservations.APIService
 	Spaces               *spaces.Service
 	Bills                *bills.Service
 	Configuration        *configuration.Service
