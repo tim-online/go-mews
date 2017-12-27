@@ -65,6 +65,7 @@ type Bill struct {
 	Notes      string    `json:"Notes"`      // Additional notes.
 	Revenue    Revenue   `json:"Revenue"`    // The revenue items on the bill.
 	Payments   Payments  `json:"Payments"`   // The payments on the bill.
+	State      BillState `json:"State"`      // State of the bill.
 }
 
 type BillType string
@@ -72,6 +73,13 @@ type BillType string
 const (
 	BillTypeReceipt BillType = "Receipt"
 	BillTypeInvoice BillType = "Invoice"
+)
+
+type BillState string
+
+const (
+	BillStateOpen   BillState = "open"
+	BillStateClosed BillState = "closed"
 )
 
 type Revenue []AccountingItem
