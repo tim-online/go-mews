@@ -98,3 +98,7 @@ func (c *Client) SetDebug(debug bool) {
 func (c *Client) SetBaseURL(baseURL *url.URL) {
 	c.client.BaseURL = baseURL
 }
+
+func (c *Client) SetDisallowUnknownFields(disallowUnknownFields bool) {
+	c.client.DisallowUnknownFields = disallowUnknownFields
+}

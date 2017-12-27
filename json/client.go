@@ -29,6 +29,9 @@ type Client struct {
 	// Debugging flag
 	Debug bool
 
+	// Disallow unknown json fields
+	DisallowUnknownFields bool
+
 	// User agent for client
 	UserAgent string
 
@@ -115,7 +118,11 @@ func (c *Client) Do(req *http.Request, response interface{}) (*http.Response, er
 	}
 
 	// try to decode body into interface parameter
-	err = json.NewDecoder(httpResp.Body).Decode(response)
+	dec := json.NewDecoder(httpResp.Body)
+	if c.DisallowUnknownFields {
+		dec.DisallowUnknownFields()
+	}
+	err = dec.Decode(response)
 	if err != nil {
 		return nil, err
 	}
