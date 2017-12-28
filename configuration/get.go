@@ -52,21 +52,24 @@ type GetResponse struct {
 }
 
 type Enterprise struct {
-	// Unique identifier of the enterprise.
-	ID string `json:"Id"`
+	ID                      string     `json:"Id"`                      // Unique identifier of the enterprise.
+	CreatedUTC              time.Time  `json:"CreatedUtc"`              // Creation date and time of the enterprise in UTC timezone in ISO 8601 format.
+	Name                    string     `json:"name"`                    // Name of the enterprise.
+	WebsiteURL              string     `json:"WebsiteUrl"`              // URL of the enterprise website.
+	Email                   string     `json:"Email"`                   // Email address of the enterprise.
+	Phone                   string     `json:"Phone"`                   // Phone number of the enterprise.
+	TimeZoneIdentifier      string     `json:"TimeZoneIdentifier"`      // IANA timezone identifier of the enterprise.
+	EditableHistoryInterval string     `json:"EditableHistoryInterval"` // Editable history interval in ISO 8601 duration format.
+	Address                 Address    `json:"Address"`                 // Address of the enterprise.
+	Currencies              Currencies `json:"Currencies"`              // Currencies accepted by the enterprise.
+}
 
-	// Creation date and time of the enterprise in UTC timezone in ISO 8601 format.
-	CreatedUTC time.Time `json:"CreatedUtc"`
+type Currencies []Currency
 
-	// Name of the enterprise.
-	Name string `json:"name"`
-
-	WebsiteURL string `json:"WebsiteUrl"`
-
-	EditableHistoryInterval string `json:"EditableHistoryInterval"`
-
-	// Address of the enterprise.
-	Address Address `json:"Address"`
+type Currency struct {
+	Currency  string `json:"Currency"`
+	IsDefault bool   `json:"IsDefault"`
+	IsEnabled bool   `json:"IsEnabled"`
 }
 
 type Address struct {

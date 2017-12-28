@@ -107,3 +107,13 @@ func TestReservations(t *testing.T) {
 		t.Error(err)
 	}
 }
+
+func TestConfig(t *testing.T) {
+	client := getClient()
+
+	requestBody := client.Configuration.NewGetRequest()
+	_, err := client.Configuration.Get(requestBody)
+	if err != nil {
+		t.Error(err)
+	}
+}
