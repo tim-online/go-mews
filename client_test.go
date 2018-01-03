@@ -6,6 +6,7 @@ import (
 	"time"
 
 	mews "github.com/tim-online/go-mews"
+	"github.com/tim-online/go-mews/accountingcategories"
 	"github.com/tim-online/go-mews/accountingitems"
 	"github.com/tim-online/go-mews/bills"
 	"github.com/tim-online/go-mews/companies"
@@ -50,6 +51,16 @@ func TestAccountingItems(t *testing.T) {
 	requestBody.StartUTC = &startUTC
 	requestBody.EndUTC = &endUTC
 	_, err := client.AccountingItems.All(requestBody)
+	if err != nil {
+		t.Error(err)
+	}
+}
+
+func TestAccountingCategories(t *testing.T) {
+	client := getClient()
+
+	requestBody := &accountingcategories.AllRequest{}
+	_, err := client.AccountingCategories.All(requestBody)
 	if err != nil {
 		t.Error(err)
 	}
