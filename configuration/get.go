@@ -54,7 +54,7 @@ type GetResponse struct {
 type Enterprise struct {
 	ID                      string     `json:"Id"`                      // Unique identifier of the enterprise.
 	CreatedUTC              time.Time  `json:"CreatedUtc"`              // Creation date and time of the enterprise in UTC timezone in ISO 8601 format.
-	Name                    string     `json:"name"`                    // Name of the enterprise.
+	Name                    string     `json:"Name"`                    // Name of the enterprise.
 	WebsiteURL              string     `json:"WebsiteUrl"`              // URL of the enterprise website.
 	Email                   string     `json:"Email"`                   // Email address of the enterprise.
 	Phone                   string     `json:"Phone"`                   // Phone number of the enterprise.
