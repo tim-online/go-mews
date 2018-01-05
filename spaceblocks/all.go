@@ -58,8 +58,8 @@ type SpaceBlock struct {
 	ID              string    `json:"Id"`              // Unique identifier of the block.
 	AssignedSpaceId string    `json:"AssignedSpaceId"` // Unique identifier of the assigned Space.
 	Type            string    `json:"Type"`            // Type of the space block.
-	StartUTC        time.Time `json:"start_utc"`       // Start of the block in UTC timezone in ISO 8601 format.
-	EndUTC          time.Time `json:"end_utc"`         // End of the block in UTC timezone in ISO 8601 format.
-	CreatedUTC      time.Time `json:"created_utc"`     // Creation date and time of the block in UTC timezone in ISO 8601 format.
-	UpdatedUTC      time.Time `json:"updated_utc"`     // Last update date and time of the block in UTC timezone in ISO 8601 format.
+	StartUTC        time.Time `json:"startUtc"`        // Start of the block in UTC timezone in ISO 8601 format.
+	EndUTC          time.Time `json:"endUtc"`          // End of the block in UTC timezone in ISO 8601 format.
+	CreatedUTC      time.Time `json:"createdUtc"`      // Creation date and time of the block in UTC timezone in ISO 8601 format.
+	UpdatedUTC      time.Time `json:"updatedUtc"`      // Last update date and time of the block in UTC timezone in ISO 8601 format.
 }
