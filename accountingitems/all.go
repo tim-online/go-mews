@@ -52,10 +52,18 @@ func (s *Service) NewAllRequest() *AllRequest {
 }
 
 type AllRequest struct {
-	AccessToken string     `json:"AccessToken"`
-	StartUTC    *time.Time `json:"StartUtc,omitempty"`
-	EndUTC      *time.Time `json:"EndUtc,omitempty"`
+	AccessToken string                    `json:"AccessToken"`
+	StartUTC    *time.Time                `json:"StartUtc,omitempty"`
+	EndUTC      *time.Time                `json:"EndUtc,omitempty"`
+	TimeFilter  AccountingItemsTimeFilter `json:"TimeFilter,omitempty"`
 }
+
+type AccountingItemsTimeFilter string
+
+const (
+	TimeFilterClosed  AccountingItemsTimeFilter = "Closed"
+	TimeFilterUpdated AccountingItemsTimeFilter = "Updated"
+)
 
 // 	"AccountingCategoryId": "4ac8ce68-5732-4f1d-bf0d-e557072c926f",
 // 	"Amount": {
