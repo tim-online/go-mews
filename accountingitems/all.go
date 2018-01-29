@@ -52,10 +52,18 @@ func (s *Service) NewAllRequest() *AllRequest {
 }
 
 type AllRequest struct {
-	AccessToken string     `json:"AccessToken"`
-	StartUTC    *time.Time `json:"StartUtc,omitempty"`
-	EndUTC      *time.Time `json:"EndUtc,omitempty"`
+	AccessToken string                    `json:"AccessToken"`
+	StartUtc    *time.Time                `json:"StartUtc,omitempty"`
+	EndUtc      *time.Time                `json:"EndUtc,omitempty`
+	TimeFilter  AccountingItemsTimeFilter `json:"TimeFilter"`
 }
+
+type AccountingItemsTimeFilter string
+
+const (
+	TimeFilterClosed  AccountingItemsTimeFilter = "Closed"
+	TimeFilterUpdated AccountingItemsTimeFilter = "Updated"
+)
 
 // 	"AccountingCategoryId": "4ac8ce68-5732-4f1d-bf0d-e557072c926f",
 // 	"Amount": {
@@ -74,8 +82,6 @@ type AllRequest struct {
 // 	"Type": "ServiceRevenue"
 // }
 
-type AccountingItems []AccountingItem
-
 type AccountingItem struct {
 	ID                   string             `json:"Id"`                   // Unique identifier of the item.
 	CustomerID           string             `json:"CustomerId"`           // Unique identifier of the Customer whose account the item belongs to.
@@ -83,21 +89,19 @@ type AccountingItem struct {
 	ServiceID            string             `json:"ServiceId"`            // Unique identifier of the Service the item belongs to.
 	OrderID              string             `json:"OrderId"`              // Unique identifier of the order (or Reservation) the item belongs to.
 	BillID               string             `json:"BillId"`               // Unique identifier of the bill the item is assigned to.
-	InvoiceID            string             `json:"InvoiceId"`            // Unique identifier of the invoiced Bill the item is receivable for.
 	AccountingCategoryID string             `json:"AccountingCategoryId"` // Unique identifier of the Accounting Category the item belongs to.
 	Amount               Amount             `json:"Amount"`               // Amount the item costs, negative amount represents either rebate or a payment.
 	Type                 AccountingItemType `json:"Type"`                 // Type of the item.
 	Name                 string             `json:"Name"`                 // Name of the item.
 	Notes                string             `json:"Notes"`                // Additional notes.
-	ConsumptionUTC       time.Time          `json:"ConsumptionUtc"`       // Date and time of the item consumption in UTC timezone in ISO 8601 format.
+	ConsumptionUtc       time.Time          `json:"ConsumptionUtc"`       // Date and time of the item consumption in UTC timezone in ISO 8601 format.
 }
 
 type Amount struct {
-	Currency string  `json:"Currency"` // ISO-4217 code of the Currency.
-	Net      float64 `json:"Net"`      // Net value in case the item is taxed.
-	Tax      float64 `json:"Tax"`      // Tax value in case the item is taxed.
-	TaxRate  float64 `json:"TaxRate"`  // Tax rate in case the item is taxed (e.g. 0.21).
-	Value    float64 `json:"Value"`    // Amount in the currency (including tax if taxed).
+	Currency string  `json:"Currency"`
+	Tax      float64 `json:"Tax"`
+	TaxRate  float64 `json:"TaxRate"`
+	Value    float64 `json:"Value"`
 }
 
 type AccountingItemType string
