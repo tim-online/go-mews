@@ -72,6 +72,8 @@ type Customer struct {
 	LoyaltyCode             string           `json:"LoyaltyCode"`             // Loyalty code of the customer.
 	Classifications         []Classification `json:"Classifications"`         // Classifications of the customer.
 	Passport                Document         `json:"Passport"`                // Passport details of the customer.
+	IdentityCard            Document         `json:"IdentityCard"`            // IdentityCard details for Customer.
+	Visa                    Document         `json:"Visa"`                    // Visa details for Customer.
 	Address                 Address          `json:"Address"`                 // Address of the customer.
 	CreatedUTC              time.Time        `json:"CreatedUtc"`              // Creation date and time of the customer in UTC timezone in ISO 8601 format.
 	UpdatedUTC              time.Time        `json:"UpdatedUtc"`              // Last update date and time of the customer in UTC timezone in ISO 8601 format.
