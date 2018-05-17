@@ -60,6 +60,7 @@ type AllExtent struct {
 	Spaces          bool `json:"Spaces"`          // Whether the response should contain spaces.
 	SpaceCategories bool `json:"SpaceCategories"` // Whether the response should contain space categories.
 	SpaceFeatures   bool `json:"SpaceFeatures"`   // Whether the response should contain space features and their assignments.
+	Inactive        bool `json:"Inactive"`        // Whether the response should contain inactive entities.
 }
 
 type Space struct {
