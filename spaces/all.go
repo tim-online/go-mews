@@ -73,6 +73,14 @@ type Space struct {
 }
 
 type SpaceCategory struct {
+	ID          string   `json:"Id"`                    // Unique identifier of the category.
+	IsActive    bool     `json:"IsActive"`              // Whether the space category is still active.
+	Name        string   `json:"Name"`                  // Name of the category.
+	ShortName   string   `json:"ShortName,omitempty"`   // Short name (e.g. code) of the category.
+	Description string   `json:"Description,omitempty"` // Description of the category.
+	Ordering    int      `json:"Ordering"`              // Ordering of the category, lower number corresponds to lower category (note that uniqueness nor continuous sequence is guaranteed).
+	UnitCount   int      `json:"UnitCount"`             // Count of units that can be accommodated (e.g. bed count).
+	ImageIDs    []string `json:"ImageIds"`              // Unique identifiers of the space category images.
 }
 
 type SpaceFeature struct {
