@@ -82,7 +82,7 @@ type Customer struct {
 	MotherName              string           `json:"MotherName"`              // ??
 	Notes                   string           `json:"Notes"`                   // ??
 	Occupation              string           `json:"Occupation"`              // ??
-	DriversLicense          string           `json:"DriversLicense"`          // NEW
+	DriversLicense          DriversLicense   `json:"DriversLicense"`          // NEW
 }
 
 type Title string
@@ -150,4 +150,13 @@ func (d *Date) UnmarshalJSON(data []byte) error {
 
 	d.Time, err = time.Parse(time.RFC3339, value)
 	return err
+}
+
+type DriversLicense struct {
+	Expiration         time.Time `json:"Expiration"`
+	ExpirationUTC      time.Time `json:"ExpirationUtc"`
+	Issuance           time.Time `json:"Issuance"`
+	IssuanceUTC        time.Time `json:"IssuanceUtc"`
+	IssuingCountryCode string    `json:"IssuingCountryCode"`
+	Number             string    `json:"Number"`
 }
