@@ -1,7 +1,6 @@
 package accountingitems
 
 import (
-	"errors"
 	"time"
 )
 
@@ -14,19 +13,16 @@ const (
 	Payment           AccountingItemType = "Payment"
 )
 
-var (
-	ErrNoToken = errors.New("No token specified")
-)
-
 // List all products
 func (s *Service) All(requestBody *AllRequest) (*AllResponse, error) {
 	// @TODO: create wrapper?
-	// Set request token
-	requestBody.AccessToken = s.Client.AccessToken
-
-	if s.Client.AccessToken == "" {
-		return nil, ErrNoToken
+	if err := s.Client.CheckTokens(); err != nil {
+		return nil, err
 	}
+
+	// Set request tokens
+	requestBody.AccessToken = s.Client.AccessToken
+	requestBody.ClientToken = s.Client.ClientToken
 
 	apiURL, err := s.Client.GetApiURL(endpointAll)
 	if err != nil {
@@ -53,6 +49,7 @@ func (s *Service) NewAllRequest() *AllRequest {
 
 type AllRequest struct {
 	AccessToken string                    `json:"AccessToken"`
+	ClientToken string                    `json:"ClientToken,omitempty"`
 	StartUTC    *time.Time                `json:"StartUtc,omitempty"`
 	EndUTC      *time.Time                `json:"EndUtc,omitempty"`
 	TimeFilter  AccountingItemsTimeFilter `json:"TimeFilter,omitempty"`

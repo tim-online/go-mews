@@ -3,6 +3,7 @@ package json
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"log"
@@ -17,6 +18,9 @@ var (
 	mediaType        = "application/json"
 	charset          = "utf-8"
 	defaultTimeout   = 10 * time.Second
+
+	ErrNoAccessToken = errors.New("No access token specified")
+	ErrNoClientToken = errors.New("No client token specified")
 )
 
 type Client struct {
@@ -36,6 +40,7 @@ type Client struct {
 	UserAgent string
 
 	AccessToken string
+	ClientToken string
 
 	// Optional function called after every successful request made to the DO APIs
 	onRequestCompleted RequestCompletionCallback
@@ -44,11 +49,12 @@ type Client struct {
 // RequestCompletionCallback defines the type of the request callback function
 type RequestCompletionCallback func(*http.Request, *http.Response)
 
-func NewClient(httpClient *http.Client, token string) *Client {
+func NewClient(httpClient *http.Client, accessToken string, clientToken string) *Client {
 	c := &Client{
 		Client:      nil,
 		UserAgent:   defaultUserAgent,
-		AccessToken: token,
+		AccessToken: accessToken,
+		ClientToken: clientToken,
 	}
 
 	if httpClient == nil {
@@ -155,4 +161,16 @@ func (c *Client) NewRequest(apiURL *url.URL, requestBody interface{}) (*http.Req
 // OnRequestCompleted sets the DO API request completion callback
 func (c *Client) OnRequestCompleted(rc RequestCompletionCallback) {
 	c.onRequestCompleted = rc
+}
+
+func (c *Client) CheckTokens() error {
+	if c.AccessToken == "" {
+		return ErrNoAccessToken
+	}
+
+	if c.ClientToken == "" {
+		return ErrNoClientToken
+	}
+
+	return nil
 }

@@ -37,14 +37,15 @@ var (
 )
 
 // NewClient returns a new MEWS API client
-func NewClient(httpClient *http.Client, token string) *Client {
+func NewClient(httpClient *http.Client, accessToken string, clientToken string) *Client {
 	if httpClient == nil {
 		httpClient = http.DefaultClient
 	}
 
-	jsonClient := json.NewClient(httpClient, token)
+	jsonClient := json.NewClient(httpClient, accessToken, clientToken)
 	jsonClient.UserAgent = userAgent
-	jsonClient.AccessToken = token
+	jsonClient.AccessToken = accessToken
+	jsonClient.ClientToken = clientToken
 	jsonClient.Debug = false
 
 	c := &Client{

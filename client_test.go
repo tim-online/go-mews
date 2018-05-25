@@ -16,10 +16,11 @@ import (
 
 func getClient() *mews.Client {
 	// get username & password
-	token := os.Getenv("MEWS_TOKEN")
+	accessToken := os.Getenv("MEWS_ACCESS_TOKEN")
+	clientToken := os.Getenv("MEWS_CLIENT_TOKEN")
 
 	// build client
-	client := mews.NewClient(nil, token)
+	client := mews.NewClient(nil, accessToken, clientToken)
 	client.SetDebug(true)
 	client.SetBaseURL(mews.BaseURLDemo)
 	client.SetDisallowUnknownFields(true)

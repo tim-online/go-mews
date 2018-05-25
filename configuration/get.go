@@ -1,7 +1,6 @@
 package configuration
 
 import (
-	"errors"
 	"time"
 )
 
@@ -9,19 +8,16 @@ const (
 	endpointGet = "configuration/get"
 )
 
-var (
-	ErrNoToken = errors.New("No token specified")
-)
-
 // Returns configuration of the enterprise and the client.
 func (s *Service) Get(requestBody *GetRequest) (*GetResponse, error) {
 	// @TODO: create wrapper?
-	// Set request token
-	requestBody.AccessToken = s.Client.AccessToken
-
-	if s.Client.AccessToken == "" {
-		return nil, ErrNoToken
+	if err := s.Client.CheckTokens(); err != nil {
+		return nil, err
 	}
+
+	// Set request tokens
+	requestBody.AccessToken = s.Client.AccessToken
+	requestBody.ClientToken = s.Client.ClientToken
 
 	apiURL, err := s.Client.GetApiURL(endpointGet)
 	if err != nil {
@@ -44,6 +40,7 @@ func (s *Service) NewGetRequest() *GetRequest {
 
 type GetRequest struct {
 	AccessToken string `json:"AccessToken"`
+	ClientToken string `json:"ClientToken,omitempty"`
 }
 
 type GetResponse struct {

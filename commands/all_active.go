@@ -1,7 +1,6 @@
 package commands
 
 import (
-	"errors"
 	"time"
 )
 
@@ -9,19 +8,16 @@ const (
 	endpointAllActive = "commands/getAllActive"
 )
 
-var (
-	ErrNoToken = errors.New("No token specified")
-)
-
 // List all products
 func (s *Service) AllActive(requestBody *AllActiveRequest) (*AllActiveResponse, error) {
 	// @TODO: create wrapper?
-	// Set request token
-	requestBody.AccessToken = s.Client.AccessToken
-
-	if s.Client.AccessToken == "" {
-		return nil, ErrNoToken
+	if err := s.Client.CheckTokens(); err != nil {
+		return nil, err
 	}
+
+	// Set request tokens
+	requestBody.AccessToken = s.Client.AccessToken
+	requestBody.ClientToken = s.Client.ClientToken
 
 	apiURL, err := s.Client.GetApiURL(endpointAllActive)
 	if err != nil {
@@ -44,6 +40,7 @@ func (s *Service) NewAllActiveRequest() *AllActiveRequest {
 
 type AllActiveRequest struct {
 	AccessToken string `json:"AccessToken"`
+	ClientToken string `json:"ClientToken,omitempty"`
 }
 
 type AllActiveResponse struct {

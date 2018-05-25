@@ -7,12 +7,13 @@ const (
 // List all products
 func (s *Service) AllByIDs(requestBody *AllByIDsRequest) (*AllByIDsResponse, error) {
 	// @TODO: create wrapper?
-	// Set request token
-	requestBody.AccessToken = s.Client.AccessToken
-
-	if s.Client.AccessToken == "" {
-		return nil, ErrNoToken
+	if err := s.Client.CheckTokens(); err != nil {
+		return nil, err
 	}
+
+	// Set request tokens
+	requestBody.AccessToken = s.Client.AccessToken
+	requestBody.ClientToken = s.Client.ClientToken
 
 	apiURL, err := s.Client.GetApiURL(endpointAllByIDs)
 	if err != nil {
@@ -35,6 +36,7 @@ func (s *Service) NewAllByIDsRequest() *AllByIDsRequest {
 
 type AllByIDsRequest struct {
 	AccessToken string   `json:"AccessToken"`
+	ClientToken string   `json:"ClientToken,omitempty"`
 	BillIDs     []string `json:"BillIds"`
 }
 
