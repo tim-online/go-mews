@@ -18,9 +18,9 @@ var (
 func (s *Service) AllByIDs(requestBody *AllByIDsRequest) (*AllByIDsResponse, error) {
 	// @TODO: create wrapper?
 	// Set request token
-	requestBody.AccessToken = s.Client.Token
+	requestBody.AccessToken = s.Client.AccessToken
 
-	if s.Client.Token == "" {
+	if s.Client.AccessToken == "" {
 		return nil, ErrNoToken
 	}
 

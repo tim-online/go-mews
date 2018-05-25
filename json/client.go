@@ -35,7 +35,7 @@ type Client struct {
 	// User agent for client
 	UserAgent string
 
-	Token string
+	AccessToken string
 
 	// Optional function called after every successful request made to the DO APIs
 	onRequestCompleted RequestCompletionCallback
@@ -46,9 +46,9 @@ type RequestCompletionCallback func(*http.Request, *http.Response)
 
 func NewClient(httpClient *http.Client, token string) *Client {
 	c := &Client{
-		Client:    nil,
-		UserAgent: defaultUserAgent,
-		Token:     token,
+		Client:      nil,
+		UserAgent:   defaultUserAgent,
+		AccessToken: token,
 	}
 
 	if httpClient == nil {

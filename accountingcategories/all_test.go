@@ -30,7 +30,7 @@ func setup() {
 
 	service = NewService()
 	service.Client.BaseURL = baseURL
-	service.Client.Token = token
+	service.Client.AccessToken = token
 
 	// set custom http client
 	service.Client.Client = &http.Client{

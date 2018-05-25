@@ -17,9 +17,9 @@ var (
 func (s *Service) AllActive(requestBody *AllActiveRequest) (*AllActiveResponse, error) {
 	// @TODO: create wrapper?
 	// Set request token
-	requestBody.AccessToken = s.Client.Token
+	requestBody.AccessToken = s.Client.AccessToken
 
-	if s.Client.Token == "" {
+	if s.Client.AccessToken == "" {
 		return nil, ErrNoToken
 	}
 

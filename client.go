@@ -44,7 +44,7 @@ func NewClient(httpClient *http.Client, token string) *Client {
 
 	jsonClient := json.NewClient(httpClient, token)
 	jsonClient.UserAgent = userAgent
-	jsonClient.Token = token
+	jsonClient.AccessToken = token
 	jsonClient.Debug = false
 
 	c := &Client{
