@@ -169,7 +169,7 @@ type BusinessSegment struct {
 
 type Document struct {
 	Number     string `json:"Number"`     // Number of the document (e.g. passport number).
-	Issuance   string `json:"Issuance"`   // Date of issuance in ISO 8601 format.
+	Issuance   Date   `json:"Issuance"`   // Date of issuance in ISO 8601 format.
 	Expiration Date   `json:"Expiration"` // Expiration date in ISO 8601 format.
 }
 

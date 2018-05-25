@@ -153,9 +153,9 @@ func (d *Date) UnmarshalJSON(data []byte) error {
 }
 
 type DriversLicense struct {
-	Expiration         time.Time `json:"Expiration"`
+	Expiration         Date      `json:"Expiration"`
 	ExpirationUTC      time.Time `json:"ExpirationUtc"`
-	Issuance           time.Time `json:"Issuance"`
+	Issuance           Date      `json:"Issuance"`
 	IssuanceUTC        time.Time `json:"IssuanceUtc"`
 	IssuingCountryCode string    `json:"IssuingCountryCode"`
 	Number             string    `json:"Number"`
