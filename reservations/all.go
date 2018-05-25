@@ -191,14 +191,26 @@ type CurrencyValue struct {
 type Products []Product
 
 type Product struct {
-	ID         string                 `json:"Id"`         // Unique identifier of the product.
-	ServiceID  string                 `json:"ServiceId"`  // Unique identifier of the Service.
-	IsActive   bool                   `json:"IsActive"`   // Whether the product is still active.
-	Name       string                 `json:"Name"`       // Name of the product.
-	ShortName  string                 `json:"ShortName"`  // Short name of the product.
-	Promotions Promotions             `json:"Promotions"` // Promotions of the service.
-	Price      accountingitems.Amount `json:"Price"`      // Price of the product.
+	ID          string                 `json:"Id"`          // Unique identifier of the product.
+	ServiceID   string                 `json:"ServiceId"`   // Unique identifier of the Service.
+	IsActive    bool                   `json:"IsActive"`    // Whether the product is still active.
+	Name        string                 `json:"Name"`        // Name of the product.
+	ShortName   string                 `json:"ShortName"`   // Short name of the product.
+	Description string                 `json:"Description"` // Description of the product.
+	Charging    ProductCharging        `json:"Charging"`    // Charging of the product.
+	Promotions  Promotions             `json:"Promotions"`  // Promotions of the service.
+	Price       accountingitems.Amount `json:"Price"`       // Price of the product.
+	CategoryID  string                 `json:"CategoryId"`  // NEW
+	ImageIds    []string               `json:"ImageIds"`    // NEW
 }
+
+type ProductCharging string
+
+const (
+	ProductChargingOnce                 ProductCharging = "Once"
+	ProductChargingPerTimeUnit          ProductCharging = "PerTimeUnit"
+	ProductChargingPerPersonPerTimeUnit ProductCharging = "PerPersonPerTimeUnit"
+)
 
 type RateGroups []RateGroup
 

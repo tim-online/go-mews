@@ -95,6 +95,7 @@ type AccountingItem struct {
 	Name                 string             `json:"Name"`                 // Name of the item.
 	Notes                string             `json:"Notes"`                // Additional notes.
 	ConsumptionUTC       time.Time          `json:"ConsumptionUtc"`       // Date and time of the item consumption in UTC timezone in ISO 8601 format.
+	ClosedUTC            time.Time          `json:"ClosedUtc"`            // Date and time of the item bill closure in UTC timezone in ISO 8601 format.
 }
 
 type Amount struct {

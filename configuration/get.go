@@ -44,8 +44,8 @@ type GetRequest struct {
 }
 
 type GetResponse struct {
-	// The closed bills.
 	Enterprise Enterprise `json:"Enterprise"`
+	NowUtc     time.Time  `json:"NowUtc"` // NEW
 }
 
 type Enterprise struct {
@@ -59,6 +59,11 @@ type Enterprise struct {
 	EditableHistoryInterval string     `json:"EditableHistoryInterval"` // Editable history interval in ISO 8601 duration format.
 	Address                 Address    `json:"Address"`                 // Address of the enterprise.
 	Currencies              Currencies `json:"Currencies"`              // Currencies accepted by the enterprise.
+	ChainID                 string     `json:"ChainId"`                 // NEW
+	CoverImageId            string     `json:"CoverImageId"`            // NEW
+	DefaultLanguageCode     string     `json:"DefaultLanguageCode"`     // NEW
+	LegalEnvironmentCode    string     `json:"LegalEnvironmentCode"`    // NEW
+	LogoImageID             string     `json:"LogoImageId"`             // NEW
 }
 
 type Currencies []Currency

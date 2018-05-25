@@ -95,6 +95,7 @@ type AccountingItem struct {
 	InvoiceID            string             `json:"InvoiceId"`            // Unique identifier of the invoiced Bill the item is receivable for.
 	Notes                string             `json:"Notes"`                // Additional notes.
 	ConsumptionUTC       time.Time          `json:"ConsumptionUtc"`       // Date and time of the item consumption in UTC timezone in ISO 8601 format.
+	ClosedUTC            time.Time          `json:"ClosedUtc"`            // Date and time of the item bill closure in UTC timezone in ISO 8601 format.
 }
 
 type AccountingItemType string

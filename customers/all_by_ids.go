@@ -68,6 +68,7 @@ type Customer struct {
 	Phone                   string           `json:"Phone"`                   // Phone number of the customer (possibly mobile).
 	LoyaltyCode             string           `json:"LoyaltyCode"`             // Loyalty code of the customer.
 	Classifications         []Classification `json:"Classifications"`         // Classifications of the customer.
+	Options                 Options          `json:"Options"`                 // Options of the customer.
 	Passport                Document         `json:"Passport"`                // Passport details of the customer.
 	IdentityCard            Document         `json:"IdentityCard"`            // IdentityCard details for Customer.
 	Visa                    Document         `json:"Visa"`                    // Visa details for Customer.
@@ -81,6 +82,7 @@ type Customer struct {
 	MotherName              string           `json:"MotherName"`              // ??
 	Notes                   string           `json:"Notes"`                   // ??
 	Occupation              string           `json:"Occupation"`              // ??
+	DriversLicense          string           `json:"DriversLicense"`          // NEW
 }
 
 type Title string
@@ -99,14 +101,20 @@ const (
 )
 
 type Document struct {
-	Number        string    `json:"Number"`        // Number of the document (e.g. passport number).
-	Issuance      Date      `json:"Issuance"`      // Date of issuance in ISO 8601 format.
-	Expiration    Date      `json:"Expiration"`    // Expiration date in ISO 8601 format.
-	ExpirationUTC time.Time `json:"ExpirationUtc"` // ??
-	IssuanceUTC   time.Time `json:"IssuanceUtc"`   // ??
+	Number             string    `json:"Number"`             // Number of the document (e.g. passport number).
+	Issuance           Date      `json:"Issuance"`           // Date of issuance in ISO 8601 format.
+	Expiration         Date      `json:"Expiration"`         // Expiration date in ISO 8601 format.
+	ExpirationUTC      time.Time `json:"ExpirationUtc"`      // ??
+	IssuanceUTC        time.Time `json:"IssuanceUtc"`        // ??
+	IssuingCountryCode string    `json:"IssuingCountryCode"` // ISO 3166-1 code of the Country.
 }
 
 type Classification string
+
+type Options []Option
+
+type Option struct {
+}
 
 type Address struct {
 	Line1       string `json:"Line1"`       // First line of the address.

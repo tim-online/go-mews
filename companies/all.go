@@ -48,8 +48,11 @@ type Company struct {
 	Name                        string  `json:"Name"`                        // Name of the company.
 	Identifier                  string  `json:"Identifier"`                  // Identifier of the company (e.g. legal identifier).
 	TaxIdentificationNumber     string  `json:"TaxIdentificationNumber"`     // Tax identification number of the company.
+	AdditionalTaxIdentifier     string  `json:"AdditionalTaxIdentifier"`     // Additional tax identifer of the company.
 	ElectronicInvoiceIdentifier string  `json:"ElectronicInvoiceIdentifier"` // Electronic invoice identifer of the company.
 	Address                     Address `json:"Address"`
+	AccountingCode              string  `json:"AccountingCode"` // NEW
+	TaxIdentifier               string  `json:"TaxIdentifier"`  // NEW
 }
 
 type Address struct {
