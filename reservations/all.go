@@ -215,7 +215,7 @@ const (
 type RateGroups []RateGroup
 
 type RateGroup struct {
-	Id       string `json:"Id"`       // Unique identifier of the group.
+	ID       string `json:"Id"`       // Unique identifier of the group.
 	IsActive bool   `json:"IsActive"` // Whether the rate group is still active.
 	Name     string `json:"Name"`     // Name of the rate group.
 }
