@@ -1,5 +1,7 @@
 package commands
 
+import "github.com/tim-online/go-mews/json"
+
 const (
 	endpointUpdate = "commands/update"
 )
@@ -10,10 +12,6 @@ func (s *Service) Update(requestBody *UpdateRequest) (*UpdateResponse, error) {
 	if err := s.Client.CheckTokens(); err != nil {
 		return nil, err
 	}
-
-	// Set request tokens
-	requestBody.AccessToken = s.Client.AccessToken
-	requestBody.ClientToken = s.Client.ClientToken
 
 	apiURL, err := s.Client.GetApiURL(endpointUpdate)
 	if err != nil {
@@ -35,10 +33,9 @@ func (s *Service) NewUpdateRequest() *UpdateRequest {
 }
 
 type UpdateRequest struct {
-	AccessToken string       `json:"AccessToken"`
-	ClientToken string       `json:"ClientToken,omitempty"`
-	CommandID   string       `json:"CommandId"`
-	State       CommandState `json:"State"`
+	json.BaseRequest
+	CommandID string       `json:"CommandId"`
+	State     CommandState `json:"State"`
 }
 
 type UpdateResponse struct {

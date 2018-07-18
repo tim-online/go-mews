@@ -2,6 +2,8 @@ package accountingitems
 
 import (
 	"time"
+
+	"github.com/tim-online/go-mews/json"
 )
 
 const (
@@ -19,10 +21,6 @@ func (s *Service) All(requestBody *AllRequest) (*AllResponse, error) {
 	if err := s.Client.CheckTokens(); err != nil {
 		return nil, err
 	}
-
-	// Set request tokens
-	requestBody.AccessToken = s.Client.AccessToken
-	requestBody.ClientToken = s.Client.ClientToken
 
 	apiURL, err := s.Client.GetApiURL(endpointAll)
 	if err != nil {
@@ -48,11 +46,10 @@ func (s *Service) NewAllRequest() *AllRequest {
 }
 
 type AllRequest struct {
-	AccessToken string                    `json:"AccessToken"`
-	ClientToken string                    `json:"ClientToken,omitempty"`
-	StartUTC    *time.Time                `json:"StartUtc,omitempty"`
-	EndUTC      *time.Time                `json:"EndUtc,omitempty"`
-	TimeFilter  AccountingItemsTimeFilter `json:"TimeFilter,omitempty"`
+	json.BaseRequest
+	StartUTC   *time.Time                `json:"StartUtc,omitempty"`
+	EndUTC     *time.Time                `json:"EndUtc,omitempty"`
+	TimeFilter AccountingItemsTimeFilter `json:"TimeFilter,omitempty"`
 }
 
 type AccountingItemsTimeFilter string

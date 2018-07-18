@@ -111,3 +111,11 @@ func (c *Client) SetBaseURL(baseURL *url.URL) {
 func (c *Client) SetDisallowUnknownFields(disallowUnknownFields bool) {
 	c.client.DisallowUnknownFields = disallowUnknownFields
 }
+
+func (c *Client) SetLanguageCode(code string) {
+	c.client.SetLanguageCode(code)
+}
+
+func (c *Client) SetCultureCode(code string) {
+	c.client.SetCultureCode(code)
+}

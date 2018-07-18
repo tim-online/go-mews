@@ -1,11 +1,11 @@
 package reservations
 
 import (
-	"encoding/json"
 	"time"
 
 	"github.com/tim-online/go-mews/accountingitems"
 	"github.com/tim-online/go-mews/customers"
+	"github.com/tim-online/go-mews/json"
 )
 
 const (
@@ -18,10 +18,6 @@ func (s *APIService) All(requestBody *AllRequest) (*AllResponse, error) {
 	if err := s.Client.CheckTokens(); err != nil {
 		return nil, err
 	}
-
-	// Set request tokens
-	requestBody.AccessToken = s.Client.AccessToken
-	requestBody.ClientToken = s.Client.ClientToken
 
 	apiURL, err := s.Client.GetApiURL(endpointAll)
 	if err != nil {
@@ -69,13 +65,12 @@ func (s *APIService) NewAllRequest() *AllRequest {
 }
 
 type AllRequest struct {
-	AccessToken string                `json:"AccessToken"`
-	ClientToken string                `json:"ClientToken,omitempty"`
-	TimeFilter  ReservationTimeFilter `json:"TimeFilter,omitempty"`
-	StartUTC    *time.Time            `json:"StartUtc,omitempty"`
-	EndUTC      *time.Time            `json:"EndUtc,omitempty"`
-	States      []ReservationState    `json:"States"`
-	Extent      ReservationExtent     `json:"Extent,omitempty"`
+	json.BaseRequest
+	TimeFilter ReservationTimeFilter `json:"TimeFilter,omitempty"`
+	StartUTC   *time.Time            `json:"StartUtc,omitempty"`
+	EndUTC     *time.Time            `json:"EndUtc,omitempty"`
+	States     []ReservationState    `json:"States"`
+	Extent     ReservationExtent     `json:"Extent,omitempty"`
 }
 
 type ReservationExtent struct {
@@ -275,34 +270,6 @@ const (
 	SpaceStateOutOfService SpaceState = "OutOfService"
 	SpaceStateOutOfOrder   SpaceState = "OutOfOrder"
 )
-
-type Date struct {
-	time.Time
-}
-
-func (d Date) MarshalJSON() ([]byte, error) {
-	return json.Marshal(d.Time.Format("2006-01-02"))
-}
-
-func (d *Date) UnmarshalJSON(data []byte) error {
-	var value string
-	err := json.Unmarshal(data, &value)
-	if err != nil {
-		return err
-	}
-
-	if value == "" {
-		return nil
-	}
-
-	d.Time, err = time.Parse("2006-01-02", value)
-	if err == nil {
-		return err
-	}
-
-	d.Time, err = time.Parse(time.RFC3339, value)
-	return err
-}
 
 type Promotions struct {
 	BeforeCheckIn  bool `json:"BeforeCheckIn"`  // Whether it can be promoted before check-in.

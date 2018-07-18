@@ -42,6 +42,9 @@ type Client struct {
 	AccessToken string
 	ClientToken string
 
+	languageCode string
+	cultureCode  string
+
 	// Optional function called after every successful request made to the DO APIs
 	onRequestCompleted RequestCompletionCallback
 }
@@ -141,6 +144,13 @@ func (c *Client) Do(req *http.Request, response interface{}) (*http.Response, er
 func (c *Client) NewRequest(apiURL *url.URL, requestBody interface{}) (*http.Request, error) {
 	buf := new(bytes.Buffer)
 	if requestBody != nil {
+		if s, ok := requestBody.(RequestBody); ok {
+			s.SetAccessToken(c.AccessToken)
+			s.SetClientToken(c.ClientToken)
+			s.SetLanguageCode(c.languageCode)
+			s.SetCultureCode(c.cultureCode)
+		}
+
 		err := json.NewEncoder(buf).Encode(requestBody)
 		if err != nil {
 			return nil, err
@@ -173,4 +183,19 @@ func (c *Client) CheckTokens() error {
 	}
 
 	return nil
+}
+
+func (c *Client) SetLanguageCode(code string) {
+	c.languageCode = code
+}
+
+func (c *Client) SetCultureCode(code string) {
+	c.cultureCode = code
+}
+
+type RequestBody interface {
+	SetAccessToken(string)
+	SetClientToken(string)
+	SetLanguageCode(string)
+	SetCultureCode(string)
 }

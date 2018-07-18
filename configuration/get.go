@@ -2,6 +2,8 @@ package configuration
 
 import (
 	"time"
+
+	"github.com/tim-online/go-mews/json"
 )
 
 const (
@@ -14,10 +16,6 @@ func (s *Service) Get(requestBody *GetRequest) (*GetResponse, error) {
 	if err := s.Client.CheckTokens(); err != nil {
 		return nil, err
 	}
-
-	// Set request tokens
-	requestBody.AccessToken = s.Client.AccessToken
-	requestBody.ClientToken = s.Client.ClientToken
 
 	apiURL, err := s.Client.GetApiURL(endpointGet)
 	if err != nil {
@@ -39,8 +37,7 @@ func (s *Service) NewGetRequest() *GetRequest {
 }
 
 type GetRequest struct {
-	AccessToken string `json:"AccessToken"`
-	ClientToken string `json:"ClientToken,omitempty"`
+	json.BaseRequest
 }
 
 type GetResponse struct {

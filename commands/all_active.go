@@ -2,6 +2,8 @@ package commands
 
 import (
 	"time"
+
+	"github.com/tim-online/go-mews/json"
 )
 
 const (
@@ -14,10 +16,6 @@ func (s *Service) AllActive(requestBody *AllActiveRequest) (*AllActiveResponse, 
 	if err := s.Client.CheckTokens(); err != nil {
 		return nil, err
 	}
-
-	// Set request tokens
-	requestBody.AccessToken = s.Client.AccessToken
-	requestBody.ClientToken = s.Client.ClientToken
 
 	apiURL, err := s.Client.GetApiURL(endpointAllActive)
 	if err != nil {
@@ -39,8 +37,7 @@ func (s *Service) NewAllActiveRequest() *AllActiveRequest {
 }
 
 type AllActiveRequest struct {
-	AccessToken string `json:"AccessToken"`
-	ClientToken string `json:"ClientToken,omitempty"`
+	json.BaseRequest
 }
 
 type AllActiveResponse struct {

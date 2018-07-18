@@ -1,5 +1,7 @@
 package bills
 
+import "github.com/tim-online/go-mews/json"
+
 const (
 	endpointAllByIDs = "bills/getAllByIds"
 )
@@ -10,10 +12,6 @@ func (s *Service) AllByIDs(requestBody *AllByIDsRequest) (*AllByIDsResponse, err
 	if err := s.Client.CheckTokens(); err != nil {
 		return nil, err
 	}
-
-	// Set request tokens
-	requestBody.AccessToken = s.Client.AccessToken
-	requestBody.ClientToken = s.Client.ClientToken
 
 	apiURL, err := s.Client.GetApiURL(endpointAllByIDs)
 	if err != nil {
@@ -35,9 +33,8 @@ func (s *Service) NewAllByIDsRequest() *AllByIDsRequest {
 }
 
 type AllByIDsRequest struct {
-	AccessToken string   `json:"AccessToken"`
-	ClientToken string   `json:"ClientToken,omitempty"`
-	BillIDs     []string `json:"BillIds"`
+	json.BaseRequest
+	BillIDs []string `json:"BillIds"`
 }
 
 type AllByIDsResponse struct {

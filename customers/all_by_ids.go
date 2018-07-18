@@ -1,8 +1,9 @@
 package customers
 
 import (
-	"encoding/json"
 	"time"
+
+	"github.com/tim-online/go-mews/json"
 )
 
 const (
@@ -15,10 +16,6 @@ func (s *Service) AllByIDs(requestBody *AllByIDsRequest) (*AllByIDsResponse, err
 	if err := s.Client.CheckTokens(); err != nil {
 		return nil, err
 	}
-
-	// Set request tokens
-	requestBody.AccessToken = s.Client.AccessToken
-	requestBody.ClientToken = s.Client.ClientToken
 
 	apiURL, err := s.Client.GetApiURL(endpointAllByIDs)
 	if err != nil {
@@ -40,8 +37,7 @@ func (s *Service) NewAllByIDsRequest() *AllByIDsRequest {
 }
 
 type AllByIDsRequest struct {
-	AccessToken string   `json:"AccessToken"`
-	ClientToken string   `json:"ClientToken,omitempty"`
+	json.BaseRequest
 	CustomerIDs []string `json:"CustomerIds"`
 }
 
@@ -122,34 +118,6 @@ type Address struct {
 	City        string `json:"City"`        // The City.
 	PostalCode  string `json:"PostalCode"`  // Postal code.
 	CountryCode string `json:"CountryCode"` // ISO 3166-1 alpha-2 country code (two letter country code).
-}
-
-type Date struct {
-	time.Time
-}
-
-func (d Date) MarshalJSON() ([]byte, error) {
-	return json.Marshal(d.Time.Format("2006-01-02"))
-}
-
-func (d *Date) UnmarshalJSON(data []byte) error {
-	var value string
-	err := json.Unmarshal(data, &value)
-	if err != nil {
-		return err
-	}
-
-	if value == "" {
-		return nil
-	}
-
-	d.Time, err = time.Parse("2006-01-02", value)
-	if err == nil {
-		return err
-	}
-
-	d.Time, err = time.Parse(time.RFC3339, value)
-	return err
 }
 
 type DriversLicense struct {

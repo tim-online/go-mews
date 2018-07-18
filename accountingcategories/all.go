@@ -1,5 +1,7 @@
 package accountingcategories
 
+import "github.com/tim-online/go-mews/json"
+
 const (
 	endpointAll = "accountingCategories/getAll"
 )
@@ -10,10 +12,6 @@ func (s *Service) All(requestBody *AllRequest) (*AllResponse, error) {
 	if err := s.Client.CheckTokens(); err != nil {
 		return nil, err
 	}
-
-	// Set request tokens
-	requestBody.AccessToken = s.Client.AccessToken
-	requestBody.ClientToken = s.Client.ClientToken
 
 	apiURL, err := s.Client.GetApiURL(endpointAll)
 	if err != nil {
@@ -39,8 +37,7 @@ func (s *Service) NewAllRequest() *AllRequest {
 }
 
 type AllRequest struct {
-	AccessToken string `json:"AccessToken"`
-	ClientToken string `json:"ClientToken,omitempty"`
+	json.BaseRequest
 }
 
 type AccountingCategory struct {
