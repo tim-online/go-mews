@@ -33,6 +33,11 @@ func (s *Service) All(requestBody *AllRequest) (*AllResponse, error) {
 	}
 
 	_, err = s.Client.Do(httpReq, responseBody)
+
+	for _, item := range responseBody.OutletItems {
+		item.Amount = item.GenerateAmount()
+	}
+
 	return responseBody, err
 }
 
@@ -82,20 +87,33 @@ type OutletItem struct {
 	BillID               string         `json:"BillId"`               // Unique identifier of the bill the item is assigned to.
 	AccountingCategoryID string         `json:"AccountingCategoryId"` // Unique identifier of the Accounting Category the item belongs to.
 	UnitCount            int            `json:"UnitCount"`            // Amount the item costs, negative amount represents either rebate or a payment.
-	Amount               Amount         `json:"UnitCost"`             // Amount the item costs, negative amount represents either rebate or a payment.
+	UnitCost             UnitCost       `json:"UnitCost"`             // Amount the item costs, negative amount represents either rebate or a payment.
 	Type                 OutletItemType `json:"Type"`                 // Type of the item.
 	Name                 string         `json:"Name"`                 // Name of the item.
 	Notes                string         `json:"Notes"`                // Additional notes.
-	ConsumptionUTC       time.Time      `json:"ConsumptionUtc"`       // Date and time of the item consumption in UTC timezone in ISO 8601 format.
+	ConsumptionUTC       time.Time      `json:"ConsumedUtc"`          // Date and time of the item consumption in UTC timezone in ISO 8601 format.
 	ClosedUTC            time.Time      `json:"ClosedUtc"`            // Date and time of the item bill closure in UTC timezone in ISO 8601 format.
+	Amount               Amount         `json:"Amount"`
 }
 
-type Amount struct {
+func (item OutletItem) GenerateAmount() Amount {
+	return Amount{
+		Currency: item.UnitCost.Currency,
+		Net:      item.UnitCost.Net * float64(item.UnitCount),
+		Tax:      item.UnitCost.Tax * float64(item.UnitCount),
+		TaxRate:  item.UnitCost.TaxRate,
+		Value:    item.UnitCost.Value * float64(item.UnitCount),
+	}
+}
+
+type UnitCost struct {
 	Currency string  `json:"Currency"` // ISO-4217 code of the Currency.
 	Net      float64 `json:"Net"`      // Net value in case the item is taxed.
 	Tax      float64 `json:"Tax"`      // Tax value in case the item is taxed.
 	TaxRate  float64 `json:"TaxRate"`  // Tax rate in case the item is taxed (e.g. 0.21).
 	Value    float64 `json:"Value"`    // Amount in the currency (including tax if taxed).
 }
+
+type Amount UnitCost
 
 type OutletItemType string

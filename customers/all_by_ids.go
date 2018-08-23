@@ -107,9 +107,7 @@ type Document struct {
 
 type Classification string
 
-type Options []Option
-
-type Option string
+type Options []string
 
 type Address struct {
 	Line1       string `json:"Line1"`       // First line of the address.
