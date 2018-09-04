@@ -36,6 +36,7 @@ type UpdateRequest struct {
 	json.BaseRequest
 	CommandID string       `json:"CommandId"`
 	State     CommandState `json:"State"`
+	Notes     string       `json:"Notes"`
 }
 
 type UpdateResponse struct {
