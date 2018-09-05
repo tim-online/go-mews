@@ -51,7 +51,7 @@ type Bills []Bill
 type Bill struct {
 	ID         string    `json:"Id"`         // Unique identifier of the bill.
 	CustomerID string    `json:"CustomerId"` // Unique identifier of the Customer the bill is issued to.
-	CompanyID  string    `json:"CompanyId"`  // Unique identifier of the Company the bill is issued to.
+	CounterID  string    `json:"CounterId"`  // Unique identifier of the Customer the bill is issued to.ompanyID  string    `json:"CompanyId"`  // Unique identifier of the Company the bill is issued to.
 	Type       BillType  `json:"Type"`       // Type of the bill.
 	Number     string    `json:"Number"`     // Number of the bill.
 	IssuedUTC  time.Time `json:"IssuedUtc"`  // Date and time of the bill issuance in UTC timezone in ISO 8601 format.
