@@ -4,12 +4,16 @@ import (
 	"time"
 
 	"github.com/tim-online/go-mews/accountingitems"
+	"github.com/tim-online/go-mews/configuration"
 	"github.com/tim-online/go-mews/customers"
 	"github.com/tim-online/go-mews/json"
 )
 
 const (
 	endpointAll = "reservations/getAll"
+
+	Reservable ServiceType = "Reservable"
+	Orderable  ServiceType = "Orderable"
 )
 
 // List all products
@@ -46,18 +50,20 @@ type AllResponse struct {
 	Services          Services                        `json:"Services"`          // Services that have been reserved.
 	SpaceCategories   SpaceCategories                 `json:"SpaceCategories"`   // Space categories of the spaces.
 	Spaces            Spaces                          `json:"Spaces"`            // Assigned spaces of the reservations.
+	Notes             OrderNotes                      `json:"Notes"`             // Notes of the reservations.
 }
 
 type Reservations []Reservation
 type Services []Service
 
 type Service struct {
-	ID         string     `json:"Id"`         // Unique identifier of the service.
-	IsActive   bool       `json:"IsActive"`   // Whether the service is still active.
-	Name       string     `json:"Name"`       // Whether the service is still active.
-	StartTime  string     `json:"StartTime"`  // Default start time of the service orders in ISO 8601 duration format.
-	EndTime    string     `json:"EndTime"`    // Default end time of the service orders in ISO 8601 duration format.
-	Promotions Promotions `json:"Promotions"` // Promotions of the service.
+	ID         string      `json:"Id"`         // Unique identifier of the service.
+	IsActive   bool        `json:"IsActive"`   // Whether the service is still active.
+	Name       string      `json:"Name"`       // Whether the service is still active.
+	StartTime  string      `json:"StartTime"`  // Default start time of the service orders in ISO 8601 duration format.
+	EndTime    string      `json:"EndTime"`    // Default end time of the service orders in ISO 8601 duration format.
+	Promotions Promotions  `json:"Promotions"` // Promotions of the service.
+	Type       ServiceType `json:"Type"`       // Type of the service.
 }
 
 func (s *APIService) NewAllRequest() *AllRequest {
@@ -100,19 +106,20 @@ type Reservation struct {
 	UpdatedUTC                time.Time        `json:"UpdatedUtc"`                // Last update date and time of the reservation in UTC timezone in ISO 8601 format.
 	StartUTC                  time.Time        `json:"StartUtc"`                  // Start of the reservation (arrival) in UTC timezone in ISO 8601 format.
 	EndUTC                    time.Time        `json:"EndUtc"`                    // End of the reservation (departure) in UTC timezone in ISO 8601 format.
-	CancelledUTC              time.Time        `json:"CancelledUtc"`              // Cancellation date and time in UTC timezone in ISO 8601 format.
-	RequestedCategoryID       string           `json:"RequestedCategoryId"`       // Identifier of the requested Space Category.
-	AssignedSpaceID           string           `json:"AssignedSpaceId"`           // Identifier of the assigned Space.
-	AssignedSpaceLocked       bool             `json:"AssignedSpaceLocked"`       // Whether the reservation is locked in the assigned Space and cannot be moved.
-	BusinessSegmentID         string           `json:"BusinessSegmentId"`         // Identifier of the reservation Business Segment.
-	CompanyID                 string           `json:"CompanyId"`                 // Identifier of the Company on behalf of which the reservation was made.
-	TravelAgencyID            string           `json:"TravelAgencyId"`            // Identifier of the Company that mediated the reservation.
-	RateID                    string           `json:"RateId"`                    // Identifier of the reservation Rate.
-	AdultCount                int              `json:"AdultCount"`                // Count of adults the reservation was booked for.
-	ChildCount                int              `json:"ChildCount"`                // Count of children the reservation was booked for.
-	CustomerID                string           `json:"Customerid"`                // required	Unique identifier of the Customer who owns the reservation.
-	CompanionIDs              []string         `json:"CompanionIds"`              // Unique identifiers of Customers that will occupy the space.
-	ChannelManagerID          string           `json:"ChannelManagerId"`          // ??
+	ReleasedUTC               time.Time        `json:"ReleasedUTC,omitempty"`
+	CancelledUTC              time.Time        `json:"CancelledUtc"`        // Cancellation date and time in UTC timezone in ISO 8601 format.
+	RequestedCategoryID       string           `json:"RequestedCategoryId"` // Identifier of the requested Space Category.
+	AssignedSpaceID           string           `json:"AssignedSpaceId"`     // Identifier of the assigned Space.
+	AssignedSpaceLocked       bool             `json:"AssignedSpaceLocked"` // Whether the reservation is locked in the assigned Space and cannot be moved.
+	BusinessSegmentID         string           `json:"BusinessSegmentId"`   // Identifier of the reservation Business Segment.
+	CompanyID                 string           `json:"CompanyId"`           // Identifier of the Company on behalf of which the reservation was made.
+	TravelAgencyID            string           `json:"TravelAgencyId"`      // Identifier of the Company that mediated the reservation.
+	RateID                    string           `json:"RateId"`              // Identifier of the reservation Rate.
+	AdultCount                int              `json:"AdultCount"`          // Count of adults the reservation was booked for.
+	ChildCount                int              `json:"ChildCount"`          // Count of children the reservation was booked for.
+	CustomerID                string           `json:"Customerid"`          // required	Unique identifier of the Customer who owns the reservation.
+	CompanionIDs              []string         `json:"CompanionIds"`        // Unique identifiers of Customers that will occupy the space.
+	ChannelManagerID          string           `json:"ChannelManagerId"`    // ??
 }
 
 type ReservationState string
@@ -166,14 +173,6 @@ type Document struct {
 	Number     string `json:"Number"`     // Number of the document (e.g. passport number).
 	Issuance   Date   `json:"Issuance"`   // Date of issuance in ISO 8601 format.
 	Expiration Date   `json:"Expiration"` // Expiration date in ISO 8601 format.
-}
-
-type Address struct {
-	Line1       string `json:"Line1"`       // First line of the address.
-	Line2       string `json:"Line2"`       // Second line of the address.
-	City        string `json:"City"`        // The city.
-	PostalCode  string `json:"PostalCode"`  // Postal code.
-	CountryCode string `json:"CountryCode"` // ISO 3166-1 alpha-2 country code (two letter country code).
 }
 
 type CurrencyValue struct {
@@ -237,19 +236,25 @@ type ReservationGroup struct {
 type SpaceCategories []SpaceCategory
 
 type SpaceCategory struct {
-	ID          string   `json:"Id"`          // Unique identifier of the category.
-	Name        string   `json:"Name"`        // Name of the category.
-	ShortName   string   `json:"ShortName"`   // Short name (e.g. code) of the category.
-	Description string   `json:"Description"` // Description of the category.
-	Ordering    int      `json:"Ordering"`    // Ordering of the category, lower number corresponds to lower category (note that uniqueness nor continuous sequence is guaranteed).
-	UnitCount   int      `json:"Unitcount"`   // Count of units that can be accommodated (e.g. bed count).
-	ImageIDs    []string `json:"ImageIds"`    // Unique identifiers of the space category images.
+	ID             string                      `json:"Id"`             // Unique identifier of the category.
+	IsActive       bool                        `json:"IsActive"`       // Whether the space category is still active.
+	Name           string                      `json:"Name"`           // Name of the category.
+	Names          configuration.LocalizedText `json:"Names"`          // All translations of the name.
+	ShortName      string                      `json:"ShortName"`      // Short name (e.g. code) of the category.
+	ShortNames     configuration.LocalizedText `json:"ShortNames"`     // All translations of the short name.
+	Description    string                      `json:"Description"`    // Description of the category.
+	Descriptions   configuration.LocalizedText `json:"Descriptions"`   // All translations of the description.
+	Ordering       int                         `json:"Ordering"`       // Ordering of the category, lower number corresponds to lower category (note that uniqueness nor continuous sequence is guaranteed).
+	UnitCount      int                         `json:"Unitcount"`      // Count of units that can be accommodated (e.g. bed count).
+	ExtraUnitCount int                         `json:"ExtraUnitCount"` // Count of extra units that can be accommodated (e.g. extra bed count).
+	ImageIDs       []string                    `json:"ImageIds"`       // Unique identifiers of the space category images.
 }
 
 type Spaces []Space
 
 type Space struct {
 	ID             string     `json:"Id"`             // Unique identifier of the space.
+	IsActive       bool       `json:"IsActive"`       // Whether the space is still active.
 	Type           SpaceType  `json:"Type"`           // Type of the space.
 	Number         string     `json:"Number"`         // Number of the space (e.g. room number).
 	FloorNumber    string     `json:"FloorNumber"`    // Number of the floor the space is on.
@@ -278,3 +283,17 @@ type Promotions struct {
 	BeforeCheckOut bool `json:"BeforeCheckout"` // Whether it can be promoted before check-out.
 	AfterCheckOut  bool `json:"AfterCheckout"`  // Whether it can be promoted after check-out.
 }
+
+type ServiceType string
+
+type OrderNotes []OrderNote
+
+type OrderNote struct {
+	ID         string        `json:"Id"`         // Unique identifier of the note.
+	OrderID    string        `json:"OrderId"`    // Unique identifier of the order or Reservation.
+	Text       string        `json:"Text"`       // Value of the note.
+	Type       OrderNoteType `json:"Type"`       // Type of the note.
+	CreatedUTC time.Time     `json:"CreatedUtc"` // Creation date and time of the note in UTC timezone in ISO 8601 format.
+}
+
+type OrderNoteType string

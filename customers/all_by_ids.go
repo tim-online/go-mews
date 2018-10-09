@@ -3,6 +3,7 @@ package customers
 import (
 	"time"
 
+	"github.com/tim-online/go-mews/configuration"
 	"github.com/tim-online/go-mews/json"
 )
 
@@ -48,37 +49,37 @@ type AllByIDsResponse struct {
 type Customers []Customer
 
 type Customer struct {
-	ID                      string           `json:"Id"`                      // Unique identifier of the customer.
-	Number                  string           `json:"Number"`                  // Number of the customer.
-	FirstName               string           `json:"FirstName"`               // First name of the customer.
-	LastName                string           `json:"LastName"`                // Last name of the customer.
-	SecondLastName          string           `json:"SecondLastName"`          // Second last name of the customer.
-	Title                   Title            `json:"Title"`                   // Title prefix of the customer.
-	Gender                  Gender           `json:"Gender"`                  // Gender of the customer.
-	NationalityCode         string           `json:"NationalityCode"`         // ISO 3166-1 alpha-2 country code (two letter country code) of the nationality.
-	LanguageCode            string           `json:"LanguageCode"`            // Language and culture code of the customers preferred language. E.g. en-US or fr-FR.
-	BirthDate               string           `json:"BirthDate"`               // Date of birth in ISO 8601 format.
-	BirthDateUTC            time.Time        `json:"BirthDateUtc"`            // ??
-	BirthPlace              string           `json:"BirthPlace"`              // Place of birth.
-	Email                   string           `json:"Email"`                   // Email address of the customer.
-	Phone                   string           `json:"Phone"`                   // Phone number of the customer (possibly mobile).
-	LoyaltyCode             string           `json:"LoyaltyCode"`             // Loyalty code of the customer.
-	Classifications         []Classification `json:"Classifications"`         // Classifications of the customer.
-	Options                 Options          `json:"Options"`                 // Options of the customer.
-	Passport                Document         `json:"Passport"`                // Passport details of the customer.
-	IdentityCard            Document         `json:"IdentityCard"`            // IdentityCard details for Customer.
-	Visa                    Document         `json:"Visa"`                    // Visa details for Customer.
-	Address                 Address          `json:"Address"`                 // Address of the customer.
-	CreatedUTC              time.Time        `json:"CreatedUtc"`              // Creation date and time of the customer in UTC timezone in ISO 8601 format.
-	UpdatedUTC              time.Time        `json:"UpdatedUtc"`              // Last update date and time of the customer in UTC timezone in ISO 8601 format.
-	TaxIdentificationNumber string           `json:"TaxIdentificationNumber"` // tax id customer
-	CategoryID              string           `json:"CategoryId"`              // ??
-	CitizenNumber           string           `json:"CitizenNumber"`           // ??
-	FatherName              string           `json:"FatherName"`              // ??
-	MotherName              string           `json:"MotherName"`              // ??
-	Notes                   string           `json:"Notes"`                   // ??
-	Occupation              string           `json:"Occupation"`              // ??
-	DriversLicense          DriversLicense   `json:"DriversLicense"`          // NEW
+	ID                      string                `json:"Id"`                      // Unique identifier of the customer.
+	Number                  string                `json:"Number"`                  // Number of the customer.
+	FirstName               string                `json:"FirstName"`               // First name of the customer.
+	LastName                string                `json:"LastName"`                // Last name of the customer.
+	SecondLastName          string                `json:"SecondLastName"`          // Second last name of the customer.
+	Title                   Title                 `json:"Title"`                   // Title prefix of the customer.
+	Gender                  Gender                `json:"Gender"`                  // Gender of the customer.
+	NationalityCode         string                `json:"NationalityCode"`         // ISO 3166-1 alpha-2 country code (two letter country code) of the nationality.
+	LanguageCode            string                `json:"LanguageCode"`            // Language and culture code of the customers preferred language. E.g. en-US or fr-FR.
+	BirthDate               string                `json:"BirthDate"`               // Date of birth in ISO 8601 format.
+	BirthDateUTC            time.Time             `json:"BirthDateUtc"`            // ??
+	BirthPlace              string                `json:"BirthPlace"`              // Place of birth.
+	Email                   string                `json:"Email"`                   // Email address of the customer.
+	Phone                   string                `json:"Phone"`                   // Phone number of the customer (possibly mobile).
+	LoyaltyCode             string                `json:"LoyaltyCode"`             // Loyalty code of the customer.
+	Classifications         []Classification      `json:"Classifications"`         // Classifications of the customer.
+	Options                 Options               `json:"Options"`                 // Options of the customer.
+	Passport                Document              `json:"Passport"`                // Passport details of the customer.
+	IdentityCard            Document              `json:"IdentityCard"`            // IdentityCard details for Customer.
+	Visa                    Document              `json:"Visa"`                    // Visa details for Customer.
+	Address                 configuration.Address `json:"Address"`                 // Address of the customer.
+	CreatedUTC              time.Time             `json:"CreatedUtc"`              // Creation date and time of the customer in UTC timezone in ISO 8601 format.
+	UpdatedUTC              time.Time             `json:"UpdatedUtc"`              // Last update date and time of the customer in UTC timezone in ISO 8601 format.
+	TaxIdentificationNumber string                `json:"TaxIdentificationNumber"` // tax id customer
+	CategoryID              string                `json:"CategoryId"`              // ??
+	CitizenNumber           string                `json:"CitizenNumber"`           // ??
+	FatherName              string                `json:"FatherName"`              // ??
+	MotherName              string                `json:"MotherName"`              // ??
+	Notes                   string                `json:"Notes"`                   // ??
+	Occupation              string                `json:"Occupation"`              // ??
+	DriversLicense          DriversLicense        `json:"DriversLicense"`          // NEW
 }
 
 type Title string
@@ -108,14 +109,6 @@ type Document struct {
 type Classification string
 
 type Options []string
-
-type Address struct {
-	Line1       string `json:"Line1"`       // First line of the address.
-	Line2       string `json:"Line2"`       // Seconds line of the address.
-	City        string `json:"City"`        // The City.
-	PostalCode  string `json:"PostalCode"`  // Postal code.
-	CountryCode string `json:"CountryCode"` // ISO 3166-1 alpha-2 country code (two letter country code).
-}
 
 type DriversLicense struct {
 	Expiration         Date      `json:"Expiration"`

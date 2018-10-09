@@ -1,6 +1,9 @@
 package companies
 
-import "github.com/tim-online/go-mews/json"
+import (
+	"github.com/tim-online/go-mews/configuration"
+	"github.com/tim-online/go-mews/json"
+)
 
 const (
 	endpointAll = "companies/getAll"
@@ -41,22 +44,14 @@ type AllResponse struct {
 }
 
 type Company struct {
-	ID                          string  `json:"Id"`                          // Unique identifier of the company.
-	Name                        string  `json:"Name"`                        // Name of the company.
-	Number                      int     `json:"Number"`                      // Unique number of the company.
-	Identifier                  string  `json:"Identifier"`                  // Identifier of the company (e.g. legal identifier).
-	TaxIdentificationNumber     string  `json:"TaxIdentificationNumber"`     // Tax identification number of the company.
-	AdditionalTaxIdentifier     string  `json:"AdditionalTaxIdentifier"`     // Additional tax identifer of the company.
-	ElectronicInvoiceIdentifier string  `json:"ElectronicInvoiceIdentifier"` // Electronic invoice identifer of the company.
-	Address                     Address `json:"Address"`
-	AccountingCode              string  `json:"AccountingCode"` // NEW
-	TaxIdentifier               string  `json:"TaxIdentifier"`  // NEW
-}
-
-type Address struct {
-	City        string `json:"City"`
-	CountryCode string `json:"CountryCode"` // ISO 3166-1 alpha-2 country code (two letter country code).
-	Line1       string `json:"Line1"`
-	Line2       string `json:"Line2"`
-	PostalCode  string `json:"PostalCode"`
+	ID                          string                `json:"Id"`                          // Unique identifier of the company.
+	Name                        string                `json:"Name"`                        // Name of the company.
+	Number                      int                   `json:"Number"`                      // Unique number of the company.
+	Identifier                  string                `json:"Identifier"`                  // Identifier of the company (e.g. legal identifier).
+	TaxIdentificationNumber     string                `json:"TaxIdentificationNumber"`     // Tax identification number of the company.
+	AdditionalTaxIdentifier     string                `json:"AdditionalTaxIdentifier"`     // Additional tax identifer of the company.
+	ElectronicInvoiceIdentifier string                `json:"ElectronicInvoiceIdentifier"` // Electronic invoice identifer of the company.
+	Address                     configuration.Address `json:"Address"`
+	AccountingCode              string                `json:"AccountingCode"` // NEW
+	TaxIdentifier               string                `json:"TaxIdentifier"`  // NEW
 }

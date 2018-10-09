@@ -43,6 +43,7 @@ func (s *Service) All(requestBody *AllRequest) (*AllResponse, error) {
 
 type AllResponse struct {
 	OutletItems []OutletItem
+	OutletBills []OutletBill
 }
 
 func (s *Service) NewAllRequest() *AllRequest {
@@ -86,14 +87,16 @@ type OutletItem struct {
 	ID                   string         `json:"Id"`                   // Unique identifier of the item.
 	BillID               string         `json:"BillId"`               // Unique identifier of the bill the item is assigned to.
 	AccountingCategoryID string         `json:"AccountingCategoryId"` // Unique identifier of the Accounting Category the item belongs to.
-	UnitCount            int            `json:"UnitCount"`            // Amount the item costs, negative amount represents either rebate or a payment.
-	UnitCost             UnitCost       `json:"UnitCost"`             // Amount the item costs, negative amount represents either rebate or a payment.
 	Type                 OutletItemType `json:"Type"`                 // Type of the item.
 	Name                 string         `json:"Name"`                 // Name of the item.
-	Notes                string         `json:"Notes"`                // Additional notes.
+	UnitCount            int            `json:"UnitCount"`            // Amount the item costs, negative amount represents either rebate or a payment.
+	UnitCost             UnitCost       `json:"UnitCost"`             // Amount the item costs, negative amount represents either rebate or a payment.
+	CreatedUTC           time.Time      `json:"CreatedUtc"`           // Date and time of the item creation in UTC timezone in ISO 8601 format.
 	ConsumptionUTC       time.Time      `json:"ConsumedUtc"`          // Date and time of the item consumption in UTC timezone in ISO 8601 format.
-	ClosedUTC            time.Time      `json:"ClosedUtc"`            // Date and time of the item bill closure in UTC timezone in ISO 8601 format.
-	Amount               Amount         `json:"Amount"`
+	Notes                string         `json:"Notes"`                // Additional notes.
+
+	// Virtual property
+	Amount Amount `json:"Amount"`
 }
 
 func (item OutletItem) GenerateAmount() Amount {
@@ -117,3 +120,11 @@ type UnitCost struct {
 type Amount UnitCost
 
 type OutletItemType string
+
+type OutletBill struct {
+	ID        string    `json:"Id"`        // Unique identifier of the bill.
+	OutletID  string    `json:"OutletId"`  // Unique identifier of the Outlet where the bill was issued.
+	Number    string    `json:"Number"`    // Number of the bill.
+	ClosedUTC time.Time `json:"ClosedUtc"` // Date and time of the bill closure in UTC timezone in ISO 8601 format.
+	Notes     string    `json:"Notes"`
+}
