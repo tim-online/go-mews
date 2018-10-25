@@ -51,7 +51,7 @@ type SpaceBlocks []SpaceBlock
 
 type SpaceBlock struct {
 	ID              string    `json:"Id"`              // Unique identifier of the block.
-	AssignedSpaceId string    `json:"AssignedSpaceId"` // Unique identifier of the assigned Space.
+	AssignedSpaceID string    `json:"AssignedSpaceId"` // Unique identifier of the assigned Space.
 	Type            string    `json:"Type"`            // Type of the space block.
 	StartUTC        time.Time `json:"startUtc"`        // Start of the block in UTC timezone in ISO 8601 format.
 	EndUTC          time.Time `json:"endUtc"`          // End of the block in UTC timezone in ISO 8601 format.
