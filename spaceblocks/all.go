@@ -38,8 +38,9 @@ func (s *Service) NewAllRequest() *AllRequest {
 
 type AllRequest struct {
 	json.BaseRequest
-	StartUTC *time.Time `json:"StartUtc,omitempty"`
-	EndUTC   *time.Time `json:"EndUtc,omitempty"`
+	StartUTC   *time.Time           `json:"StartUtc,omitempty"`
+	EndUTC     *time.Time           `json:"EndUtc,omitempty"`
+	TimeFilter SpaceBlockTimeFilter `json:"TimeFilter,omitempty"`
 }
 
 type AllResponse struct {
@@ -57,3 +58,11 @@ type SpaceBlock struct {
 	CreatedUTC      time.Time `json:"createdUtc"`      // Creation date and time of the block in UTC timezone in ISO 8601 format.
 	UpdatedUTC      time.Time `json:"updatedUtc"`      // Last update date and time of the block in UTC timezone in ISO 8601 format.
 }
+
+type SpaceBlockTimeFilter string
+
+const (
+	SpaceBlockTimeFilterColliding SpaceBlockTimeFilter = "Colliding"
+	SpaceBlockTimeFilterCreated   SpaceBlockTimeFilter = "Created"
+	SpaceBlockTimeFilterUpdated   SpaceBlockTimeFilter = "Updated"
+)
