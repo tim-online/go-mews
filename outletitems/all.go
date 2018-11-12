@@ -1,6 +1,7 @@
 package outletitems
 
 import (
+	"math"
 	"time"
 
 	"github.com/tim-online/go-mews/json"
@@ -102,7 +103,7 @@ type OutletItem struct {
 func (item OutletItem) GenerateAmount() Amount {
 	return Amount{
 		Currency: item.UnitCost.Currency,
-		Net:      item.UnitCost.Net * float64(item.UnitCount),
+		Net:      math.Round((item.UnitCost.Value*float64(item.UnitCount))/(1+item.UnitCost.TaxRate)*100) / 100,
 		Tax:      item.UnitCost.Tax * float64(item.UnitCount),
 		TaxRate:  item.UnitCost.TaxRate,
 		Value:    item.UnitCost.Value * float64(item.UnitCount),
