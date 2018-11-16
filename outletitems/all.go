@@ -101,13 +101,15 @@ type OutletItem struct {
 }
 
 func (item OutletItem) GenerateAmount() Amount {
-	return Amount{
+	amt := Amount{
 		Currency: item.UnitCost.Currency,
 		Net:      math.Round((item.UnitCost.Value*float64(item.UnitCount))/(1+item.UnitCost.TaxRate)*100) / 100,
-		Tax:      item.UnitCost.Tax * float64(item.UnitCount),
+		Tax:      0,
 		TaxRate:  item.UnitCost.TaxRate,
 		Value:    item.UnitCost.Value * float64(item.UnitCount),
 	}
+	amt.Tax = amt.Value - amt.Net
+	return amt
 }
 
 type UnitCost struct {
