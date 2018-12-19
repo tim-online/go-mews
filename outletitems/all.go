@@ -101,9 +101,13 @@ type OutletItem struct {
 }
 
 func (item OutletItem) GenerateAmount() Amount {
+	taxRate := 0.0
+	if item.UnitCost.TaxRate != nil {
+		taxRate = *item.UnitCost.TaxRate
+	}
 	amt := Amount{
 		Currency: item.UnitCost.Currency,
-		Net:      math.Round((item.UnitCost.Value*float64(item.UnitCount))/(1+item.UnitCost.TaxRate)*100) / 100,
+		Net:      math.Round((item.UnitCost.Value*float64(item.UnitCount))/(1+taxRate)*100) / 100,
 		Tax:      0,
 		TaxRate:  item.UnitCost.TaxRate,
 		Value:    item.UnitCost.Value * float64(item.UnitCount),
@@ -113,11 +117,11 @@ func (item OutletItem) GenerateAmount() Amount {
 }
 
 type UnitCost struct {
-	Currency string  `json:"Currency"` // ISO-4217 code of the Currency.
-	Net      float64 `json:"Net"`      // Net value in case the item is taxed.
-	Tax      float64 `json:"Tax"`      // Tax value in case the item is taxed.
-	TaxRate  float64 `json:"TaxRate"`  // Tax rate in case the item is taxed (e.g. 0.21).
-	Value    float64 `json:"Value"`    // Amount in the currency (including tax if taxed).
+	Currency string   `json:"Currency"` // ISO-4217 code of the Currency.
+	Net      float64  `json:"Net"`      // Net value in case the item is taxed.
+	Tax      float64  `json:"Tax"`      // Tax value in case the item is taxed.
+	TaxRate  *float64 `json:"TaxRate"`  // Tax rate in case the item is taxed (e.g. 0.21).
+	Value    float64  `json:"Value"`    // Amount in the currency (including tax if taxed).
 }
 
 type Amount UnitCost

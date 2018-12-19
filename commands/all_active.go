@@ -147,9 +147,9 @@ const (
 type Payments []AccountingItem
 
 type Amount struct {
-	Currency string  `json:"Currency"` // ISO-4217 currency code, e.g. EUR or USD.
-	Net      float64 `json:"Net"`      // Net value in case the item is taxed.
-	Tax      float64 `json:"Tax"`      // Tax value in case the item is taxed.
-	TaxRate  float64 `json:"TaxRate"`  // Tax rate in case the item is taxed (e.g. 0.21).
-	Value    float64 `json:"Value"`    // Amount in the currency (including tax if taxed).
+	Currency string   `json:"Currency"` // ISO-4217 currency code, e.g. EUR or USD.
+	Net      float64  `json:"Net"`      // Net value in case the item is taxed.
+	Tax      float64  `json:"Tax"`      // Tax value in case the item is taxed.
+	TaxRate  *float64 `json:"TaxRate"`  // Tax rate in case the item is taxed (e.g. 0.21).
+	Value    float64  `json:"Value"`    // Amount in the currency (including tax if taxed).
 }
