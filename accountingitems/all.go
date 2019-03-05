@@ -38,11 +38,18 @@ func (s *Service) All(requestBody *AllRequest) (*AllResponse, error) {
 }
 
 type AllResponse struct {
-	AccountingItems []AccountingItem
+	AccountingItems        []AccountingItem
+	CreditCardTransactions CreditCardTransactions
 }
 
 func (s *Service) NewAllRequest() *AllRequest {
-	return &AllRequest{}
+	return &AllRequest{
+		Extent: AccountingItemsExtent{
+
+			AccountingItems:        true,
+			CreditCardTransactions: false,
+		},
+	}
 }
 
 type AllRequest struct {
@@ -50,6 +57,8 @@ type AllRequest struct {
 	StartUTC   *time.Time                `json:"StartUtc,omitempty"`
 	EndUTC     *time.Time                `json:"EndUtc,omitempty"`
 	TimeFilter AccountingItemsTimeFilter `json:"TimeFilter,omitempty"`
+	Currency   string                    `json:"Currency,omitempty"`
+	Extent     AccountingItemsExtent     `json:"Extent,omitempty"`
 }
 
 type AccountingItemsTimeFilter string
@@ -96,6 +105,18 @@ type AccountingItem struct {
 	ClosedUTC            time.Time          `json:"ClosedUtc"`              // Date and time of the item bill closure in UTC timezone in ISO 8601 format.
 }
 
+type CreditCardTransactions []CreditCardTransaction
+
+type CreditCardTransaction struct {
+	ID            string    `json:"Id"`
+	PaymentID     string    `json:"PaymentId"`
+	ChargedAmount Cost      `json:"ChargedAmount"`
+	SettledAmount Cost      `json:"SettledAmount"`
+	Fee           Cost      `json:"Fee"`
+	SettlementID  string    `json:"SettlementId"`
+	SettledUTC    time.Time `json:"SettledUtc"`
+}
+
 type Amount struct {
 	Currency string   `json:"Currency"` // ISO-4217 code of the Currency.
 	Net      float64  `json:"Net"`      // Net value in case the item is taxed.
@@ -105,3 +126,16 @@ type Amount struct {
 }
 
 type AccountingItemType string
+
+type AccountingItemsExtent struct {
+	AccountingItems        bool `json:"AccountingItems"`
+	CreditCardTransactions bool `json:"CreditCardTransactions"`
+}
+
+type Cost struct {
+	Currency string   `json:"Currency"` // ISO-4217 code of the Currency.
+	Net      float64  `json:"Net"`      // Net value in case the item is taxed.
+	Tax      float64  `json:"Tax"`      // Tax value in case the item is taxed.
+	TaxRate  *float64 `json:"TaxRate"`  // Tax rate in case the item is taxed (e.g. 0.21).
+	Value    float64  `json:"Value"`    // Amount in the currency (including tax if taxed).
+}
