@@ -17,6 +17,7 @@ import (
 	"github.com/tim-online/go-mews/reservations"
 	"github.com/tim-online/go-mews/spaceblocks"
 	"github.com/tim-online/go-mews/spaces"
+	"github.com/tim-online/go-mews/tasks"
 )
 
 const (
@@ -80,6 +81,8 @@ func NewClient(httpClient *http.Client, accessToken string, clientToken string) 
 	c.Configuration.Client = c.client
 	c.BusinessSegments = businesssegments.NewService()
 	c.BusinessSegments.Client = c.client
+	c.Tasks = tasks.NewService()
+	c.Tasks.Client = c.client
 
 	return c
 }
@@ -102,6 +105,7 @@ type Client struct {
 	Commands             *commands.Service
 	Configuration        *configuration.Service
 	BusinessSegments     *businesssegments.Service
+	Tasks                *tasks.Service
 }
 
 func (c *Client) SetDebug(debug bool) {
