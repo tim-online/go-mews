@@ -88,21 +88,23 @@ const (
 type AccountingItems []AccountingItem
 
 type AccountingItem struct {
-	ID                   string             `json:"Id"`                     // Unique identifier of the item.
-	CustomerID           string             `json:"CustomerId"`             // Unique identifier of the Customer whose account the item belongs to.
-	ProductID            string             `json:"ProductId"`              // Unique identifier of the Product.
-	ServiceID            string             `json:"ServiceId"`              // Unique identifier of the Service the item belongs to.
-	OrderID              string             `json:"OrderId"`                // Unique identifier of the order (or Reservation) the item belongs to.
-	BillID               string             `json:"BillId"`                 // Unique identifier of the bill the item is assigned to.
-	CreditCardID         string             `json:"CreditCardId,omitempty"` // Unique identifier of the Credit card the item is associated to.
-	InvoiceID            string             `json:"InvoiceId"`              // Unique identifier of the invoiced Bill the item is receivable for.
-	AccountingCategoryID string             `json:"AccountingCategoryId"`   // Unique identifier of the Accounting Category the item belongs to.
-	Amount               Amount             `json:"Amount"`                 // Amount the item costs, negative amount represents either rebate or a payment.
-	Type                 AccountingItemType `json:"Type"`                   // Type of the item.
-	Name                 string             `json:"Name"`                   // Name of the item.
-	Notes                string             `json:"Notes"`                  // Additional notes.
-	ConsumptionUTC       time.Time          `json:"ConsumptionUtc"`         // Date and time of the item consumption in UTC timezone in ISO 8601 format.
-	ClosedUTC            time.Time          `json:"ClosedUtc"`              // Date and time of the item bill closure in UTC timezone in ISO 8601 format.
+	ID                   string                `json:"Id"`                     // Unique identifier of the item.
+	CustomerID           string                `json:"CustomerId"`             // Unique identifier of the Customer whose account the item belongs to.
+	ProductID            string                `json:"ProductId"`              // Unique identifier of the Product.
+	ServiceID            string                `json:"ServiceId"`              // Unique identifier of the Service the item belongs to.
+	OrderID              string                `json:"OrderId"`                // Unique identifier of the order (or Reservation) the item belongs to.
+	BillID               string                `json:"BillId"`                 // Unique identifier of the bill the item is assigned to.
+	CreditCardID         string                `json:"CreditCardId,omitempty"` // Unique identifier of the Credit card the item is associated to.
+	InvoiceID            string                `json:"InvoiceId"`              // Unique identifier of the invoiced Bill the item is receivable for.
+	AccountingCategoryID string                `json:"AccountingCategoryId"`   // Unique identifier of the Accounting Category the item belongs to.
+	Amount               Amount                `json:"Amount"`                 // Amount the item costs, negative amount represents either rebate or a payment.
+	Type                 AccountingItemType    `json:"Type"`                   // Type of the item.
+	Name                 string                `json:"Name"`                   // Name of the item.
+	Notes                string                `json:"Notes"`                  // Additional notes.
+	ConsumptionUTC       time.Time             `json:"ConsumptionUtc"`         // Date and time of the item consumption in UTC timezone in ISO 8601 format.
+	ClosedUTC            time.Time             `json:"ClosedUtc"`              // Date and time of the item bill closure in UTC timezone in ISO 8601 format.
+	SubType              AccountingItemSubtype `json:"SubType"`                // subtype of the item. Note that the subtype depends on the Type of the item.
+	State                string                `json:"State"`
 }
 
 type CreditCardTransactions []CreditCardTransaction
@@ -115,14 +117,6 @@ type CreditCardTransaction struct {
 	Fee           Cost      `json:"Fee"`
 	SettlementID  string    `json:"SettlementId"`
 	SettledUTC    time.Time `json:"SettledUtc"`
-}
-
-type Amount struct {
-	Currency string   `json:"Currency"` // ISO-4217 code of the Currency.
-	Net      float64  `json:"Net"`      // Net value in case the item is taxed.
-	Tax      float64  `json:"Tax"`      // Tax value in case the item is taxed.
-	TaxRate  *float64 `json:"TaxRate"`  // Tax rate in case the item is taxed (e.g. 0.21).
-	Value    float64  `json:"Value"`    // Amount in the currency (including tax if taxed).
 }
 
 type AccountingItemType string
@@ -138,4 +132,26 @@ type Cost struct {
 	Tax      float64  `json:"Tax"`      // Tax value in case the item is taxed.
 	TaxRate  *float64 `json:"TaxRate"`  // Tax rate in case the item is taxed (e.g. 0.21).
 	Value    float64  `json:"Value"`    // Amount in the currency (including tax if taxed).
+}
+
+type AccountingItemSubtype string
+
+type Amount struct {
+	Currency   string    `json:"Currency"`   // ISO-4217 code of the Currency.
+	NetValue   float64   `json:"NetValue"`   // Net value in case the item is taxed.
+	GrossValue float64   `json:"GrossValue"` // Gross value including all taxes.
+	TaxValues  TaxValues `json:"TaxValues"`  // The tax values applied.
+
+	// Deprecated?
+	Net     float64  `json:"Net"`     // Net value in case the item is taxed.
+	Tax     float64  `json:"Tax"`     // Tax value in case the item is taxed.
+	TaxRate *float64 `json:"TaxRate"` // Tax rate in case the item is taxed (e.g. 0.21).
+	Value   float64  `json:"Value"`   // Amount in the currency (including tax if taxed).
+}
+
+type TaxValues []TaxValue
+
+type TaxValue struct {
+	Code  string  `json:"Code"`  // Code corresponding to tax type.
+	Value float64 `json:"Value"` // Amount of tax applied.
 }

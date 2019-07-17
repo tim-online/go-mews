@@ -116,16 +116,6 @@ func (item OutletItem) GenerateAmount() Amount {
 	return amt
 }
 
-type UnitCost struct {
-	Currency string   `json:"Currency"` // ISO-4217 code of the Currency.
-	Net      float64  `json:"Net"`      // Net value in case the item is taxed.
-	Tax      float64  `json:"Tax"`      // Tax value in case the item is taxed.
-	TaxRate  *float64 `json:"TaxRate"`  // Tax rate in case the item is taxed (e.g. 0.21).
-	Value    float64  `json:"Value"`    // Amount in the currency (including tax if taxed).
-}
-
-type Amount UnitCost
-
 type OutletItemType string
 
 type OutletBill struct {
@@ -134,4 +124,26 @@ type OutletBill struct {
 	Number    string    `json:"Number"`    // Number of the bill.
 	ClosedUTC time.Time `json:"ClosedUtc"` // Date and time of the bill closure in UTC timezone in ISO 8601 format.
 	Notes     string    `json:"Notes"`
+}
+
+type UnitCost Amount
+
+type Amount struct {
+	Currency   string    `json:"Currency"`   // ISO-4217 code of the Currency.
+	NetValue   float64   `json:"NetValue"`   // Net value in case the item is taxed.
+	GrossValue float64   `json:"GrossValue"` // Gross value including all taxes.
+	TaxValues  TaxValues `json:"TaxValues"`  // The tax values applied.
+
+	// Deprecated?
+	Net     float64  `json:"Net"`     // Net value in case the item is taxed.
+	Tax     float64  `json:"Tax"`     // Tax value in case the item is taxed.
+	TaxRate *float64 `json:"TaxRate"` // Tax rate in case the item is taxed (e.g. 0.21).
+	Value   float64  `json:"Value"`   // Amount in the currency (including tax if taxed).
+}
+
+type TaxValues []TaxValue
+
+type TaxValue struct {
+	Code  string  `json:"Code"`  // Code corresponding to tax type.
+	Value float64 `json:"Value"` // Amount of tax applied.
 }
