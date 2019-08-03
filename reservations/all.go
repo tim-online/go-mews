@@ -120,6 +120,7 @@ type Reservation struct {
 	CustomerID                string           `json:"Customerid"`          // required	Unique identifier of the Customer who owns the reservation.
 	CompanionIDs              []string         `json:"CompanionIds"`        // Unique identifiers of Customers that will occupy the space.
 	ChannelManagerID          string           `json:"ChannelManagerId"`    // ??
+	CancellationReason        string           `json:"CancellationReason"`  // ??
 }
 
 type ReservationState string
