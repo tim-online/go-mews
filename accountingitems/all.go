@@ -3,7 +3,10 @@ package accountingitems
 import (
 	"time"
 
-	"github.com/tim-online/go-mews/json"
+	"encoding/json"
+
+	"github.com/tim-online/go-errors"
+	base "github.com/tim-online/go-mews/json"
 )
 
 const (
@@ -53,7 +56,7 @@ func (s *Service) NewAllRequest() *AllRequest {
 }
 
 type AllRequest struct {
-	json.BaseRequest
+	base.BaseRequest
 	StartUTC   *time.Time                `json:"StartUtc,omitempty"`
 	EndUTC     *time.Time                `json:"EndUtc,omitempty"`
 	TimeFilter AccountingItemsTimeFilter `json:"TimeFilter,omitempty"`
@@ -64,9 +67,28 @@ type AllRequest struct {
 type AccountingItemsTimeFilter string
 
 const (
-	TimeFilterClosed  AccountingItemsTimeFilter = "Closed"
-	TimeFilterUpdated AccountingItemsTimeFilter = "Updated"
+	TimeFilterClosed   AccountingItemsTimeFilter = "Closed"
+	TimeFilterConsumed AccountingItemsTimeFilter = "Consumed"
 )
+
+func (f *AccountingItemsTimeFilter) UnmarshalJSON(data []byte) error {
+	var s string
+	err := json.Unmarshal(data, &s)
+	if err != nil {
+		return err
+	}
+
+	switch s {
+	case string(TimeFilterClosed):
+		*f = TimeFilterClosed
+		return nil
+	case string(TimeFilterConsumed):
+		*f = TimeFilterConsumed
+		return nil
+	}
+
+	return errors.Errorf("Unknown accounting items time filter: %s", s)
+}
 
 // 	"AccountingCategoryId": "4ac8ce68-5732-4f1d-bf0d-e557072c926f",
 // 	"Amount": {
