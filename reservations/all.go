@@ -117,10 +117,11 @@ type Reservation struct {
 	RateID                    string           `json:"RateId"`              // Identifier of the reservation Rate.
 	AdultCount                int              `json:"AdultCount"`          // Count of adults the reservation was booked for.
 	ChildCount                int              `json:"ChildCount"`          // Count of children the reservation was booked for.
-	CustomerID                string           `json:"Customerid"`          // required	Unique identifier of the Customer who owns the reservation.
+	CustomerID                string           `json:"CustomerId"`          // required	Unique identifier of the Customer who owns the reservation.
 	CompanionIDs              []string         `json:"CompanionIds"`        // Unique identifiers of Customers that will occupy the space.
 	ChannelManagerID          string           `json:"ChannelManagerId"`    // ??
 	CancellationReason        string           `json:"CancellationReason"`  // ??
+	BookerID                  string           `json:"BookerId,omitempty"`  // Unique identifier of the Customer on whose behalf the reservation was made.
 }
 
 type ReservationState string
