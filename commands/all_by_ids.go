@@ -8,7 +8,7 @@ const (
 	endpointAllByIDs = "commands/getAllByIDs"
 )
 
-// List all products
+// List all commands
 func (s *Service) AllByIDs(requestBody *AllByIDsRequest) (*AllByIDsResponse, error) {
 	// @TODO: create wrapper?
 	if err := s.Client.CheckTokens(); err != nil {
