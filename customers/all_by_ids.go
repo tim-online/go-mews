@@ -79,7 +79,8 @@ type Customer struct {
 	MotherName              string                `json:"MotherName"`              // ??
 	Notes                   string                `json:"Notes"`                   // ??
 	Occupation              string                `json:"Occupation"`              // ??
-	DriversLicense          DriversLicense        `json:"DriversLicense"`          // NEW
+	DriversLicense          DriversLicense        `json:"DriversLicense"`          // Drivers license  details of the customer.
+	AccountingCode          string                `json:"AccountingCode"`          // Accounting code of the customer.
 }
 
 type Title string
