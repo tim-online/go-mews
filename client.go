@@ -1,6 +1,7 @@
 package mews
 
 import (
+	"context"
 	"net/http"
 	"net/url"
 
@@ -126,4 +127,16 @@ func (c *Client) SetLanguageCode(code string) {
 
 func (c *Client) SetCultureCode(code string) {
 	c.client.SetCultureCode(code)
+}
+
+func (c *Client) GetWebsocket(ctx context.Context) *Websocket {
+	ws := NewWebsocket(c.client.Client, c.client.AccessToken, c.client.ClientToken)
+	url := &url.URL{
+		Scheme: WebsocketURL.Scheme,
+		Host:   c.client.BaseURL.Host,
+		Path:   WebsocketURL.Path,
+	}
+	ws.SetBaseURL(url)
+	ws.SetDebug(c.client.Debug)
+	return ws
 }

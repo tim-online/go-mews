@@ -1,10 +1,10 @@
 package mews
 
 import (
+	"context"
 	"encoding/json"
 	"log"
 	"net/http"
-	"net/http/httputil"
 	"net/url"
 	"time"
 
@@ -27,6 +27,17 @@ var (
 	}
 )
 
+const (
+	// Time allowed to write a message to the peer.
+	writeWait = 10 * time.Second
+
+	// Send pings to peer with this period. Must be less than pongWait.
+	pingPeriod = 60 * time.Second
+
+	// Time to wait before force close on connection.
+	closeGracePeriod = 10 * time.Second
+)
+
 type Websocket struct {
 	// HTTP client used to communicate with the DO API.
 	client *http.Client
@@ -44,10 +55,11 @@ type Websocket struct {
 	clientToken string
 
 	connection *websocket.Conn
+	cancelFunc context.CancelFunc
 
 	doneChan chan struct{}
-	msgChan  chan []byte
-	errChan  chan error
+	// msgChan  chan []byte
+	errChan chan error
 
 	cmdChan         chan CommandEvent
 	resChan         chan ReservationEvent
@@ -67,7 +79,7 @@ func NewWebsocket(httpClient *http.Client, accessToken string, clientToken strin
 	ws.SetBaseURL(WebsocketURL)
 
 	ws.doneChan = make(chan struct{})
-	ws.msgChan = make(chan []byte)
+	// ws.msgChan = make(chan []byte)
 	ws.errChan = make(chan error)
 	ws.cmdChan = make(chan CommandEvent)
 	ws.resChan = make(chan ReservationEvent)
@@ -126,7 +138,11 @@ func (ws *Websocket) PriceUpdateEvents() chan (PriceUpdateEvent) {
 	return ws.priceUpdateChan
 }
 
-func (ws Websocket) Connect() error {
+func (ws *Websocket) Errors() chan (error) {
+	return ws.errChan
+}
+
+func (ws *Websocket) Connect(ctx context.Context) error {
 	var err error
 
 	u := ws.BaseURL()
@@ -135,85 +151,86 @@ func (ws Websocket) Connect() error {
 	q.Add("AccessToken", ws.AccessToken())
 	u.RawQuery = q.Encode()
 
-	resp := &http.Response{}
-	ws.connection, resp, err = websocket.DefaultDialer.Dial(u.String(), nil)
+	ws.connection, _, err = websocket.DefaultDialer.Dial(u.String(), nil)
 	if err != nil {
 		return err
 	}
 
-	dump, err := httputil.DumpResponse(resp, true)
-	if err != nil {
-		return err
-	}
-	log.Println(string(dump))
+	// Send ping messages. Stop doing that when context is canceled
+	go ws.KeepAlive(ctx)
 
+	// Receive close messages from the peer
 	ws.connection.SetCloseHandler(func(code int, text string) error {
-		log.Println(code)
-		log.Println(text)
+		// ws.Close()
 		return nil
 	})
-
-	ws.connection.SetPingHandler(func(appData string) error {
-		log.Println(appData)
-		return nil
-	})
-
-	done := make(chan struct{})
 
 	// read messages
 	go func() {
-		defer close(done)
 		for {
-			_, msg, err := ws.connection.ReadMessage()
-			if err != nil {
-				ws.errChan <- err
-				return
-			}
-
-			events := Events{}
-			err = json.Unmarshal(msg, &events)
-			log.Println(string(msg))
-			continue
-			if err != nil {
-				ws.errChan <- err
-				return
-			}
-
-			for _, event := range events {
-				if event.Type == EventTypeDeviceCommand && ws.cmdChan != nil {
-					cmdEvent := CommandEvent{}
-					err := json.Unmarshal(msg, &cmdEvent)
-					if err != nil {
+			select {
+			case <-ctx.Done():
+				break
+			default:
+				_, msg, err := ws.connection.ReadMessage()
+				if err != nil {
+					_, ok := err.(*websocket.CloseError)
+					if !ok {
 						ws.errChan <- err
-						return
 					}
-					ws.cmdChan <- cmdEvent
+					return
 				}
 
-				if event.Type == EventTypeReservation && ws.resChan != nil {
-					resEvent := ReservationEvent{}
-					err := json.Unmarshal(msg, &resEvent)
+				message := Message{}
+				err = json.Unmarshal(msg, &message)
+				if err != nil {
+					ws.errChan <- err
+					return
+				}
+
+				for _, b := range message.Events {
+					event := Event{}
+					err = json.Unmarshal(b, &event)
 					if err != nil {
 						ws.errChan <- err
 						return
 					}
-					ws.resChan <- resEvent
-				} else if event.Type == EventTypeSpace && ws.spaceChan != nil {
-					spaceEvent := SpaceEvent{}
-					err := json.Unmarshal(msg, &spaceEvent)
-					if err != nil {
-						ws.errChan <- err
-						return
+
+					if event.Type == EventTypeDeviceCommand && ws.cmdChan != nil {
+						cmdEvent := CommandEvent{}
+						err := json.Unmarshal(b, &cmdEvent)
+						if err != nil {
+							ws.errChan <- err
+							return
+						}
+						ws.cmdChan <- cmdEvent
 					}
-					ws.spaceChan <- spaceEvent
-				} else if event.Type == EventTypePriceUpdate && ws.priceUpdateChan != nil {
-					priceUpdateEvent := PriceUpdateEvent{}
-					err := json.Unmarshal(msg, &priceUpdateEvent)
-					if err != nil {
-						ws.errChan <- err
-						return
+
+					if event.Type == EventTypeReservation && ws.resChan != nil {
+						resEvent := ReservationEvent{}
+						err := json.Unmarshal(b, &resEvent)
+						if err != nil {
+							ws.errChan <- err
+							return
+						}
+						ws.resChan <- resEvent
+					} else if event.Type == EventTypeSpace && ws.spaceChan != nil {
+						spaceEvent := SpaceEvent{}
+						err := json.Unmarshal(b, &spaceEvent)
+						if err != nil {
+							ws.errChan <- err
+							return
+						}
+						ws.spaceChan <- spaceEvent
+					} else if event.Type == EventTypePriceUpdate && ws.priceUpdateChan != nil {
+						priceUpdateEvent := PriceUpdateEvent{}
+						err := json.Unmarshal(b, &priceUpdateEvent)
+						if err != nil {
+							ws.errChan <- err
+							return
+						}
+						ws.priceUpdateChan <- priceUpdateEvent
 					}
-					ws.priceUpdateChan <- priceUpdateEvent
 				}
 			}
 		}
@@ -222,12 +239,55 @@ func (ws Websocket) Connect() error {
 	return nil
 }
 
+func (ws *Websocket) KeepAlive(ctx context.Context) error {
+	ticker := time.NewTicker(pingPeriod)
+	defer ticker.Stop()
+
+	for {
+		select {
+		case <-ticker.C:
+			if ws.Debug() {
+				log.Println("sending keep alive ping message")
+			}
+			err := ws.connection.WriteControl(websocket.PingMessage, []byte{}, time.Now().Add(writeWait))
+			if err != nil {
+				return err
+			}
+		case <-ctx.Done():
+			log.Println("keep alive stopped")
+			return nil
+		}
+	}
+}
+
+func (ws *Websocket) Close() error {
+	// Send close message to the peer
+	if ws.Debug() {
+		log.Println("send close message to peer")
+	}
+	message := websocket.FormatCloseMessage(websocket.CloseNormalClosure, "")
+	err := ws.connection.WriteControl(websocket.CloseMessage, message, time.Now().Add(writeWait))
+	if err != nil {
+		return err
+	}
+
+	// wait for a specified time before force-closing the connection
+	time.Sleep(closeGracePeriod)
+
+	// Close closes the underlying network connection without sending or waiting for a close message.
+	return ws.connection.Close()
+}
+
 func (ws *Websocket) ReadMessages() {
 }
 
 func (ws *Websocket) Stop() {
 	ws.doneChan <- struct{}{}
 	ws.connection.Close()
+}
+
+type Message struct {
+	Events []json.RawMessage `json:"Events"`
 }
 
 type Events []Event
