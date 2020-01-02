@@ -157,7 +157,12 @@ func (ws *Websocket) Connect(ctx context.Context) error {
 	}
 
 	// Send ping messages. Stop doing that when context is canceled
-	go ws.KeepAlive(ctx)
+	go func() {
+		err := ws.KeepAlive(ctx)
+		if err != nil {
+			ws.errChan <- err
+		}
+	}()
 
 	// Receive close messages from the peer
 	ws.connection.SetCloseHandler(func(code int, text string) error {
@@ -254,7 +259,9 @@ func (ws *Websocket) KeepAlive(ctx context.Context) error {
 				return err
 			}
 		case <-ctx.Done():
-			log.Println("keep alive stopped")
+			if ws.Debug() {
+				log.Println("keep alive stopped")
+			}
 			return nil
 		}
 	}
