@@ -30,10 +30,12 @@ var (
 const (
 	// Time allowed to write a message to the peer.
 	writeWait = 10 * time.Second
-	readWait  = 10 * time.Second
+
+	// Time allowed to read the next pong message from the peer.
+	pongWait = 60 * time.Second
 
 	// Send pings to peer with this period. Must be less than pongWait.
-	pingPeriod = 60 * time.Second
+	pingPeriod = (pongWait * 9) / 10
 
 	// Time to wait before force close on connection.
 	closeGracePeriod = 10 * time.Second
@@ -157,8 +159,8 @@ func (ws *Websocket) Connect(ctx context.Context) error {
 		return err
 	}
 
-	// set a timeout for receiving answers
-	ws.connection.SetReadDeadline(time.Now().Add(readWait))
+	// Time allowed to read the next pong message from the peer.
+	ws.connection.SetReadDeadline(time.Now().Add(pongWait))
 
 	// Send ping messages. Stop doing that when context is canceled
 	go func() {
