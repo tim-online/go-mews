@@ -161,6 +161,8 @@ func (ws *Websocket) Connect(ctx context.Context) error {
 
 	// Time allowed to read the next pong message from the peer.
 	ws.connection.SetReadDeadline(time.Now().Add(pongWait))
+	// After receiving a pong: reset the read deadline
+	ws.connection.SetPongHandler(func(string) error { ws.connection.SetReadDeadline(time.Now().Add(pongWait)); return nil })
 
 	// Send ping messages. Stop doing that when context is canceled
 	go func() {
