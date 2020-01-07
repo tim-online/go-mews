@@ -3,6 +3,7 @@ package mews
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"net/url"
@@ -60,7 +61,6 @@ type Websocket struct {
 	connection *websocket.Conn
 	cancelFunc context.CancelFunc
 
-	doneChan chan struct{}
 	// msgChan  chan []byte
 	errChan chan error
 
@@ -80,14 +80,6 @@ func NewWebsocket(httpClient *http.Client, accessToken string, clientToken strin
 	ws.SetClientToken(clientToken)
 	ws.SetDebug(false)
 	ws.SetBaseURL(WebsocketURL)
-
-	ws.doneChan = make(chan struct{})
-	// ws.msgChan = make(chan []byte)
-	ws.errChan = make(chan error)
-	ws.cmdChan = make(chan CommandEvent)
-	ws.resChan = make(chan ReservationEvent)
-	ws.spaceChan = make(chan SpaceEvent)
-	ws.priceUpdateChan = make(chan PriceUpdateEvent)
 
 	return ws
 }
@@ -126,22 +118,27 @@ func (ws *Websocket) SetDebug(debug bool) {
 }
 
 func (ws *Websocket) CommandEvents() chan (CommandEvent) {
+	ws.cmdChan = make(chan CommandEvent)
 	return ws.cmdChan
 }
 
 func (ws *Websocket) ReservationEvents() chan (ReservationEvent) {
+	ws.resChan = make(chan ReservationEvent)
 	return ws.resChan
 }
 
 func (ws *Websocket) SpaceEvents() chan (SpaceEvent) {
+	ws.spaceChan = make(chan SpaceEvent)
 	return ws.spaceChan
 }
 
 func (ws *Websocket) PriceUpdateEvents() chan (PriceUpdateEvent) {
+	ws.priceUpdateChan = make(chan PriceUpdateEvent)
 	return ws.priceUpdateChan
 }
 
 func (ws *Websocket) Errors() chan (error) {
+	ws.errChan = make(chan error)
 	return ws.errChan
 }
 
@@ -183,13 +180,24 @@ func (ws *Websocket) Connect(ctx context.Context) error {
 		for {
 			select {
 			case <-ctx.Done():
+				if ws.debug {
+					log.Println("stopping reading messages: context is canceled")
+				}
 				break
 			default:
+				if ws.debug {
+					log.Println("waiting to receive message")
+				}
 				_, msg, err := ws.connection.ReadMessage()
+				if ws.debug {
+					log.Println("received msg on websocket")
+				}
 				if err != nil {
 					_, ok := err.(*websocket.CloseError)
 					if !ok {
-						ws.errChan <- err
+						if ws.errChan != nil {
+							ws.errChan <- err
+						}
 					}
 					return
 				}
@@ -197,7 +205,9 @@ func (ws *Websocket) Connect(ctx context.Context) error {
 				message := Message{}
 				err = json.Unmarshal(msg, &message)
 				if err != nil {
-					ws.errChan <- err
+					if ws.errChan != nil {
+						ws.errChan <- err
+					}
 					return
 				}
 
@@ -205,7 +215,9 @@ func (ws *Websocket) Connect(ctx context.Context) error {
 					event := Event{}
 					err = json.Unmarshal(b, &event)
 					if err != nil {
-						ws.errChan <- err
+						if ws.errChan != nil {
+							ws.errChan <- err
+						}
 						return
 					}
 
@@ -213,36 +225,68 @@ func (ws *Websocket) Connect(ctx context.Context) error {
 						cmdEvent := CommandEvent{}
 						err := json.Unmarshal(b, &cmdEvent)
 						if err != nil {
-							ws.errChan <- err
+							if ws.errChan != nil {
+								ws.errChan <- err
+							}
 							return
 						}
+						if ws.debug {
+							log.Println(fmt.Sprintf("websocket: pushing command %s to cmd channel", cmdEvent.ID))
+						}
 						ws.cmdChan <- cmdEvent
+						if ws.debug {
+							log.Println(fmt.Sprintf("websocket: pushed command %s to cmd channel", cmdEvent.ID))
+						}
 					}
 
 					if event.Type == EventTypeReservation && ws.resChan != nil {
 						resEvent := ReservationEvent{}
 						err := json.Unmarshal(b, &resEvent)
 						if err != nil {
-							ws.errChan <- err
+							if ws.errChan != nil {
+								ws.errChan <- err
+							}
 							return
 						}
+						if ws.debug {
+							log.Println(fmt.Sprintf("websocket: pushing command %s to res channel", resEvent.ID))
+						}
 						ws.resChan <- resEvent
+						if ws.debug {
+							log.Println(fmt.Sprintf("websocket: pushed command %s to res channel", resEvent.ID))
+						}
 					} else if event.Type == EventTypeSpace && ws.spaceChan != nil {
 						spaceEvent := SpaceEvent{}
 						err := json.Unmarshal(b, &spaceEvent)
 						if err != nil {
-							ws.errChan <- err
+							if ws.errChan != nil {
+								ws.errChan <- err
+							}
 							return
 						}
+						if ws.debug {
+							log.Println(fmt.Sprintf("websocket: pushing command %s to space channel", spaceEvent.ID))
+						}
 						ws.spaceChan <- spaceEvent
+						if ws.debug {
+							log.Println(fmt.Sprintf("websocket: pushed command %s to space channel", spaceEvent.ID))
+						}
 					} else if event.Type == EventTypePriceUpdate && ws.priceUpdateChan != nil {
 						priceUpdateEvent := PriceUpdateEvent{}
 						err := json.Unmarshal(b, &priceUpdateEvent)
 						if err != nil {
-							ws.errChan <- err
+							if ws.errChan != nil {
+								ws.errChan <- err
+							}
 							return
 						}
+						if ws.debug {
+							log.Println(fmt.Sprintf("websocket: pushing command %s to price update channel", priceUpdateEvent.ID))
+						}
 						ws.priceUpdateChan <- priceUpdateEvent
+						if ws.debug {
+							log.Println(fmt.Sprintf("websocket: pushed command %s to prive update channel", priceUpdateEvent.ID))
+						}
 					}
 				}
 			}
@@ -297,7 +341,6 @@ func (ws *Websocket) ReadMessages() {
 }
 
 func (ws *Websocket) Stop() {
-	ws.doneChan <- struct{}{}
 	ws.connection.Close()
 }
 
