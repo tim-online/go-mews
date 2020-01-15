@@ -49,7 +49,7 @@ type UpdateRequest struct {
 	// New title.
 	Title string `json:"Title"`
 	// New birth date in ISO 8601 format.
-	BirthDate *Date `json:"BirthDate"`
+	BirthDate *json.Date `json:"BirthDate"`
 	// New birth place.
 	BirthPlace string `json:"BirthPlace"`
 	// ISO 3166-1 code of the Country.

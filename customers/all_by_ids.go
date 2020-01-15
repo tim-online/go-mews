@@ -100,8 +100,8 @@ const (
 
 type Document struct {
 	Number             string    `json:"Number"`             // Number of the document (e.g. passport number).
-	Issuance           Date      `json:"Issuance"`           // Date of issuance in ISO 8601 format.
-	Expiration         Date      `json:"Expiration"`         // Expiration date in ISO 8601 format.
+	Issuance           json.Date `json:"Issuance"`           // Date of issuance in ISO 8601 format.
+	Expiration         json.Date `json:"Expiration"`         // Expiration date in ISO 8601 format.
 	ExpirationUTC      time.Time `json:"ExpirationUtc"`      // ??
 	IssuanceUTC        time.Time `json:"IssuanceUtc"`        // ??
 	IssuingCountryCode string    `json:"IssuingCountryCode"` // ISO 3166-1 code of the Country.
@@ -112,9 +112,9 @@ type Classification string
 type Options []string
 
 type DriversLicense struct {
-	Expiration         Date      `json:"Expiration"`
+	Expiration         json.Date `json:"Expiration"`
 	ExpirationUTC      time.Time `json:"ExpirationUtc"`
-	Issuance           Date      `json:"Issuance"`
+	Issuance           json.Date `json:"Issuance"`
 	IssuanceUTC        time.Time `json:"IssuanceUtc"`
 	IssuingCountryCode string    `json:"IssuingCountryCode"`
 	Number             string    `json:"Number"`
