@@ -58,7 +58,7 @@ type Bill struct {
 	Type       BillType  `json:"Type"`       // Type of the bill.
 	Number     string    `json:"Number"`     // Number of the bill.
 	IssuedUTC  time.Time `json:"IssuedUtc"`  // Date and time of the bill issuance in UTC timezone in ISO 8601 format.
-	TaxedUTC   time.Time `json:"TaxedUtc"`   // Taxation date of the bill in UTC timezone in ISO 8601 format.
+	TaxedUTC   json.Date `json:"TaxedUtc"`   // Taxation date of the bill in UTC timezone in ISO 8601 format.
 	DueUTC     time.Time `json:"DueUtc"`     // Bill due date and time in UTC timezone in ISO 8601 format.
 	Notes      string    `json:"Notes"`      // Additional notes.
 	Revenue    Revenue   `json:"Revenue"`    // The revenue items on the bill.
