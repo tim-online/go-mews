@@ -12,7 +12,7 @@ const (
 )
 
 // List all products
-func (s *Service) All(requestBody *AllRequest) (*AllResponse, error) {
+func (s *Service) AllClosed(requestBody *AllRequest) (*AllResponse, error) {
 	// @TODO: create wrapper?
 	if err := s.Client.CheckTokens(); err != nil {
 		return nil, err
@@ -33,17 +33,17 @@ func (s *Service) All(requestBody *AllRequest) (*AllResponse, error) {
 	return responseBody, err
 }
 
-func (s *Service) NewAllRequest() *AllRequest {
+func (s *Service) NewAllClosedRequest() *AllRequest {
 	return &AllRequest{}
 }
 
-type AllRequest struct {
+type AllClosedRequest struct {
 	json.BaseRequest
 	StartUTC *time.Time `json:"StartUtc,omitempty"`
 	EndUTC   *time.Time `json:"EndUtc,omitempty"`
 }
 
-type AllResponse struct {
+type AllClosedResponse struct {
 	Bills Bills `json:"Bills"` // The closed bills.
 }
 
