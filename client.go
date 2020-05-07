@@ -97,7 +97,7 @@ type Client struct {
 	client *json.Client
 
 	// Services used for communicating with the API
-	AccountingItems      *accountingitems.Service
+	AccountingItems      *accountingitems.APIService
 	OutletItems          *outletitems.Service
 	AccountingCategories *accountingcategories.Service
 	Companies            *companies.Service

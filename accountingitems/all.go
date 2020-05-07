@@ -19,7 +19,7 @@ const (
 )
 
 // List all products
-func (s *Service) All(requestBody *AllRequest) (*AllResponse, error) {
+func (s *APIService) All(requestBody *AllRequest) (*AllResponse, error) {
 	// @TODO: create wrapper?
 	if err := s.Client.CheckTokens(); err != nil {
 		return nil, err
@@ -45,7 +45,7 @@ type AllResponse struct {
 	CreditCardTransactions CreditCardTransactions
 }
 
-func (s *Service) NewAllRequest() *AllRequest {
+func (s *APIService) NewAllRequest() *AllRequest {
 	return &AllRequest{
 		Extent: AccountingItemsExtent{
 
