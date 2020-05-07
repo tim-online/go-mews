@@ -57,9 +57,7 @@ type AllRequest struct {
 	json.BaseRequest
 }
 
-type Promotions []Promotion
-
-type Promotion struct {
+type Promotions struct {
 	BeforeCheckIn  bool `json:"BeforeCheckIn"`  // Whether it can be promoted before check-in.
 	AfterCheckIn   bool `json:"AfterCheckIn"`   // Whether it can be promoted after check-in.
 	DuringStay     bool `json:"DuringStay"`     // Whether it can be promoted during stay.
