@@ -5,6 +5,7 @@ type BaseRequest struct {
 	ClientToken  string `json:"ClientToken,omitempty"`
 	LanguageCode string `json:"LanguageCode,omitempty"`
 	CultureCode  string `json:"CultureCode,omitempty"`
+	Client       string `json:"Client,omitempty"`
 }
 
 func (req *BaseRequest) SetAccessToken(token string) {
