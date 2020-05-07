@@ -16,6 +16,7 @@ import (
 	"github.com/tim-online/go-mews/json"
 	"github.com/tim-online/go-mews/outletitems"
 	"github.com/tim-online/go-mews/reservations"
+	"github.com/tim-online/go-mews/services"
 	"github.com/tim-online/go-mews/spaceblocks"
 	"github.com/tim-online/go-mews/spaces"
 	"github.com/tim-online/go-mews/tasks"
@@ -72,6 +73,8 @@ func NewClient(httpClient *http.Client, accessToken string, clientToken string) 
 	c.Reservations.Client = c.client
 	c.Spaces = spaces.NewService()
 	c.Spaces.Client = c.client
+	c.Services = services.NewAPIService()
+	c.Services.Client = c.client
 	c.SpaceBlocks = spaceblocks.NewService()
 	c.SpaceBlocks.Client = c.client
 	c.Bills = bills.NewService()
@@ -100,6 +103,7 @@ type Client struct {
 	Companies            *companies.Service
 	Customers            *customers.Service
 	Reservations         *reservations.APIService
+	Services             *services.APIService
 	Spaces               *spaces.Service
 	SpaceBlocks          *spaceblocks.Service
 	Bills                *bills.Service
