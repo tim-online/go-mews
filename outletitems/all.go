@@ -2,7 +2,6 @@ package outletitems
 
 import (
 	"encoding/json"
-	"math"
 	"time"
 
 	"github.com/tim-online/go-errors"
@@ -36,11 +35,6 @@ func (s *Service) All(requestBody *AllRequest) (*AllResponse, error) {
 	}
 
 	_, err = s.Client.Do(httpReq, responseBody)
-
-	for k, _ := range responseBody.OutletItems {
-		responseBody.OutletItems[k].Amount = responseBody.OutletItems[k].GenerateAmount()
-	}
-
 	return responseBody, err
 }
 
@@ -113,28 +107,10 @@ type OutletItem struct {
 	Name                 string         `json:"Name"`                 // Name of the item.
 	UnitCount            int            `json:"UnitCount"`            // Amount the item costs, negative amount represents either rebate or a payment.
 	UnitCost             UnitCost       `json:"UnitCost"`             // Amount the item costs, negative amount represents either rebate or a payment.
+	UnitAmount           UnitAmount     `json:"UnitAmount"`           // Unit amount of the item.
 	CreatedUTC           time.Time      `json:"CreatedUtc"`           // Date and time of the item creation in UTC timezone in ISO 8601 format.
 	ConsumptionUTC       time.Time      `json:"ConsumedUtc"`          // Date and time of the item consumption in UTC timezone in ISO 8601 format.
 	Notes                string         `json:"Notes"`                // Additional notes.
-
-	// Virtual property
-	Amount Amount `json:"Amount"`
-}
-
-func (item OutletItem) GenerateAmount() Amount {
-	taxRate := 0.0
-	if item.UnitCost.TaxRate != nil {
-		taxRate = *item.UnitCost.TaxRate
-	}
-	amt := Amount{
-		Currency: item.UnitCost.Currency,
-		Net:      math.Round((item.UnitCost.Value*float64(item.UnitCount))/(1+taxRate)*100) / 100,
-		Tax:      0,
-		TaxRate:  item.UnitCost.TaxRate,
-		Value:    item.UnitCost.Value * float64(item.UnitCount),
-	}
-	amt.Tax = amt.Value - amt.Net
-	return amt
 }
 
 type OutletItemType string
@@ -148,6 +124,8 @@ type OutletBill struct {
 }
 
 type UnitCost Amount
+
+type UnitAmount Amount
 
 type Amount struct {
 	Currency   string    `json:"Currency"`   // ISO-4217 code of the Currency.
