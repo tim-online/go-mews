@@ -41,7 +41,7 @@ type AllRequest struct {
 	// Unique identifiers of the Bills.
 	BillIDs []string `json:"BillIds,omitempty"`
 	// Unique identifiers of the Customers.
-	CustomerIDs []string `json:"CustomerIds"`
+	CustomerIDs []string `json:"CustomerIds,omitempty"`
 	// Bill state the bills should be in. If not specified Open and Closed bills are returned.
 	State string `json:"State,omitempty"`
 	// Time filter of the interval.
@@ -59,5 +59,5 @@ type AllResponse struct {
 }
 
 type BillExtent struct {
-	Items bool `json:"Items,omitempty"`
+	Items bool `json:"Items"`
 }
