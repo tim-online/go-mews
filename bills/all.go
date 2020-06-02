@@ -43,9 +43,9 @@ type AllRequest struct {
 	// Unique identifiers of the Customers.
 	CustomerIDs []string `json:"CustomerIds"`
 	// Bill state the bills should be in. If not specified Open and Closed bills are returned.
-	State string `json:"State,Optional"`
+	State string `json:"State,omitempty"`
 	// Time filter of the interval.
-	TimeFilter string `json:"TimeFilter,optional"`
+	TimeFilter string `json:"TimeFilter,omitempty"`
 	// Start of the interval in UTC timezone in ISO 8601 format.
 	StartUTC *time.Time `json:"StartUtc,omitempty"`
 	// End of the interval in UTC timezone in ISO 8601 format.
