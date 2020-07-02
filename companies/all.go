@@ -47,11 +47,12 @@ type Company struct {
 	ID                          string                `json:"Id"`                          // Unique identifier of the company.
 	Name                        string                `json:"Name"`                        // Name of the company.
 	Number                      int                   `json:"Number"`                      // Unique number of the company.
+	IsActive                    bool                  `json:"IsActive"`                    // Whether the company is still active.
 	Identifier                  string                `json:"Identifier"`                  // Identifier of the company (e.g. legal identifier).
-	TaxIdentificationNumber     string                `json:"TaxIdentificationNumber"`     // Tax identification number of the company.
+	TaxIdentifier               string                `json:"TaxIdentifier"`               // Tax identification number of the company.
 	AdditionalTaxIdentifier     string                `json:"AdditionalTaxIdentifier"`     // Additional tax identifer of the company.
 	ElectronicInvoiceIdentifier string                `json:"ElectronicInvoiceIdentifier"` // Electronic invoice identifer of the company.
-	Address                     configuration.Address `json:"Address"`
-	AccountingCode              string                `json:"AccountingCode"` // NEW
-	TaxIdentifier               string                `json:"TaxIdentifier"`  // NEW
+	AccountingCode              string                `json:"AccountingCode"`              // Accounting code of the company.
+	BillingCode                 string                `json:"BillingCode"`                 // Billing code of the company.
+	Address                     configuration.Address `json:"Address"`                     // Address of the company (if it is non-empty, otherwise null).
 }
