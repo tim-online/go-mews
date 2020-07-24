@@ -53,7 +53,7 @@ type Taxation struct {
 	Code               string `json:"Code"`               // Code of the taxation.
 	TaxEnvironmentCode string `json:"TaxEnvironmentCode"` // Code of the tax environment.
 	Name               string `json:"Name"`               // Name of the taxation.
-	LocalName          string `json:"Name"`               // Local name of the taxation.
+	LocalName          string `json:"LocalName"`          // Local name of the taxation.
 }
 
 type TaxRates []TaxRate
