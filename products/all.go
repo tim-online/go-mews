@@ -42,6 +42,7 @@ func (s *APIService) NewAllRequest() *AllRequest {
 
 type AllRequest struct {
 	base.BaseRequest
+	ServiceIDs []string `json:"ServiceIds"` // Unique identifiers of the Services.
 }
 
 type Products []Product
