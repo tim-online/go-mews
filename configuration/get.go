@@ -88,3 +88,14 @@ type CurrencyValue struct {
 	TaxRate  float64 `json:"TaxRate"`  // Tax rate in case the item is taxed (e.g. 0.21).
 	Tax      float64 `json:"Tax"`      // Tax value in case the item is taxed.
 }
+
+type TimeInterval struct {
+	// Start of the interval in UTC timezone in ISO 8601 format.
+	StartUTC time.Time `json:"StartUtc"`
+	// End of the interval in UTC timezone in ISO 8601 format.
+	EndUTC time.Time `json:"EndUtc"`
+}
+
+func (i TimeInterval) IsEmpty() bool {
+	return i.StartUTC.IsZero() && i.EndUTC.IsZero()
+}

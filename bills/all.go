@@ -1,9 +1,9 @@
 package bills
 
 import (
-	"time"
-
+	"github.com/tim-online/go-mews/configuration"
 	"github.com/tim-online/go-mews/json"
+	"github.com/tim-online/go-mews/omitempty"
 )
 
 const (
@@ -44,14 +44,20 @@ type AllRequest struct {
 	CustomerIDs []string `json:"CustomerIds,omitempty"`
 	// Bill state the bills should be in. If not specified Open and Closed bills are returned.
 	State string `json:"State,omitempty"`
-	// Time filter of the interval.
-	TimeFilter string `json:"TimeFilter,omitempty"`
-	// Start of the interval in UTC timezone in ISO 8601 format.
-	StartUTC *time.Time `json:"StartUtc,omitempty"`
-	// End of the interval in UTC timezone in ISO 8601 format.
-	EndUTC *time.Time `json:"EndUtc,omitempty"`
+	// Interval in which the Bill was closed.
+	ClosedUTC configuration.TimeInterval `json:"ClosedUtc,omitempty"`
+	// Interval in which the Bill was created.
+	CreatedUTC configuration.TimeInterval `json:"CreatedUtc,omitempty"`
+	// Interval in which the Bill is due to be paid.
+	DueUTC configuration.TimeInterval `json:"DueUtc,omitempty"`
+	// Interval in which the Bill was paid.
+	PaidUTC configuration.TimeInterval `json:"PaidUtc,omitempty"`
 	// Extent of data to be returned. E.g. it is possible to specify that together with the bills, payments and revenue items should be also returned. If not specified, no extent is used.
 	Extent BillExtent `json:"Extent,omitempty"`
+}
+
+func (r AllRequest) MarshalJSON() ([]byte, error) {
+	return omitempty.MarshalJSON(r)
 }
 
 type AllResponse struct {
