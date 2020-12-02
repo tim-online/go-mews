@@ -101,7 +101,7 @@ var (
 )
 
 type BillPDFFile struct {
-	Base64Data []byte `json:"Base64Data"`
+	Base64Data string `json:"Base64Data"`
 }
 
 type BillPrintEvent struct {
