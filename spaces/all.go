@@ -59,7 +59,7 @@ type AllExtent struct {
 type Space struct {
 	ID            string     `json:"Id"`            // Unique identifier of the reservation.
 	Type          SpaceType  `json:"Type"`          // 	Type of the space.
-	Number        string     `json:"number"`        // Number of the space (e.g. room number).
+	Number        string     `json:"Number"`        // Number of the space (e.g. room number).
 	ParentSpaceID string     `json:"ParentSpaceId"` // dentifier of the parent Space (e.g. room of a bed).
 	CategoryID    string     `json:"CategoryId"`    // Identifier of the Space Category assigned to the space.
 	State         SpaceState `json:"State"`         // State of the room.
