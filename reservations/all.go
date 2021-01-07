@@ -6,6 +6,7 @@ import (
 	"github.com/tim-online/go-mews/accountingitems"
 	"github.com/tim-online/go-mews/configuration"
 	"github.com/tim-online/go-mews/customers"
+	"github.com/tim-online/go-mews/enterprises"
 	"github.com/tim-online/go-mews/json"
 )
 
@@ -39,21 +40,23 @@ func (s *APIService) All(requestBody *AllRequest) (*AllResponse, error) {
 }
 
 type AllResponse struct {
-	BusinessSegments  BusinessSegments                `json:"BusinessSegments"`  //  Business segments of the reservations.
-	Customers         customers.Customers             `json:"Customers"`         // Customers that are members of the reservations.
-	Items             accountingitems.AccountingItems `json:"Items"`             // Revenue items of the reservations.
-	Products          Products                        `json:"Products"`          // Products orderable with reservations.
-	RateGroups        RateGroups                      `json:"RateGroups"`        // Rate groups of the reservation rates.
-	Rates             Rates                           `json:"Rates"`             // Rates of the reservations.
-	ReservationGroups ReservationGroups               `json:"ReservationGroups"` // Reservation groups that the reservations are members of.
-	Reservations      Reservations                    `json:"Reservations"`      // The reservations that collide with the specified interval.
-	Services          Services                        `json:"Services"`          // Services that have been reserved.
-	SpaceCategories   SpaceCategories                 `json:"SpaceCategories"`   // Space categories of the spaces.
-	Spaces            Spaces                          `json:"Spaces"`            // Assigned spaces of the reservations.
-	Notes             OrderNotes                      `json:"Notes"`             // Notes of the reservations.
+	BusinessSegments            BusinessSegments                        `json:"BusinessSegments"`  //  Business segments of the reservations.
+	Customers                   customers.Customers                     `json:"Customers"`         // Customers that are members of the reservations.
+	Items                       accountingitems.AccountingItems         `json:"Items"`             // Revenue items of the reservations.
+	Products                    Products                                `json:"Products"`          // Products orderable with reservations.
+	RateGroups                  RateGroups                              `json:"RateGroups"`        // Rate groups of the reservation rates.
+	Rates                       Rates                                   `json:"Rates"`             // Rates of the reservations.
+	ReservationGroups           ReservationGroups                       `json:"ReservationGroups"` // Reservation groups that the reservations are members of.
+	Reservations                Reservations                            `json:"Reservations"`      // The reservations that collide with the specified interval.
+	Services                    Services                                `json:"Services"`          // Services that have been reserved.
+	Resources                   enterprises.Resources                   // Assigned resources of the reservations.
+	ResourceCategories          enterprises.ResourceCategories          // Resource categories of the resources.
+	ResourceCategoryAssignments enterprises.ResourceCategoryAssignments // Assignments of the resources to categories.
+	Notes                       OrderNotes                              `json:"Notes"` // Notes of the reservations.
 }
 
 type Reservations []Reservation
+
 type Services []Service
 
 type Service struct {
@@ -80,16 +83,25 @@ type AllRequest struct {
 }
 
 type ReservationExtent struct {
-	BusinessSegments  bool `json:"BusinessSegments"`  // Whether the response should contain business segmentation.
-	Customers         bool `json:"Customers"`         // Whether the response should contain customers of the reservations.
-	Items             bool `json:"Items"`             // Whether the response should contain reservation items.
-	Products          bool `json:"Products"`          // Whether the response should contain products orderable with the reservations.
-	Rates             bool `json:"Rates"`             // Whether the response should contain rates and rate groups.
-	Reservations      bool `json:"Reservations"`      // Whether the response should contain reservations.
-	ReservationGroups bool `json:"ReservationGroups"` // Whether the response should contain groups of the reservations.
-	Services          bool `json:"Services"`          // Whether the response should contain services reserved by the reservations.
-	Spaces            bool `json:"Spaces"`            // Whether the response should contain spaces and space categories.
+	BusinessSegments            bool             `json:"BusinessSegments"`            // Whether the response should contain business segmentation.
+	Customers                   bool             `json:"Customers"`                   // Whether the response should contain customers of the reservations.
+	Items                       bool             `json:"Items"`                       // Whether the response should contain reservation items.
+	Products                    bool             `json:"Products"`                    // Whether the response should contain products orderable with the reservations.
+	Rates                       bool             `json:"Rates"`                       // Whether the response should contain rates and rate groups.
+	Reservations                bool             `json:"Reservations"`                // Whether the response should contain reservations.
+	ReservationGroups           bool             `json:"ReservationGroups"`           // Whether the response should contain groups of the reservations.
+	Services                    bool             `json:"Services"`                    // Whether the response should contain services reserved by the reservations.
+	Resources                   bool             `json:"Resources"`                   // Whether the response should contain resources.
+	ResourceCategories          bool             `json:"ResourceCategories"`          // Whether the response should contain resource categories.
+	ResourceCategoryAssignments bool             `json:"ResourceCategoryAssignments"` // Whether the response should contain assignments of the resources to categories.
+	Notes                       bool             `json:"Notes"`                       // Whether the response should contain notes.
+	QrCodeData                  bool             `json:"QrCodeData"`                  // Whether the response should contain QR code data.
+	AccountingStates            AccountingStates `json:"AccountingStates"`            // States the items should be in. If not specified, items in Open or Closed states are returned.
 }
+
+type AccountingStates []AccountingState
+
+type AccountingState string
 
 type Reservation struct {
 	ID                        string           `json:"Id"`                        // Unique identifier of the reservation.
@@ -109,8 +121,8 @@ type Reservation struct {
 	ReleasedUTC               time.Time        `json:"ReleasedUTC,omitempty"`
 	CancelledUTC              time.Time        `json:"CancelledUtc"`        // Cancellation date and time in UTC timezone in ISO 8601 format.
 	RequestedCategoryID       string           `json:"RequestedCategoryId"` // Identifier of the requested Space Category.
-	AssignedSpaceID           string           `json:"AssignedSpaceId"`     // Identifier of the assigned Space.
-	AssignedSpaceLocked       bool             `json:"AssignedSpaceLocked"` // Whether the reservation is locked in the assigned Space and cannot be moved.
+	AssignedResourceID        string           `json:"AssignedResourceId"`  // Identifier of the assigned Resource.
+	AssignedResourceLocked    bool             `json:"AssignedSpaceLocked"` // Whether the reservation is locked in the assigned Space and cannot be moved.
 	BusinessSegmentID         string           `json:"BusinessSegmentId"`   // Identifier of the reservation Business Segment.
 	CompanyID                 string           `json:"CompanyId"`           // Identifier of the Company on behalf of which the reservation was made.
 	TravelAgencyID            string           `json:"TravelAgencyId"`      // Identifier of the Company that mediated the reservation.

@@ -11,8 +11,8 @@ import (
 
 	"github.com/gorilla/websocket"
 	"github.com/tim-online/go-mews/commands"
+	"github.com/tim-online/go-mews/enterprises"
 	"github.com/tim-online/go-mews/reservations"
-	"github.com/tim-online/go-mews/spaces"
 )
 
 var (
@@ -66,7 +66,7 @@ type Websocket struct {
 
 	cmdChan         chan CommandEvent
 	resChan         chan ReservationEvent
-	spaceChan       chan SpaceEvent
+	resourceChan    chan ResourceEvent
 	priceUpdateChan chan PriceUpdateEvent
 }
 
@@ -127,9 +127,9 @@ func (ws *Websocket) ReservationEvents() chan (ReservationEvent) {
 	return ws.resChan
 }
 
-func (ws *Websocket) SpaceEvents() chan (SpaceEvent) {
-	ws.spaceChan = make(chan SpaceEvent)
-	return ws.spaceChan
+func (ws *Websocket) ResourceEvents() chan (ResourceEvent) {
+	ws.resourceChan = make(chan ResourceEvent)
+	return ws.resourceChan
 }
 
 func (ws *Websocket) PriceUpdateEvents() chan (PriceUpdateEvent) {
@@ -255,9 +255,9 @@ func (ws *Websocket) Connect(ctx context.Context) error {
 						if ws.debug {
 							log.Println(fmt.Sprintf("websocket: pushed command %s to res channel", resEvent.ID))
 						}
-					} else if event.Type == EventTypeSpace && ws.spaceChan != nil {
-						spaceEvent := SpaceEvent{}
-						err := json.Unmarshal(b, &spaceEvent)
+					} else if event.Type == EventTypeResource && ws.resourceChan != nil {
+						resourceEvent := ResourceEvent{}
+						err := json.Unmarshal(b, &resourceEvent)
 						if err != nil {
 							if ws.errChan != nil {
 								ws.errChan <- err
@@ -265,11 +265,11 @@ func (ws *Websocket) Connect(ctx context.Context) error {
 							return
 						}
 						if ws.debug {
-							log.Println(fmt.Sprintf("websocket: pushing command %s to space channel", spaceEvent.ID))
+							log.Println(fmt.Sprintf("websocket: pushing command %s to resource channel", resourceEvent.ID))
 						}
-						ws.spaceChan <- spaceEvent
+						ws.resourceChan <- resourceEvent
 						if ws.debug {
-							log.Println(fmt.Sprintf("websocket: pushed command %s to space channel", spaceEvent.ID))
+							log.Println(fmt.Sprintf("websocket: pushed command %s to resource channel", resourceEvent.ID))
 						}
 					} else if event.Type == EventTypePriceUpdate && ws.priceUpdateChan != nil {
 						priceUpdateEvent := PriceUpdateEvent{}
@@ -361,7 +361,7 @@ type EventType string
 const (
 	EventTypeDeviceCommand EventType = "DeviceCommand"
 	EventTypeReservation   EventType = "Reservation"
-	EventTypeSpace         EventType = "Space"
+	EventTypeResource      EventType = "Resource"
 	EventTypePriceUpdate   EventType = "PriceUpdate"
 )
 
@@ -372,25 +372,25 @@ type CommandEvent struct {
 type ReservationEvent struct {
 	Event
 
-	ID              string                        `json:"Id"`              // Unique identifier of the Reservation.
-	State           reservations.ReservationState `json:"State"`           // State of the reservation.
-	StartUTC        time.Time                     `json:"StartUtc"`        // Start of the reservation (arrival) in UTC timezone in ISO 8601 format.
-	EndUTC          time.Time                     `json:"EndUtc"`          // End of the reservation (departure) in UTC timezone in ISO 8601 format.
-	AssignedSpaceID string                        `json:"AssignedSpaceId"` // Unique identifier of the operations/enterprises#space assigned to the reservation.
+	ID                 string                        `json:"Id"`                 // Unique identifier of the Reservation.
+	State              reservations.ReservationState `json:"State"`              // State of the reservation.
+	StartUTC           time.Time                     `json:"StartUtc"`           // Start of the reservation (arrival) in UTC timezone in ISO 8601 format.
+	EndUTC             time.Time                     `json:"EndUtc"`             // End of the reservation (departure) in UTC timezone in ISO 8601 format.
+	AssignedResourceID string                        `json:"AssignedResourceId"` // Unique identifier of the operations/enterprises#resource assigned to the reservation.
 }
 
-type SpaceEvent struct {
+type ResourceEvent struct {
 	Event
 
-	State spaces.SpaceState `json:"State"` // State of the space.
+	State enterprises.ResourceState `json:"State"` // State of the resource.
 
 }
 
 type PriceUpdateEvent struct {
 	Event
 
-	StartUTC        time.Time `json:"StartUtc"`        // Start of the price update interval in UTC timezone in ISO 8601 format.
-	EndUtc          time.Time `json:"EndUtc"`          // End of the price update interval in UTC timezone in ISO 8601 format.
-	RateID          string    `json:"RateId"`          // Unique identifier of the Rate assigned to the update price event.
-	SpaceCategoryID string    `json:"SpaceCategoryId"` // Unique identifier of the Space category assigned to the update price event.
+	StartUTC           time.Time `json:"StartUtc"`           // Start of the price update interval in UTC timezone in ISO 8601 format.
+	EndUtc             time.Time `json:"EndUtc"`             // End of the price update interval in UTC timezone in ISO 8601 format.
+	RateID             string    `json:"RateId"`             // Unique identifier of the Rate assigned to the update price event.
+	ResourceCategoryID string    `json:"ResourceCategoryId"` // Unique identifier of the Resource category assigned to the update price event.
 }

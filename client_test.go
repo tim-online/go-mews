@@ -58,7 +58,7 @@ func TestReservations(t *testing.T) {
 		Reservations:      true,
 		ReservationGroups: true,
 		Services:          true,
-		Spaces:            true,
+		Resources:         true,
 	}
 	requestBody.TimeFilter = reservations.ReservationTimeFilterCreated
 	_, err := client.Reservations.All(requestBody)

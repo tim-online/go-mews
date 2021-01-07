@@ -13,6 +13,7 @@ import (
 	"github.com/tim-online/go-mews/companies"
 	"github.com/tim-online/go-mews/configuration"
 	"github.com/tim-online/go-mews/customers"
+	"github.com/tim-online/go-mews/enterprises"
 	"github.com/tim-online/go-mews/json"
 	"github.com/tim-online/go-mews/outletitems"
 	"github.com/tim-online/go-mews/outlets"
@@ -20,8 +21,6 @@ import (
 	"github.com/tim-online/go-mews/rates"
 	"github.com/tim-online/go-mews/reservations"
 	"github.com/tim-online/go-mews/services"
-	"github.com/tim-online/go-mews/spaceblocks"
-	"github.com/tim-online/go-mews/spaces"
 	"github.com/tim-online/go-mews/tasks"
 	"github.com/tim-online/go-mews/taxenvironments"
 )
@@ -75,18 +74,16 @@ func NewClient(httpClient *http.Client, accessToken string, clientToken string) 
 	c.Customers.Client = c.client
 	c.Outlets = outlets.NewAPIService()
 	c.Outlets.Client = c.client
+	c.Enterprises = enterprises.NewAPIService()
+	c.Enterprises.Client = c.client
 	c.Products = products.NewAPIService()
 	c.Products.Client = c.client
 	c.Reservations = reservations.NewAPIService()
 	c.Reservations.Client = c.client
-	c.Spaces = spaces.NewService()
-	c.Spaces.Client = c.client
 	c.Services = services.NewAPIService()
 	c.Services.Client = c.client
 	c.Rates = rates.NewAPIService()
 	c.Rates.Client = c.client
-	c.SpaceBlocks = spaceblocks.NewService()
-	c.SpaceBlocks.Client = c.client
 	c.Bills = bills.NewService()
 	c.Bills.Client = c.client
 	c.Commands = commands.NewService()
@@ -115,12 +112,11 @@ type Client struct {
 	Companies            *companies.Service
 	Customers            *customers.Service
 	Outlets              *outlets.APIService
+	Enterprises          *enterprises.APIService
 	Products             *products.APIService
 	Reservations         *reservations.APIService
 	Services             *services.APIService
 	Rates                *rates.APIService
-	Spaces               *spaces.Service
-	SpaceBlocks          *spaceblocks.Service
 	Bills                *bills.Service
 	Commands             *commands.Service
 	Configuration        *configuration.Service

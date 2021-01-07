@@ -82,6 +82,18 @@ type Address struct {
 
 type LocalizedText map[string]string
 
+func (t LocalizedText) Default() string {
+	if v, ok := t["en-US"]; ok {
+		return v
+	}
+
+	for _, v := range t {
+		return v
+	}
+
+	return ""
+}
+
 type CurrencyValue struct {
 	Currency string  `json:"Currency"` // ISO-4217 currency code, e.g. EUR or USD.
 	Value    float64 `json:"Value"`    // Amount in the currency (including tax if taxed).
