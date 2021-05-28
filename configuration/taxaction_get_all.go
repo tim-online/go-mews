@@ -1,29 +1,24 @@
-package taxenvironments
+package configuration
 
 import "github.com/tim-online/go-mews/json"
 
 const (
-	endpointAll = "taxenvironments/getAll"
-)
-
-var (
-	TaxRateStrategyDiscriminatorFlat     TaxRateStrategyDiscriminator = "Flat"
-	TaxRateStrategyDiscriminatorRelative TaxRateStrategyDiscriminator = "Relative"
+	endpointTaxationsGetAll = "taxations/getAll"
 )
 
 // List all products
-func (s *Service) All(requestBody *AllRequest) (*AllResponse, error) {
+func (s *Service) TaxationsGetAll(requestBody *TaxationsGetAllRequest) (*TaxationsGetAllResponse, error) {
 	// @TODO: create wrapper?
 	if err := s.Client.CheckTokens(); err != nil {
 		return nil, err
 	}
 
-	apiURL, err := s.Client.GetApiURL(endpointAll)
+	apiURL, err := s.Client.GetApiURL(endpointTaxationsGetAll)
 	if err != nil {
 		return nil, err
 	}
 
-	responseBody := &AllResponse{}
+	responseBody := &TaxationsGetAllResponse{}
 	httpReq, err := s.Client.NewRequest(apiURL, requestBody)
 	if err != nil {
 		return nil, err
@@ -33,18 +28,17 @@ func (s *Service) All(requestBody *AllRequest) (*AllResponse, error) {
 	return responseBody, err
 }
 
-type AllResponse struct {
-	TaxEnvironments TaxEnvironments `json:"TaxEnvironments"` // The supported tax environments.
-	Taxations       Taxations       `json:"Taxations"`       // The supported taxations.
-	TaxRates        TaxRates        `json:"TaxRates"`        // The supported tax rates.
+type TaxationsGetAllResponse struct {
+	Taxations Taxations `json:"Taxations"` // The supported taxations.
+	TaxRates  TaxRates  `json:"TaxRates"`  // The supported tax rates.
 }
 
-type TaxEnvironments []TaxEnvironment
+func (s *Service) NewTaxationsGetAllRequest() *TaxationsGetAllRequest {
+	return &TaxationsGetAllRequest{}
+}
 
-type TaxEnvironment struct {
-	Code        string `json:"Code"`        // Code of the tax environment.
-	CountryCode string `json:"CountryCode"` // ISO 3166-1 alpha-3 code, e.g. USA or GBR.
-
+type TaxationsGetAllRequest struct {
+	json.BaseRequest
 }
 
 type Taxations []Taxation
@@ -80,11 +74,3 @@ type RelativeTaxRateStrategyData struct {
 }
 
 type TaxRateStrategyDiscriminator string
-
-func (s *Service) NewAllRequest() *AllRequest {
-	return &AllRequest{}
-}
-
-type AllRequest struct {
-	json.BaseRequest
-}

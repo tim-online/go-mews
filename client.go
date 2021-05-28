@@ -23,7 +23,6 @@ import (
 	"github.com/tim-online/go-mews/reservations"
 	"github.com/tim-online/go-mews/services"
 	"github.com/tim-online/go-mews/tasks"
-	"github.com/tim-online/go-mews/taxenvironments"
 )
 
 const (
@@ -95,8 +94,6 @@ func NewClient(httpClient *http.Client, accessToken string, clientToken string) 
 	c.BusinessSegments.Client = c.client
 	c.Tasks = tasks.NewService()
 	c.Tasks.Client = c.client
-	c.TaxEnvironments = taxenvironments.NewService()
-	c.TaxEnvironments.Client = c.client
 	c.Finance = finance.NewService()
 	c.Finance.Client = c.client
 
@@ -125,7 +122,6 @@ type Client struct {
 	Configuration        *configuration.Service
 	BusinessSegments     *businesssegments.Service
 	Tasks                *tasks.Service
-	TaxEnvironments      *taxenvironments.Service
 	Finance              *finance.Service
 }
 
