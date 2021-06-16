@@ -57,7 +57,7 @@ type Company struct {
 	AccountingCode              string                `json:"AccountingCode"`              // Accounting code of the company.
 	BillingCode                 string                `json:"BillingCode"`                 // Billing code of the company.
 	Address                     configuration.Address `json:"Address"`                     // Address of the company (if it is non-empty, otherwise null).
-	InvoiceDueInterval          string                `json:"InvoiceDueInterval"`
+	InvoiceDueInterval          json.Duration         `json:"InvoiceDueInterval"`
 	CreatedUtc                  time.Time             `json:"CreatedUtc"`
 	UpdatedUtc                  time.Time             `json:"UpdatedUtc"`
 	Iata                        interface{}           `json:"Iata"`
