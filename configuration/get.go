@@ -46,21 +46,21 @@ type GetResponse struct {
 }
 
 type Enterprise struct {
-	ID                      string     `json:"Id"`                      // Unique identifier of the enterprise.
-	CreatedUTC              time.Time  `json:"CreatedUtc"`              // Creation date and time of the enterprise in UTC timezone in ISO 8601 format.
-	Name                    string     `json:"Name"`                    // Name of the enterprise.
-	WebsiteURL              string     `json:"WebsiteUrl"`              // URL of the enterprise website.
-	Email                   string     `json:"Email"`                   // Email address of the enterprise.
-	Phone                   string     `json:"Phone"`                   // Phone number of the enterprise.
-	TimeZoneIdentifier      string     `json:"TimeZoneIdentifier"`      // IANA timezone identifier of the enterprise.
-	EditableHistoryInterval string     `json:"EditableHistoryInterval"` // Editable history interval in ISO 8601 duration format.
-	Address                 Address    `json:"Address"`                 // Address of the enterprise.
-	Currencies              Currencies `json:"Currencies"`              // Currencies accepted by the enterprise.
-	ChainID                 string     `json:"ChainId"`                 // NEW
-	CoverImageId            string     `json:"CoverImageId"`            // NEW
-	DefaultLanguageCode     string     `json:"DefaultLanguageCode"`     // NEW
-	LegalEnvironmentCode    string     `json:"LegalEnvironmentCode"`    // NEW
-	LogoImageID             string     `json:"LogoImageId"`             // NEW
+	ID                      string        `json:"Id"`                      // Unique identifier of the enterprise.
+	CreatedUTC              time.Time     `json:"CreatedUtc"`              // Creation date and time of the enterprise in UTC timezone in ISO 8601 format.
+	Name                    string        `json:"Name"`                    // Name of the enterprise.
+	WebsiteURL              string        `json:"WebsiteUrl"`              // URL of the enterprise website.
+	Email                   string        `json:"Email"`                   // Email address of the enterprise.
+	Phone                   string        `json:"Phone"`                   // Phone number of the enterprise.
+	TimeZoneIdentifier      string        `json:"TimeZoneIdentifier"`      // IANA timezone identifier of the enterprise.
+	EditableHistoryInterval json.Duration `json:"EditableHistoryInterval"` // Editable history interval in ISO 8601 duration format.
+	Address                 Address       `json:"Address"`                 // Address of the enterprise.
+	Currencies              Currencies    `json:"Currencies"`              // Currencies accepted by the enterprise.
+	ChainID                 string        `json:"ChainId"`                 // NEW
+	CoverImageId            string        `json:"CoverImageId"`            // NEW
+	DefaultLanguageCode     string        `json:"DefaultLanguageCode"`     // NEW
+	LegalEnvironmentCode    string        `json:"LegalEnvironmentCode"`    // NEW
+	LogoImageID             string        `json:"LogoImageId"`             // NEW
 }
 
 type Currencies []Currency
