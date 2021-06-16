@@ -1,6 +1,8 @@
 package companies
 
 import (
+	"time"
+
 	"github.com/tim-online/go-mews/configuration"
 	"github.com/tim-online/go-mews/json"
 )
@@ -55,4 +57,13 @@ type Company struct {
 	AccountingCode              string                `json:"AccountingCode"`              // Accounting code of the company.
 	BillingCode                 string                `json:"BillingCode"`                 // Billing code of the company.
 	Address                     configuration.Address `json:"Address"`                     // Address of the company (if it is non-empty, otherwise null).
+	InvoiceDueInterval          string                `json:"InvoiceDueInterval"`
+	CreatedUtc                  time.Time             `json:"CreatedUtc"`
+	UpdatedUtc                  time.Time             `json:"UpdatedUtc"`
+	Iata                        interface{}           `json:"Iata"`
+	Telephone                   string                `json:"Telephone"`
+	ContactPerson               string                `json:"ContactPerson"`
+	Contact                     string                `json:"Contact"`
+	Notes                       string                `json:"Notes"`
+	TaxIdentificationNumber     string                `json:"TaxIdentificationNumber"`
 }
