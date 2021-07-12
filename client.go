@@ -38,7 +38,7 @@ var (
 	}
 	BaseURLDemo = &url.URL{
 		Scheme: "https",
-		Host:   "demo.mews.li",
+		Host:   "app.mews-demo.com",
 		Path:   "/api/connector/v1/",
 	}
 )
