@@ -48,7 +48,6 @@ type AllResponse struct {
 func (s *APIService) NewAllRequest() *AllRequest {
 	return &AllRequest{
 		Extent: AccountingItemsExtent{
-
 			AccountingItems:        true,
 			CreditCardTransactions: false,
 		},
@@ -62,6 +61,7 @@ type AllRequest struct {
 	TimeFilter AccountingItemsTimeFilter `json:"TimeFilter,omitempty"`
 	Currency   string                    `json:"Currency,omitempty"`
 	Extent     AccountingItemsExtent     `json:"Extent,omitempty"`
+	States     []AccountingItemsState    `json:"States,omitempty"`
 }
 
 type AccountingItemsTimeFilter string
@@ -147,6 +147,15 @@ type AccountingItemsExtent struct {
 	AccountingItems        bool `json:"AccountingItems"`
 	CreditCardTransactions bool `json:"CreditCardTransactions"`
 }
+
+type AccountingItemsState string
+
+const (
+	AccountingItemsStateClosed   AccountingItemsState = "Closed"
+	AccountingItemsStateOpen     AccountingItemsState = "Open"
+	AccountingItemsStateInactive AccountingItemsState = "Inactive"
+	AccountingItemsStateCanceled AccountingItemsState = "Canceled"
+)
 
 type Cost struct {
 	Currency string   `json:"Currency"` // ISO-4217 code of the Currency.
