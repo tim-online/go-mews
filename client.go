@@ -33,12 +33,12 @@ const (
 var (
 	BaseURL = &url.URL{
 		Scheme: "https",
-		Host:   "www.mews.li",
+		Host:   "api.mews.com",
 		Path:   "/api/connector/v1/",
 	}
 	BaseURLDemo = &url.URL{
 		Scheme: "https",
-		Host:   "app.mews-demo.com",
+		Host:   "api.mews-demo.com",
 		Path:   "/api/connector/v1/",
 	}
 )

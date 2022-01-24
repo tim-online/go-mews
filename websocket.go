@@ -18,12 +18,12 @@ import (
 var (
 	WebsocketURL = &url.URL{
 		Scheme: "wss",
-		Host:   "www.mews.li",
+		Host:   "ws.mews.com",
 		Path:   "/ws/connector",
 	}
 	WebsocketURLDemo = &url.URL{
 		Scheme: "wss",
-		Host:   "demo.mews.li",
+		Host:   "ws.mews-demo.com",
 		Path:   "/ws/connector",
 	}
 )
