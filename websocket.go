@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"net/http/httputil"
 	"net/url"
 	"time"
 
@@ -144,6 +145,7 @@ func (ws *Websocket) Errors() chan (error) {
 
 func (ws *Websocket) Connect(ctx context.Context) error {
 	var err error
+	var resp *http.Response
 
 	u := ws.BaseURL()
 	q := u.Query()
@@ -151,8 +153,12 @@ func (ws *Websocket) Connect(ctx context.Context) error {
 	q.Add("AccessToken", ws.AccessToken())
 	u.RawQuery = q.Encode()
 
-	ws.connection, _, err = websocket.DefaultDialer.Dial(u.String(), nil)
+	ws.connection, resp, err = websocket.DefaultDialer.Dial(u.String(), nil)
 	if err != nil {
+		if ws.debug {
+			b, _ := httputil.DumpResponse(resp, true)
+			log.Println(string(b))
+		}
 		return err
 	}
 

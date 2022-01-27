@@ -149,7 +149,7 @@ func (c *Client) GetWebsocket(ctx context.Context) *Websocket {
 	ws := NewWebsocket(c.client.Client, c.client.AccessToken, c.client.ClientToken)
 	url := &url.URL{
 		Scheme: WebsocketURL.Scheme,
-		Host:   c.client.BaseURL.Host,
+		Host:   WebsocketURL.Host,
 		Path:   WebsocketURL.Path,
 	}
 	ws.SetBaseURL(url)
