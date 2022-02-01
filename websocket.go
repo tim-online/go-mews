@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"net/http/cookiejar"
 	"net/http/httputil"
 	"net/url"
 	"time"
@@ -147,15 +148,28 @@ func (ws *Websocket) Connect(ctx context.Context) error {
 	var err error
 	var resp *http.Response
 
-	u := ws.BaseURL()
-	q := u.Query()
-	q.Add("ClientToken", ws.ClientToken())
-	q.Add("AccessToken", ws.AccessToken())
-	u.RawQuery = q.Encode()
+	d := &websocket.Dialer{
+		Proxy:            http.ProxyFromEnvironment,
+		HandshakeTimeout: 45 * time.Second,
+	}
 
-	ws.connection, resp, err = websocket.DefaultDialer.Dial(u.String(), nil)
+	d.Jar, err = cookiejar.New(nil)
 	if err != nil {
-		if ws.debug {
+		return err
+	}
+
+	cookies := []*http.Cookie{
+		&http.Cookie{Name: "ClientToken", Value: ws.ClientToken()},
+		&http.Cookie{Name: "AccessToken", Value: ws.AccessToken()},
+	}
+
+	u := *ws.BaseURL()
+	u.Scheme = "https"
+	d.Jar.SetCookies(&u, cookies)
+
+	ws.connection, resp, err = d.Dial(ws.BaseURL().String(), nil)
+	if err != nil {
+		if ws.debug && resp != nil {
 			b, _ := httputil.DumpResponse(resp, true)
 			log.Println(string(b))
 		}
@@ -165,7 +179,20 @@ func (ws *Websocket) Connect(ctx context.Context) error {
 	// Time allowed to read the next pong message from the peer.
 	ws.connection.SetReadDeadline(time.Now().Add(pongWait))
 	// After receiving a pong: reset the read deadline
-	ws.connection.SetPongHandler(func(string) error { ws.connection.SetReadDeadline(time.Now().Add(pongWait)); return nil })
+	ws.connection.SetPongHandler(func(data string) error {
+		if ws.Debug() {
+			log.Printf("Received pong message; %s", data)
+		}
+		ws.connection.SetReadDeadline(time.Now().Add(pongWait))
+		return nil
+	})
+
+	ws.connection.SetPingHandler(func(data string) error {
+		if ws.Debug() {
+			log.Printf("Received ping message; %s", data)
+		}
+		return nil
+	})
 
 	// Send ping messages. Stop doing that when context is canceled
 	go func() {
@@ -176,10 +203,10 @@ func (ws *Websocket) Connect(ctx context.Context) error {
 	}()
 
 	// Receive close messages from the peer
-	ws.connection.SetCloseHandler(func(code int, text string) error {
-		// ws.Close()
-		return nil
-	})
+	// ws.connection.SetCloseHandler(func(code int, text string) error {
+	// 	log.Printf("Received close message from peer: %s (%d)", text, code)
+	// 	return ws.Close()
+	// })
 
 	// read messages
 	go func() {
@@ -194,16 +221,13 @@ func (ws *Websocket) Connect(ctx context.Context) error {
 				if ws.debug {
 					log.Println("waiting to receive message")
 				}
-				_, msg, err := ws.connection.ReadMessage()
+				msgType, msg, err := ws.connection.ReadMessage()
 				if ws.debug {
-					log.Println("received msg on websocket")
+					log.Printf("received msg on websocket: %s (%d)", msg, msgType)
 				}
 				if err != nil {
-					_, ok := err.(*websocket.CloseError)
-					if !ok {
-						if ws.errChan != nil {
-							ws.errChan <- err
-						}
+					if ws.errChan != nil {
+						ws.errChan <- err
 					}
 					return
 				}
