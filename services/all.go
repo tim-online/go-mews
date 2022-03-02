@@ -71,3 +71,12 @@ const (
 	ServiceReservable ServiceType = "Reservable"
 	ServiceOrderable  ServiceType = "Orderable"
 )
+
+type ActivityStates []ActivityState
+
+type ActivityState string
+
+const (
+	ActivityStateActive  ActivityState = "Active"
+	ActivityStateDeleted ActivityState = "Deleted"
+)
