@@ -5,6 +5,7 @@ import (
 
 	"github.com/tim-online/go-mews/configuration"
 	"github.com/tim-online/go-mews/json"
+	"github.com/tim-online/go-mews/omitempty"
 )
 
 const (
@@ -39,11 +40,21 @@ func (s *Service) NewAllRequest() *AllRequest {
 
 type AllRequest struct {
 	json.BaseRequest
+	IDs        []string                   `json:"Ids,omitempty"`        // Unique identifiers of Companies.
+	Names      []string                   `json:"Names,omitempty"`      // Names of Companies.
+	CreatedUTC configuration.TimeInterval `json:"CreatedUtc,omitempty"` // Interval of Company creation date and time.
+	UpdatedUTC configuration.TimeInterval `json:"UpdatedUtc,omitempty"` // Interval of Company last update date and time.
+}
+
+func (r AllRequest) MarshalJSON() ([]byte, error) {
+	return omitempty.MarshalJSON(r)
 }
 
 type AllResponse struct {
-	Companies []Company `json:"companies"`
+	Companies Companies `json:"companies"`
 }
+
+type Companies []Company
 
 type Company struct {
 	ID                          string                `json:"Id"`                          // Unique identifier of the company.
