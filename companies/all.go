@@ -66,15 +66,19 @@ type Company struct {
 	AdditionalTaxIdentifier     string                `json:"AdditionalTaxIdentifier"`     // Additional tax identifer of the company.
 	ElectronicInvoiceIdentifier string                `json:"ElectronicInvoiceIdentifier"` // Electronic invoice identifer of the company.
 	AccountingCode              string                `json:"AccountingCode"`              // Accounting code of the company.
-	BillingCode                 string                `json:"BillingCode"`                 // Billing code of the company.
-	Address                     configuration.Address `json:"Address"`                     // Address of the company (if it is non-empty, otherwise null).
+	MotherCompanyID             string                `json:"MotherCompanyId"`
+	BillingCode                 string                `json:"BillingCode"` // Billing code of the company.
+	Address                     configuration.Address `json:"Address"`     // Address of the company (if it is non-empty, otherwise null).
 	InvoiceDueInterval          json.Duration         `json:"InvoiceDueInterval"`
 	CreatedUtc                  time.Time             `json:"CreatedUtc"`
 	UpdatedUtc                  time.Time             `json:"UpdatedUtc"`
-	Iata                        interface{}           `json:"Iata"`
+	Iata                        string                `json:"Iata"`
 	Telephone                   string                `json:"Telephone"`
 	ContactPerson               string                `json:"ContactPerson"`
 	Contact                     string                `json:"Contact"`
 	Notes                       string                `json:"Notes"`
 	TaxIdentificationNumber     string                `json:"TaxIdentificationNumber"`
+	Options                     struct {
+		Invoiceable bool `json:"Invoiceable"`
+	} `json:"Options"`
 }

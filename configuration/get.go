@@ -72,12 +72,14 @@ type Currency struct {
 }
 
 type Address struct {
-	Line1                  string `json:"Line1"`                            // First line of the address.
-	Line2                  string `json:"Line2"`                            // Second line of the address.
-	City                   string `json:"City"`                             // The city.
-	PostalCode             string `json:"PostalCode"`                       // Postal code.
-	CountryCode            string `json:"CountryCode"`                      // ISO 3166-1 alpha-2 country code (two letter country code).
-	CountrySubdivisionCode string `json:"CountrySubdivisionCode,omitempty"` // ISO 3166-2 code of the administrative division, e.g. DE-BW.
+	Line1                  string      `json:"Line1"`                            // First line of the address.
+	Line2                  string      `json:"Line2"`                            // Second line of the address.
+	City                   string      `json:"City"`                             // The city.
+	PostalCode             string      `json:"PostalCode"`                       // Postal code.
+	CountryCode            string      `json:"CountryCode"`                      // ISO 3166-1 alpha-2 country code (two letter country code).
+	CountrySubdivisionCode string      `json:"CountrySubdivisionCode,omitempty"` // ISO 3166-2 code of the administrative division, e.g. DE-BW.
+	Latitude               interface{} `json:"Latitude"`
+	Longitude              interface{} `json:"Longitude"`
 }
 
 type LocalizedText map[string]string
