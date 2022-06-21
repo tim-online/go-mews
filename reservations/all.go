@@ -75,11 +75,12 @@ func (s *APIService) NewAllRequest() *AllRequest {
 
 type AllRequest struct {
 	json.BaseRequest
-	TimeFilter ReservationTimeFilter `json:"TimeFilter,omitempty"`
-	StartUTC   *time.Time            `json:"StartUtc,omitempty"`
-	EndUTC     *time.Time            `json:"EndUtc,omitempty"`
-	States     []ReservationState    `json:"States"`
-	Extent     ReservationExtent     `json:"Extent,omitempty"`
+	TimeFilter  ReservationTimeFilter `json:"TimeFilter,omitempty"`
+	StartUTC    *time.Time            `json:"StartUtc,omitempty"`
+	EndUTC      *time.Time            `json:"EndUtc,omitempty"`
+	CustomerIDs []string              `json:"CustomerIds,omitempty"`
+	States      []ReservationState    `json:"States"`
+	Extent      ReservationExtent     `json:"Extent,omitempty"`
 }
 
 type ReservationExtent struct {
