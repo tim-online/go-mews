@@ -12,6 +12,7 @@ import (
 	"github.com/tim-online/go-mews/commands"
 	"github.com/tim-online/go-mews/companies"
 	"github.com/tim-online/go-mews/configuration"
+	"github.com/tim-online/go-mews/countries"
 	"github.com/tim-online/go-mews/customers"
 	"github.com/tim-online/go-mews/enterprises"
 	"github.com/tim-online/go-mews/finance"
@@ -70,6 +71,8 @@ func NewClient(httpClient *http.Client, accessToken string, clientToken string) 
 	c.AccountingCategories.Client = c.client
 	c.Companies = companies.NewService()
 	c.Companies.Client = c.client
+	c.Countries = countries.NewService()
+	c.Countries.Client = c.client
 	c.Customers = customers.NewService()
 	c.Customers.Client = c.client
 	c.Outlets = outlets.NewAPIService()
@@ -110,6 +113,7 @@ type Client struct {
 	OutletItems          *outletitems.Service
 	AccountingCategories *accountingcategories.Service
 	Companies            *companies.Service
+	Countries            *countries.Service
 	Customers            *customers.Service
 	Outlets              *outlets.APIService
 	Enterprises          *enterprises.APIService
