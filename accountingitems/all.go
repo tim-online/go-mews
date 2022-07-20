@@ -133,12 +133,13 @@ type CreditCardTransactions []CreditCardTransaction
 
 type CreditCardTransaction struct {
 	ID            string    `json:"Id"`
-	PaymentID     string    `json:"PaymentId"`
-	ChargedAmount Cost      `json:"ChargedAmount"`
-	SettledAmount Cost      `json:"SettledAmount"`
-	Fee           Cost      `json:"Fee"`
-	SettlementID  string    `json:"SettlementId"`
-	SettledUTC    time.Time `json:"SettledUtc"`
+	PaymentID     string    `json:"PaymentId"`     // Unique identifier of the
+	SettlementID  string    `json:"SettlementId"`  // Identifier of the settlement.
+	SettledUTC    time.Time `json:"SettledUtc"`    // Settlement date and time in UTC timezone in ISO 8601 format.
+	Fee           Amount    `json:"Fee"`           // Transaction fee - this includes an estimate of bank charges.
+	AdjustedFee   Amount    `json:"AdjustedFee"`   // Transaction fee (adjusted) - this is the final confirmed transaction fee, including confirmed bank charges.
+	ChargedAmount Amount    `json:"ChargedAmount"` // Charged amount of the transaction.
+	SettledAmount Amount    `json:"SettledAmount"` // Settled amount of the transaction.
 }
 
 type AccountingItemType string
