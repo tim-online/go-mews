@@ -4,7 +4,6 @@ import (
 	"time"
 
 	"github.com/tim-online/go-mews/accountingitems"
-	"github.com/tim-online/go-mews/configuration"
 	"github.com/tim-online/go-mews/customers"
 	"github.com/tim-online/go-mews/enterprises"
 	"github.com/tim-online/go-mews/json"
@@ -239,23 +238,6 @@ type ReservationGroups []ReservationGroup
 type ReservationGroup struct {
 	ID   string `json:"Id"`   // Unique identifier of the reservation group.
 	Name string `json:"Name"` // Name of the reservation group, might be empty or same for multiple groups.
-}
-
-type SpaceCategories []SpaceCategory
-
-type SpaceCategory struct {
-	ID             string                      `json:"Id"`             // Unique identifier of the category.
-	IsActive       bool                        `json:"IsActive"`       // Whether the space category is still active.
-	Name           string                      `json:"Name"`           // Name of the category.
-	Names          configuration.LocalizedText `json:"Names"`          // All translations of the name.
-	ShortName      string                      `json:"ShortName"`      // Short name (e.g. code) of the category.
-	ShortNames     configuration.LocalizedText `json:"ShortNames"`     // All translations of the short name.
-	Description    string                      `json:"Description"`    // Description of the category.
-	Descriptions   configuration.LocalizedText `json:"Descriptions"`   // All translations of the description.
-	Ordering       int                         `json:"Ordering"`       // Ordering of the category, lower number corresponds to lower category (note that uniqueness nor continuous sequence is guaranteed).
-	UnitCount      int                         `json:"Unitcount"`      // Count of units that can be accommodated (e.g. bed count).
-	ExtraUnitCount int                         `json:"ExtraUnitCount"` // Count of extra units that can be accommodated (e.g. extra bed count).
-	ImageIDs       []string                    `json:"ImageIds"`       // Unique identifiers of the space category images.
 }
 
 type Spaces []Space
