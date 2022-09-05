@@ -74,7 +74,8 @@ type Company struct {
 	UpdatedUtc                  time.Time             `json:"UpdatedUtc"`
 	Iata                        string                `json:"Iata"`
 	Telephone                   string                `json:"Telephone"`
-	ContactPerson               string                `json:"ContactPerson"`
+	InvoicingEmail              string                `json:"InvoicingEmail"`
+	ContactPerson               string                `json:"ContactPerson"` // Email for issuing invoices to the company.
 	Contact                     string                `json:"Contact"`
 	Notes                       string                `json:"Notes"`
 	TaxIdentificationNumber     string                `json:"TaxIdentificationNumber"`
