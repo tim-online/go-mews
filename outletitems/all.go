@@ -110,6 +110,7 @@ type OutletItem struct {
 	UnitAmount           UnitAmount     `json:"UnitAmount"`           // Unit amount of the item.
 	CreatedUTC           time.Time      `json:"CreatedUtc"`           // Date and time of the item creation in UTC timezone in ISO 8601 format.
 	ConsumptionUTC       time.Time      `json:"ConsumedUtc"`          // Date and time of the item consumption in UTC timezone in ISO 8601 format.
+	ExternalIdentifier   string         `json:"ExternalIdentifier"`   // An identifier of this item from another system.
 	Notes                string         `json:"Notes"`                // Additional notes.
 }
 
