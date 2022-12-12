@@ -77,6 +77,7 @@ type AllRequest struct {
 	TimeFilter  ReservationTimeFilter `json:"TimeFilter,omitempty"`
 	StartUTC    *time.Time            `json:"StartUtc,omitempty"`
 	EndUTC      *time.Time            `json:"EndUtc,omitempty"`
+	ServiceIDs  []string              `json:"ServiceIds,omitempty"`
 	CustomerIDs []string              `json:"CustomerIds,omitempty"`
 	States      []ReservationState    `json:"States"`
 	Extent      ReservationExtent     `json:"Extent,omitempty"`
