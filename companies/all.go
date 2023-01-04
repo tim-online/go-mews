@@ -65,7 +65,8 @@ type Company struct {
 	TaxIdentifier               string                `json:"TaxIdentifier"`               // Tax identification number of the company.
 	AdditionalTaxIdentifier     string                `json:"AdditionalTaxIdentifier"`     // Additional tax identifer of the company.
 	ElectronicInvoiceIdentifier string                `json:"ElectronicInvoiceIdentifier"` // Electronic invoice identifer of the company.
-	AccountingCode              string                `json:"AccountingCode"`              // Accounting code of the company.
+	ExternalIdentifier          string                `json:"ExternalIdentifier"`
+	AccountingCode              string                `json:"AccountingCode"` // Accounting code of the company.
 	MotherCompanyID             string                `json:"MotherCompanyId"`
 	BillingCode                 string                `json:"BillingCode"` // Billing code of the company.
 	Address                     configuration.Address `json:"Address"`     // Address of the company (if it is non-empty, otherwise null).
