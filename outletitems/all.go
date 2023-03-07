@@ -41,6 +41,7 @@ func (s *Service) All(requestBody *AllRequest) (*AllResponse, error) {
 type AllResponse struct {
 	OutletItems []OutletItem
 	OutletBills []OutletBill
+	Cursor      string `json:"Cursor"`
 }
 
 func (s *Service) NewAllRequest() *AllRequest {
@@ -49,9 +50,10 @@ func (s *Service) NewAllRequest() *AllRequest {
 
 type AllRequest struct {
 	base.BaseRequest
-	StartUTC   *time.Time            `json:"StartUtc,omitempty"`
-	EndUTC     *time.Time            `json:"EndUtc,omitempty"`
-	TimeFilter OutletItemsTimeFilter `json:"TimeFilter,omitempty"`
+	base.Limitation `json:"Limitation"`
+	StartUTC        *time.Time            `json:"StartUtc,omitempty"`
+	EndUTC          *time.Time            `json:"EndUtc,omitempty"`
+	TimeFilter      OutletItemsTimeFilter `json:"TimeFilter,omitempty"`
 }
 
 type OutletItemsTimeFilter string

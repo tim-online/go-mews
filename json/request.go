@@ -23,3 +23,8 @@ func (req *BaseRequest) SetLanguageCode(code string) {
 func (req *BaseRequest) SetCultureCode(code string) {
 	req.CultureCode = code
 }
+
+type Limitation struct {
+	Cursor string `json:"Cursor,omitempty"`
+	Count  int    `json:"Count,omitempty"`
+}
