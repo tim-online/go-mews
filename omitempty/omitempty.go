@@ -15,7 +15,14 @@ func MarshalJSON(obj interface{}) ([]byte, error) {
 	st := reflect.TypeOf(obj)
 	fs := []reflect.StructField{}
 	for i := 0; i < st.NumField(); i++ {
-		fs = append(fs, st.Field(i))
+		f := st.Field(i)
+
+		// embedded fields can't be omitted
+		// if f.Anonymous {
+		// 	continue
+		// }
+
+		fs = append(fs, f)
 	}
 
 	for i, _ := range fs {

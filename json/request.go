@@ -1,5 +1,7 @@
 package json
 
+import "github.com/cydev/zero"
+
 type BaseRequest struct {
 	AccessToken  string `json:"AccessToken"`
 	ClientToken  string `json:"ClientToken,omitempty"`
@@ -27,4 +29,8 @@ func (req *BaseRequest) SetCultureCode(code string) {
 type Limitation struct {
 	Cursor string `json:"Cursor,omitempty"`
 	Count  int    `json:"Count,omitempty"`
+}
+
+func (l Limitation) IsEmpty() bool {
+	return zero.IsZero(l)
 }

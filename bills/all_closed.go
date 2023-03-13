@@ -3,8 +3,10 @@ package bills
 import (
 	"time"
 
+	"encoding/json"
+
 	"github.com/tim-online/go-mews/accountingitems"
-	"github.com/tim-online/go-mews/json"
+	base "github.com/tim-online/go-mews/json"
 )
 
 const (
@@ -38,7 +40,7 @@ func (s *Service) NewAllClosedRequest() *AllRequest {
 }
 
 type AllClosedRequest struct {
-	json.BaseRequest
+	base.BaseRequest
 	StartUTC *time.Time `json:"StartUtc,omitempty"`
 	EndUTC   *time.Time `json:"EndUtc,omitempty"`
 }
@@ -50,19 +52,25 @@ type AllClosedResponse struct {
 type Bills []Bill
 
 type Bill struct {
-	ID         string    `json:"Id"`         // Unique identifier of the bill.
-	CustomerID string    `json:"CustomerId"` // Unique identifier of the Customer the bill is issued to.
-	CompanyID  string    `json:"CompanyId"`  // Unique identifier of the Company the bill is issued to.
-	CounterID  string    `json:"CounterId"`  // Unique identifier of the bill Counter.
-	State      BillState `json:"State"`      // State of the bill.
-	Type       BillType  `json:"Type"`       // Type of the bill.
-	Number     string    `json:"Number"`     // Number of the bill.
-	IssuedUTC  time.Time `json:"IssuedUtc"`  // Date and time of the bill issuance in UTC timezone in ISO 8601 format.
-	TaxedUTC   json.Date `json:"TaxedUtc"`   // Taxation date of the bill in UTC timezone in ISO 8601 format.
-	DueUTC     time.Time `json:"DueUtc"`     // Bill due date and time in UTC timezone in ISO 8601 format.
-	Notes      string    `json:"Notes"`      // Additional notes.
-	Revenue    Revenue   `json:"Revenue"`    // The revenue items on the bill.
-	Payments   Payments  `json:"Payments"`   // The payments on the bill.
+	ID                  string                     `json:"Id"`                  // Unique identifier of the bill.
+	CustomerID          string                     `json:"CustomerId"`          // Unique identifier of the Customer the bill is issued to.
+	CompanyID           string                     `json:"CompanyId"`           // Unique identifier of the Company the bill is issued to.
+	CounterID           string                     `json:"CounterId"`           // Unique identifier of the bill Counter.
+	State               BillState                  `json:"State"`               // State of the bill.
+	Type                BillType                   `json:"Type"`                // Type of the bill.
+	Number              string                     `json:"Number"`              // Number of the bill.
+	IssuedUTC           time.Time                  `json:"IssuedUtc"`           // Date and time of the bill issuance in UTC timezone in ISO 8601 format.
+	TaxedUTC            base.Date                  `json:"TaxedUtc"`            // Taxation date of the bill in UTC timezone in ISO 8601 format.
+	DueUTC              time.Time                  `json:"DueUtc"`              // Bill due date and time in UTC timezone in ISO 8601 format.
+	Notes               string                     `json:"Notes"`               // Additional notes.
+	OrderItems          accountingitems.OrderItems `json:"OrderItems"`          // The revenue items on the bill.
+	Revenue             Revenue                    `json:"Revenue"`             // The revenue items on the bill.
+	Payments            Payments                   `json:"Payments"`            // The payments on the bill.
+	OwnerData           BillOwnerData              `json:"OwnerData"`           // Additional information about owner of the bill. Can be a Customer or Company. Persisted at the time of closing of the bill.
+	CompanyDetails      BillCompanyData            `json:"CompanyDetails"`      // Additional information about the company assigned to the bill. Not the same as the owner. Persisted at the time of closing of the bill.
+	EnterpriseData      BillEnterpriseData         `json:"EnterpriseData"`      // Additional information about the enterprise issuing the bill, including bank account details. Persisted at the time of closing of the bill.
+	PurchaseOrderNumber string                     `json:"PurchaseOrderNumber"` // Unique number of the purchase order from the buyer.
+	Options             BillOptions                `json:"Options"`             // Options of the bill.
 }
 
 type BillType string
@@ -100,4 +108,51 @@ type TaxValues []TaxValue
 type TaxValue struct {
 	Code  string  `json:"Code"`  // Code corresponding to tax type.
 	Value float64 `json:"Value"` // Amount of tax applied.
+}
+
+type BillOwnerData struct {
+	Discriminator    string           `json:"Discriminator"` // Determines type of value.
+	Value            json.RawMessage  // Structure of object depends on Bill owner data discriminator. Can be either of type Bill customer data or Bill company data.
+	BillCustomerData BillCustomerData // Owner data specific to a Customer
+	BillCompanyData  BillCompanyData  // Owner data specific to a Company
+}
+
+type BillCustomerData struct {
+}
+
+type BillCompanyData struct {
+	ID                      string      `json:"Id"`                      // ID of the Company.
+	Address                 BillAddress `json:"Address"`                 // Address of the company.
+	LegalIdentifiers        Dictionary  `json:"LegalIdentifiers"`        // The set of LegalIdentifiers for the company.
+	BillingCode             string      `json:"BillingCode"`             // A unique code for Mews to list on invoices it sends to the company.
+	Name                    string      `json:"Name"`                    // Name of the company.
+	FiscalIdentifier        string      `json:"FiscalIdentifier"`        // Fiscal identifier of the company.
+	AdditionalTaxIdentifier string      `json:"AdditionalTaxIdentifier"` // Additional tax identifier of the company.
+}
+
+type BillEnterpriseData struct {
+	AdditionalTaxIdentifier string `json:"AdditionalTaxIdentifier"` // Enterprise additional tax identifier.
+	CompanyName             string `json:"CompanyName"`             // Enterprise company name.
+	BankAccount             string `json:"BankAccount"`             // Enterprise bank account.
+	BankName                string `json:"BankName"`                // Enterprise bank name.
+	IBAN                    string `json:"Iban"`                    // Enterprise IBAN (International Bank Account Number).
+	BIC                     string `json:"Bic"`                     // Enterprise BIC (Bank Identifier Code).
+}
+
+type BillAddress struct {
+	Line1           string `json:"Line1"`           // First line of the address.
+	Line2           string `json:"Line2"`           // Second line of the address.
+	City            string `json:"City"`            // City of the address.
+	PostalCode      string `json:"PostalCode"`      // Postal code of the address.
+	SubdivisionCode string `json:"SubdivisionCode"` // ISO 3166-2 code of the administrative division.
+	CountryCode     string `json:"CountryCode"`     // ISO 3166-1 code of the country.
+}
+
+type Dictionary map[string]interface{}
+
+type BillOptions struct {
+	DisplayCustomer bool `json:"DisplayCustomer"` // Display customer information on a bill.
+	DisplayTaxation bool `json:"DisplayTaxation"` // Display taxation detail on a bill.
+	TrackReceivable bool `json:"TrackReceivable"` // Tracking of payments is enabled for bill, only applicable for Invoice.
+	DisplayCID      bool `json:"DisplayCid"`      // Display CID number on bill, only applicable for Invoice.
 }

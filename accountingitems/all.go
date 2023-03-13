@@ -6,7 +6,9 @@ import (
 	"encoding/json"
 
 	"github.com/tim-online/go-errors"
+	"github.com/tim-online/go-mews/configuration"
 	base "github.com/tim-online/go-mews/json"
+	"github.com/tim-online/go-mews/omitempty"
 )
 
 const (
@@ -56,12 +58,23 @@ func (s *APIService) NewAllRequest() *AllRequest {
 
 type AllRequest struct {
 	base.BaseRequest
+
 	StartUTC   *time.Time                `json:"StartUtc,omitempty"`
 	EndUTC     *time.Time                `json:"EndUtc,omitempty"`
 	TimeFilter AccountingItemsTimeFilter `json:"TimeFilter,omitempty"`
-	Currency   string                    `json:"Currency,omitempty"`
-	Extent     AccountingItemsExtent     `json:"Extent,omitempty"`
-	States     []AccountingItemsState    `json:"States,omitempty"`
+
+	ConsumedUTC    configuration.TimeInterval `json:"ConsumedUtc,omitempty"`    // Interval in which the accounting item was consumed. Required if no other filter is provided.
+	ClosedUTC      configuration.TimeInterval `json:"ClosedUtc,omitempty"`      // Interval in which the accounting item was closed. Required if no other filter is provided.
+	UpdatedUTC     configuration.TimeInterval `json:"UpdatedUtc,omitempty"`     // Interval in which the accounting item was updated. Required if no other filter is provided.
+	ItemIDs        []string                   `json:"ItemIds,omitempty"`        // Unique identifiers of the Accounting items. Required if no other filter is provided.
+	RebatedItemIDs []string                   `json:"RebatedItemIds,omitempty"` // Unique identifiers of the Accounting items we are finding rebates for. Required if no other filter is provided.
+	Currency       string                     `json:"Currency,omitempty"`       // ISO-4217 code of the Currency the item costs should be converted to.
+	Extent         AccountingItemsExtent      `json:"Extent,omitempty"`         // Extent of data to be returned. E.g. it is possible to specify that together with the accounting items, credit card transactions should be also returned.
+	States         []AccountingItemsState     `json:"States,omitempty"`         // States the accounting items should be in. If not specified, accounting items in Open or Closed states are returned.
+}
+
+func (r AllRequest) MarshalJSON() ([]byte, error) {
+	return omitempty.MarshalJSON(r)
 }
 
 type AccountingItemsTimeFilter string
@@ -129,6 +142,24 @@ type AccountingItem struct {
 	State                string                `json:"State"`
 }
 
+type OrderItems []OrderItem
+
+type OrderItem struct {
+	ID                   string          `json:"Id"`                   // Unique identifier of the item.
+	AccountID            string          `json:"AccountID"`            // Unique identifier of the account (for example Customer) the item belongs to.
+	OrderID              string          `json:"OrderId"`              // Unique identifier of the order (or Reservation) the item belongs to.
+	BillID               string          `json:"BillId"`               // Unique identifier of the bill the item is assigned to.
+	AccountingCategoryID string          `json:"AccountingCategoryId"` // Unique identifier of the Accounting Category the item belongs to.
+	UnitCount            int             `json:"UnitCount"`            // Unit count of item, i.e. the number of sub-items or units, if applicable.
+	UnitAmount           Amount          `json:"UnitAmount"`           // Unit amount of item, i.e. the amount of each individual sub-item or unit, if applicable.
+	Amount               Amount          `json:"Amount"`               // Amount the item costs, negative amount represents either rebate or a payment.
+	RevenueType          RevenueType     `json:"RevenueType"`          // Revenue type of the item.
+	ConsumedUTC          time.Time       `json:"ConsumedUtc"`          // Date and time of the item consumption in UTC timezone in ISO 8601 format.
+	ClosedUTC            time.Time       `json:"ClosedUtc"`            // Date and time of the item bill closure in UTC timezone in ISO 8601 format.
+	AccountingState      AccountingState `json:"AccountingState"`      // Accounting state of the item.
+	Data                 OrderItemData   `json:"Data"`                 // Additional data specific to particular order item.
+}
+
 type CreditCardTransactions []CreditCardTransaction
 
 type CreditCardTransaction struct {
@@ -187,3 +218,47 @@ type TaxValue struct {
 	Code  string  `json:"Code"`  // Code corresponding to tax type.
 	Value float64 `json:"Value"` // Amount of tax applied.
 }
+
+type AccountingState string
+
+type OrderItemData struct {
+	Discriminator        OrderItemDataDiscriminator `json:"Discriminator"` // Type of the order item (e.g. ProductOrder).
+	Value                json.RawMessage            `json:"Value"`         // Based on order item discriminator, e.g. Product order item data or null for types without any additional data.
+	ProductOrderItemData ProductOrderItemData       `json:"-"`
+	RebateOrderItemData  RebateOrderItemData        `json:"-"`
+}
+
+type OrderItemDataDiscriminator string
+
+func (d *OrderItemData) UnmarshalJSON(data []byte) error {
+	type alias OrderItemData
+	a := alias(*d)
+	err := json.Unmarshal(data, &a)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(a.Value, &a.ProductOrderItemData)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(a.Value, &a.RebateOrderItemData)
+	if err != nil {
+		return err
+	}
+
+	*d = OrderItemData(a)
+	return nil
+}
+
+type RebateOrderItemData struct {
+	RebatedItemID string `json:"RebatedItemId"` // Unique identifier of Order item which has been rebated by current item.
+}
+
+type ProductOrderItemData struct {
+	ProductID     string `json:"ProductId"`     // Unique identifier of the Product
+	AgeCategoryID string `json:"AgeCategoryId"` // Unique identifier of the Age Category
+}
+
+type RevenueType string
