@@ -50,10 +50,10 @@ func (s *Service) NewAllRequest() *AllRequest {
 
 type AllRequest struct {
 	base.BaseRequest
-	base.Limitation `json:"Limitation"`
-	StartUTC        *time.Time            `json:"StartUtc,omitempty"`
-	EndUTC          *time.Time            `json:"EndUtc,omitempty"`
-	TimeFilter      OutletItemsTimeFilter `json:"TimeFilter,omitempty"`
+	Limitation base.Limitation       `json:"Limitation"`
+	StartUTC   *time.Time            `json:"StartUtc,omitempty"`
+	EndUTC     *time.Time            `json:"EndUtc,omitempty"`
+	TimeFilter OutletItemsTimeFilter `json:"TimeFilter,omitempty"`
 }
 
 type OutletItemsTimeFilter string

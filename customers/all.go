@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/tim-online/go-mews/configuration"
-	"github.com/tim-online/go-mews/json"
+	base "github.com/tim-online/go-mews/json"
 	"github.com/tim-online/go-mews/omitempty"
 	"github.com/tim-online/go-mews/services"
 )
@@ -40,7 +40,8 @@ func (s *Service) NewAllRequest() *AllRequest {
 }
 
 type AllRequest struct {
-	json.BaseRequest
+	base.BaseRequest
+	Limitation     base.Limitation            `json:"Limitation,omitempty"`
 	CustomerIDs    []string                   `json:"CustomerIds,omitempty"`    // Unique identifiers of Customers. Required if no other filter is provided.
 	Emails         []string                   `json:"Emails,omitempty"`         // Emails of the Customers.
 	FirstNames     []string                   `json:"FirstNames,omitempty"`     // First names of the Customers.
@@ -59,6 +60,7 @@ func (r AllRequest) MarshalJSON() ([]byte, error) {
 
 type AllResponse struct {
 	Customers Customers `json:"customers"`
+	Cursor    string    `json:"Cursor"`
 }
 
 type CustomersExtent struct {
@@ -134,8 +136,8 @@ const (
 
 type Document struct {
 	Number             string    `json:"Number"`             // Number of the document (e.g. passport number).
-	Issuance           json.Date `json:"Issuance"`           // Date of issuance in ISO 8601 format.
-	Expiration         json.Date `json:"Expiration"`         // Expiration date in ISO 8601 format.
+	Issuance           base.Date `json:"Issuance"`           // Date of issuance in ISO 8601 format.
+	Expiration         base.Date `json:"Expiration"`         // Expiration date in ISO 8601 format.
 	ExpirationUTC      time.Time `json:"ExpirationUtc"`      // ??
 	IssuanceUTC        time.Time `json:"IssuanceUtc"`        // ??
 	IssuingCountryCode string    `json:"IssuingCountryCode"` // ISO 3166-1 code of the Country.
@@ -146,9 +148,9 @@ type Classification string
 type Options []string
 
 type DriversLicense struct {
-	Expiration         json.Date `json:"Expiration"`
+	Expiration         base.Date `json:"Expiration"`
 	ExpirationUTC      time.Time `json:"ExpirationUtc"`
-	Issuance           json.Date `json:"Issuance"`
+	Issuance           base.Date `json:"Issuance"`
 	IssuanceUTC        time.Time `json:"IssuanceUtc"`
 	IssuingCountryCode string    `json:"IssuingCountryCode"`
 	Number             string    `json:"Number"`
