@@ -6,7 +6,8 @@ import (
 	"github.com/tim-online/go-mews/accountingitems"
 	"github.com/tim-online/go-mews/customers"
 	"github.com/tim-online/go-mews/enterprises"
-	"github.com/tim-online/go-mews/json"
+	base "github.com/tim-online/go-mews/json"
+	"github.com/tim-online/go-mews/omitempty"
 )
 
 const (
@@ -52,6 +53,7 @@ type AllResponse struct {
 	ResourceCategories          enterprises.ResourceCategories          // Resource categories of the resources.
 	ResourceCategoryAssignments enterprises.ResourceCategoryAssignments // Assignments of the resources to categories.
 	Notes                       OrderNotes                              `json:"Notes"` // Notes of the reservations.
+	Cursor                      string                                  `json:"Cursor"`
 }
 
 type Reservations []Reservation
@@ -73,7 +75,8 @@ func (s *APIService) NewAllRequest() *AllRequest {
 }
 
 type AllRequest struct {
-	json.BaseRequest
+	base.BaseRequest
+	Limitation  base.Limitation       `json:"Limitation,omitempty"`
 	TimeFilter  ReservationTimeFilter `json:"TimeFilter,omitempty"`
 	StartUTC    *time.Time            `json:"StartUtc,omitempty"`
 	EndUTC      *time.Time            `json:"EndUtc,omitempty"`
@@ -81,6 +84,10 @@ type AllRequest struct {
 	CustomerIDs []string              `json:"CustomerIds,omitempty"`
 	States      []ReservationState    `json:"States"`
 	Extent      ReservationExtent     `json:"Extent,omitempty"`
+}
+
+func (r AllRequest) MarshalJSON() ([]byte, error) {
+	return omitempty.MarshalJSON(r)
 }
 
 type ReservationExtent struct {
@@ -186,8 +193,8 @@ type BusinessSegment struct {
 
 type Document struct {
 	Number     string    `json:"Number"`     // Number of the document (e.g. passport number).
-	Issuance   json.Date `json:"Issuance"`   // Date of issuance in ISO 8601 format.
-	Expiration json.Date `json:"Expiration"` // Expiration date in ISO 8601 format.
+	Issuance   base.Date `json:"Issuance"`   // Date of issuance in ISO 8601 format.
+	Expiration base.Date `json:"Expiration"` // Expiration date in ISO 8601 format.
 }
 
 type Products []Product

@@ -6,6 +6,7 @@ import (
 
 	"github.com/tim-online/go-errors"
 	base "github.com/tim-online/go-mews/json"
+	"github.com/tim-online/go-mews/omitempty"
 )
 
 const (
@@ -50,10 +51,14 @@ func (s *Service) NewAllRequest() *AllRequest {
 
 type AllRequest struct {
 	base.BaseRequest
-	Limitation base.Limitation       `json:"Limitation"`
+	Limitation base.Limitation       `json:"Limitation,omitempty"`
 	StartUTC   *time.Time            `json:"StartUtc,omitempty"`
 	EndUTC     *time.Time            `json:"EndUtc,omitempty"`
 	TimeFilter OutletItemsTimeFilter `json:"TimeFilter,omitempty"`
+}
+
+func (r AllRequest) MarshalJSON() ([]byte, error) {
+	return omitempty.MarshalJSON(r)
 }
 
 type OutletItemsTimeFilter string
