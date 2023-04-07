@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/tim-online/go-mews/configuration"
-	"github.com/tim-online/go-mews/json"
+	base "github.com/tim-online/go-mews/json"
 	"github.com/tim-online/go-mews/omitempty"
 )
 
@@ -39,7 +39,8 @@ func (s *Service) NewAllRequest() *AllRequest {
 }
 
 type AllRequest struct {
-	json.BaseRequest
+	base.BaseRequest
+	Limitation base.Limitation            `json:"Limitation,omitempty"`
 	IDs        []string                   `json:"Ids,omitempty"`        // Unique identifiers of Companies.
 	Names      []string                   `json:"Names,omitempty"`      // Names of Companies.
 	CreatedUTC configuration.TimeInterval `json:"CreatedUtc,omitempty"` // Interval of Company creation date and time.
@@ -52,6 +53,7 @@ func (r AllRequest) MarshalJSON() ([]byte, error) {
 
 type AllResponse struct {
 	Companies Companies `json:"companies"`
+	Cursor    string    `json:"Cursor"`
 }
 
 type Companies []Company
@@ -70,7 +72,7 @@ type Company struct {
 	MotherCompanyID             string                `json:"MotherCompanyId"`
 	BillingCode                 string                `json:"BillingCode"` // Billing code of the company.
 	Address                     configuration.Address `json:"Address"`     // Address of the company (if it is non-empty, otherwise null).
-	InvoiceDueInterval          json.Duration         `json:"InvoiceDueInterval"`
+	InvoiceDueInterval          base.Duration         `json:"InvoiceDueInterval"`
 	CreatedUtc                  time.Time             `json:"CreatedUtc"`
 	UpdatedUtc                  time.Time             `json:"UpdatedUtc"`
 	Iata                        string                `json:"Iata"`
