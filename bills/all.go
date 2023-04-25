@@ -2,7 +2,7 @@ package bills
 
 import (
 	"github.com/tim-online/go-mews/configuration"
-	"github.com/tim-online/go-mews/json"
+	base "github.com/tim-online/go-mews/json"
 	"github.com/tim-online/go-mews/omitempty"
 )
 
@@ -37,7 +37,8 @@ func (s *Service) NewAllRequest() *AllRequest {
 }
 
 type AllRequest struct {
-	json.BaseRequest
+	base.BaseRequest
+	Limitation base.Limitation `json:"Limitation,omitempty"`
 	// Unique identifiers of the Bills.
 	BillIDs []string `json:"BillIds,omitempty"`
 	// Unique identifiers of the Customers.
@@ -61,7 +62,8 @@ func (r AllRequest) MarshalJSON() ([]byte, error) {
 }
 
 type AllResponse struct {
-	Bills Bills `json:"Bills"` // The closed bills.
+	Bills  Bills  `json:"Bills"` // The closed bills.
+	Cursor string `json:"Cursor"`
 }
 
 type BillExtent struct {
