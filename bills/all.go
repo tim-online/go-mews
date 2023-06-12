@@ -49,6 +49,8 @@ type AllRequest struct {
 	ClosedUTC configuration.TimeInterval `json:"ClosedUtc,omitempty"`
 	// Interval in which the Bill was created.
 	CreatedUTC configuration.TimeInterval `json:"CreatedUtc,omitempty"`
+	// Interval in which the Bill was updated.
+	UpdatedUTC configuration.TimeInterval `json:"UpdatedUtc,omitempty"`
 	// Interval in which the Bill is due to be paid.
 	DueUTC configuration.TimeInterval `json:"DueUtc,omitempty"`
 	// Interval in which the Bill was paid.
