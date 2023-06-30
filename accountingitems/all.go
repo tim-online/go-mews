@@ -44,6 +44,8 @@ func (s *APIService) All(requestBody *AllRequest) (*AllResponse, error) {
 
 type AllResponse struct {
 	AccountingItems        []AccountingItem
+	OrderItems             OrderItems
+	PaymentItems           PaymentItems
 	CreditCardTransactions CreditCardTransactions
 }
 
@@ -160,6 +162,33 @@ type OrderItem struct {
 	Data                 OrderItemData   `json:"Data"`                 // Additional data specific to particular order item.
 }
 
+type PaymentItems []PaymentItem
+
+type PaymentItem struct {
+	ID                   string           `json:"Id"`                   // Unique identifier of the item.
+	AccountID            string           `json:"AccountId"`            // Unique identifier the account (for example Customer) the item belongs to
+	BillID               string           `json:"BillId"`               // Unique identifier of the the Bill the item is assigned to.
+	AccountingCategoryID string           `json:"AccountingCategoryId"` // Unique identifier of the Accounting Category the item belongs to
+	Amount               Amount           `json:"Amount"`               // Item's amount, negative amount represents either rebate or a payment.
+	OriginalAmount       Amount           `json:"OriginalAmount"`       // Amount of item; note a negative amount represents a rebate or payment. Contains the earliest known value in conversion chain.
+	Notes                string           `json:"Notes"`                // Additional notes.
+	SettlementID         string           `json:"SettlementId"`         // Identifier of the settled payment from the external system (ApplePay/GooglePay).
+	ConsumedUTC          time.Time           `json:"ConsumedUtc"`          // Date and time of the item consumption in UTC timezone in ISO 8601 format.
+	ClosedUTC            time.Time           `json:"ClosedUtc"`            // Date and time of the item bill closure in UTC timezone in ISO 8601 format.
+	AccountingState      AccountingState  `json:"AccountingState"`      // Accounting state of the item.
+	State                PaymentItemState `json:"State"`                // Payment state of the item.
+	Data                 PaymentItemData  `json:"Data"`                 // Additional data specific to particular payment item.
+}
+
+type PaymentItemData struct {
+	Discriminator PaymentItemDataDiscriminator `json:"Discriminator"` // Type of the payment item (e.g. CreditCard).
+	Value         map[string]interface{}       `json:""`              // Based on order item discriminator, e.g. Credit card payment item data or null for types without any additional data
+}
+
+type PaymentItemDataDiscriminator string
+
+type PaymentItemState string
+
 type CreditCardTransactions []CreditCardTransaction
 
 type CreditCardTransaction struct {
@@ -177,6 +206,8 @@ type AccountingItemType string
 
 type AccountingItemsExtent struct {
 	AccountingItems        bool `json:"AccountingItems"`
+	OrderItems             bool `json:"OrderItems"`
+	PaymentItems           bool `json:"PaymentItems"`
 	CreditCardTransactions bool `json:"CreditCardTransactions"`
 }
 
