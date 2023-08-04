@@ -118,6 +118,14 @@ type BillOwnerData struct {
 }
 
 type BillCustomerData struct {
+	ID               string            `json:"Id"`
+	Address          BillAddress       `json:"Address"`
+	LegalIdentifiers map[string]string `json:"LegalIdentifiers"`
+	BillingCode      string            `json:"BillingCode"`
+	LastName         string            `json:"LastName"`
+	FirstName        string            `json:"FirstName"`
+	SecondLastName   string            `json:"SecondLastName"`
+	TitlePrefix      string            `json:"TitlePrefix"`
 }
 
 type BillCompanyData struct {
