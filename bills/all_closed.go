@@ -113,8 +113,39 @@ type TaxValue struct {
 type BillOwnerData struct {
 	Discriminator    string           `json:"Discriminator"` // Determines type of value.
 	Value            json.RawMessage  // Structure of object depends on Bill owner data discriminator. Can be either of type Bill customer data or Bill company data.
-	BillCustomerData BillCustomerData // Owner data specific to a Customer
-	BillCompanyData  BillCompanyData  // Owner data specific to a Company
+	BillCustomerData *BillCustomerData `json:"BillCustomerData,omitempty"` // Owner data specific to a Customer
+	BillCompanyData  *BillCompanyData  `json:"BillCompanyData,omitempty"` // Owner data specific to a Company
+}
+
+func (b *BillOwnerData) UnmarshalJSON(data []byte) error {
+	tmp := struct {
+		Discriminator string          `json:"Discriminator"` // Determines type of value.
+		Value         json.RawMessage // Structure of object depends on Bill owner data discriminator. Can be either of type Bill customer data or Bill company data.
+	}{}
+
+	err := json.Unmarshal(data, &tmp)
+	if err != nil {
+		return err
+	}
+
+	b.Discriminator = tmp.Discriminator
+	b.Value = tmp.Value
+
+	if tmp.Discriminator == "BillCustomerData" {
+		err = json.Unmarshal(tmp.Value, &b.BillCustomerData)
+		if err != nil {
+			return err
+		}
+	} else if tmp.Discriminator == "BillCompanyData" {
+		err = json.Unmarshal(tmp.Value, &b.BillCompanyData)
+		if err != nil {
+			return err
+		}
+	} else {
+		// do nothing
+	}
+
+	return nil
 }
 
 type BillCustomerData struct {
