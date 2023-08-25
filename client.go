@@ -20,6 +20,7 @@ import (
 	"github.com/tim-online/go-mews/json"
 	"github.com/tim-online/go-mews/outletitems"
 	"github.com/tim-online/go-mews/outlets"
+	"github.com/tim-online/go-mews/payments"
 	"github.com/tim-online/go-mews/products"
 	"github.com/tim-online/go-mews/productserviceorders"
 	"github.com/tim-online/go-mews/rates"
@@ -67,6 +68,8 @@ func NewClient(httpClient *http.Client, accessToken string, clientToken string) 
 	// Services
 	c.AccountingItems = accountingitems.NewService()
 	c.AccountingItems.Client = c.client
+	c.Payments = payments.NewService()
+	c.Payments.Client = c.client
 	c.OutletItems = outletitems.NewService()
 	c.OutletItems.Client = c.client
 	c.AccountingCategories = accountingcategories.NewService()
@@ -116,6 +119,7 @@ type Client struct {
 
 	// Services used for communicating with the API
 	AccountingItems      *accountingitems.APIService
+	Payments             *payments.Service
 	OutletItems          *outletitems.Service
 	AccountingCategories *accountingcategories.Service
 	Companies            *companies.Service
