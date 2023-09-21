@@ -48,19 +48,20 @@ type AllRequest struct {
 type Products []Product
 
 type Product struct {
-	ID              string                      `json:"Id"`                     // Unique identifier of the product.
-	ServiceID       string                      `json:"ServiceId"`              // Unique identifier of the Service.
-	CategoryID      string                      `json:"CategoryId"`             // Unique identifier of the Product category.
-	IsActive        bool                        `json:"IsActive"`               // Whether the product is still active.
-	Name            string                      `json:"Name"`                   // Name of the product.
-	ExternalName    string                      `json:"ExternalName"`           // Name of the product meant to be displayed to customer.
-	ShortName       string                      `json:"ShortName"`              // Short name of the product.
-	Description     string                      `json:"Description"`            // Description of the product.
-	Charging        ProductCharging             `json:"Charging"`               // Charging of the product.
-	Posting         ProductPosting              `json:"Posting"`                // Posting of the product.
-	Promotions      services.Promotions         `json:"Promotions"`             // Promotions of the service.
-	Classifications ProductClassifications      `json:"ProductClassifications"` // Classifications of the service.
-	Price           configuration.CurrencyValue `json:"Price"`                  // Price of the product.
+	ID                 string                      `json:"Id"`                     // Unique identifier of the product.
+	ServiceID          string                      `json:"ServiceId"`              // Unique identifier of the Service.
+	CategoryID         string                      `json:"CategoryId"`             // Unique identifier of the Product category.
+	IsActive           bool                        `json:"IsActive"`               // Whether the product is still active.
+	Name               string                      `json:"Name"`                   // Name of the product.
+	ExternalName       string                      `json:"ExternalName"`           // Name of the product meant to be displayed to customer.
+	ShortName          string                      `json:"ShortName"`              // Short name of the product.
+	Description        string                      `json:"Description"`            // Description of the product.
+	ExternalIdentifier string                      `json:"ExternalIdentifier"`     // Identifier of the product from external system.
+	Charging           ProductCharging             `json:"Charging"`               // Charging of the product.
+	Posting            ProductPosting              `json:"Posting"`                // Posting of the product.
+	Promotions         services.Promotions         `json:"Promotions"`             // Promotions of the service.
+	Classifications    ProductClassifications      `json:"ProductClassifications"` // Classifications of the service.
+	Price              configuration.CurrencyValue `json:"Price"`                  // Price of the product.
 }
 
 type ProductCharging string
