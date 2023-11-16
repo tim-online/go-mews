@@ -36,7 +36,12 @@ func (s *Service) All(requestBody *AllRequest) (*AllResponse, error) {
 }
 
 func (s *Service) NewAllRequest() *AllRequest {
-	return &AllRequest{}
+	return &AllRequest{
+		Extent: CustomersExtent{
+			Customers: true,
+			Addresses: true,
+		},
+	}
 }
 
 type AllRequest struct {
