@@ -52,25 +52,26 @@ type AllClosedResponse struct {
 type Bills []Bill
 
 type Bill struct {
-	ID                  string                     `json:"Id"`                  // Unique identifier of the bill.
-	CustomerID          string                     `json:"CustomerId"`          // Unique identifier of the Customer the bill is issued to.
-	CompanyID           string                     `json:"CompanyId"`           // Unique identifier of the Company the bill is issued to.
-	CounterID           string                     `json:"CounterId"`           // Unique identifier of the bill Counter.
-	State               BillState                  `json:"State"`               // State of the bill.
-	Type                BillType                   `json:"Type"`                // Type of the bill.
-	Number              string                     `json:"Number"`              // Number of the bill.
-	IssuedUTC           time.Time                  `json:"IssuedUtc"`           // Date and time of the bill issuance in UTC timezone in ISO 8601 format.
-	TaxedUTC            base.Date                  `json:"TaxedUtc"`            // Taxation date of the bill in UTC timezone in ISO 8601 format.
-	DueUTC              time.Time                  `json:"DueUtc"`              // Bill due date and time in UTC timezone in ISO 8601 format.
-	Notes               string                     `json:"Notes"`               // Additional notes.
-	OrderItems          accountingitems.OrderItems `json:"OrderItems"`          // The revenue items on the bill.
-	Revenue             Revenue                    `json:"Revenue"`             // The revenue items on the bill.
-	Payments            Payments                   `json:"Payments"`            // The payments on the bill.
-	OwnerData           BillOwnerData              `json:"OwnerData"`           // Additional information about owner of the bill. Can be a Customer or Company. Persisted at the time of closing of the bill.
-	CompanyDetails      BillCompanyData            `json:"CompanyDetails"`      // Additional information about the company assigned to the bill. Not the same as the owner. Persisted at the time of closing of the bill.
-	EnterpriseData      BillEnterpriseData         `json:"EnterpriseData"`      // Additional information about the enterprise issuing the bill, including bank account details. Persisted at the time of closing of the bill.
-	PurchaseOrderNumber string                     `json:"PurchaseOrderNumber"` // Unique number of the purchase order from the buyer.
-	Options             BillOptions                `json:"Options"`             // Options of the bill.
+	ID                    string                     `json:"Id"`                    // Unique identifier of the bill.
+	CustomerID            string                     `json:"CustomerId"`            // Unique identifier of the Customer the bill is issued to.
+	CompanyID             string                     `json:"CompanyId"`             // Unique identifier of the Company the bill is issued to.
+	CounterID             string                     `json:"CounterId"`             // Unique identifier of the bill Counter.
+	State                 BillState                  `json:"State"`                 // State of the bill.
+	Type                  BillType                   `json:"Type"`                  // Type of the bill.
+	Number                string                     `json:"Number"`                // Number of the bill.
+	IssuedUTC             time.Time                  `json:"IssuedUtc"`             // Date and time of the bill issuance in UTC timezone in ISO 8601 format.
+	TaxedUTC              base.Date                  `json:"TaxedUtc"`              // Taxation date of the bill in UTC timezone in ISO 8601 format.
+	DueUTC                time.Time                  `json:"DueUtc"`                // Bill due date and time in UTC timezone in ISO 8601 format.
+	Notes                 string                     `json:"Notes"`                 // Additional notes.
+	OrderItems            accountingitems.OrderItems `json:"OrderItems"`            // The revenue items on the bill.
+	Revenue               Revenue                    `json:"Revenue"`               // The revenue items on the bill.
+	Payments              Payments                   `json:"Payments"`              // The payments on the bill.
+	AssociatedAccountData []AssociatedAccountData    `json:"AssociatedAccountData"` // Account data of the associated account on a bill. Currently one object is supported and only populated when the bill is closed.
+	OwnerData             BillOwnerData              `json:"OwnerData"`             // Additional information about owner of the bill. Can be a Customer or Company. Persisted at the time of closing of the bill.
+	CompanyDetails        BillCompanyData            `json:"CompanyDetails"`        // Additional information about the company assigned to the bill. Not the same as the owner. Persisted at the time of closing of the bill.
+	EnterpriseData        BillEnterpriseData         `json:"EnterpriseData"`        // Additional information about the enterprise issuing the bill, including bank account details. Persisted at the time of closing of the bill.
+	PurchaseOrderNumber   string                     `json:"PurchaseOrderNumber"`   // Unique number of the purchase order from the buyer.
+	Options               BillOptions                `json:"Options"`               // Options of the bill.
 }
 
 type BillType string
@@ -110,11 +111,17 @@ type TaxValue struct {
 	Value float64 `json:"Value"` // Amount of tax applied.
 }
 
+type AssociatedAccountData struct {
+	Discriminator    string            `json:"Discriminator"`              // Determines type of value.
+	BillCustomerData *BillCustomerData `json:"BillCustomerData,omitempty"` // Associated account bill data of type Bill customer data
+	BillCompanyData  *BillCompanyData  `json:"BillCompanyData,omitempty"`  // Associated account bill data of type Bill company data
+}
+
 type BillOwnerData struct {
-	Discriminator    string           `json:"Discriminator"` // Determines type of value.
-	Value            json.RawMessage  // Structure of object depends on Bill owner data discriminator. Can be either of type Bill customer data or Bill company data.
+	Discriminator    string            `json:"Discriminator"` // Determines type of value.
+	Value            json.RawMessage   // Structure of object depends on Bill owner data discriminator. Can be either of type Bill customer data or Bill company data.
 	BillCustomerData *BillCustomerData `json:"BillCustomerData,omitempty"` // Owner data specific to a Customer
-	BillCompanyData  *BillCompanyData  `json:"BillCompanyData,omitempty"` // Owner data specific to a Company
+	BillCompanyData  *BillCompanyData  `json:"BillCompanyData,omitempty"`  // Owner data specific to a Company
 }
 
 func (b *BillOwnerData) UnmarshalJSON(data []byte) error {
