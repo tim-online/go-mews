@@ -1,9 +1,8 @@
 package accountingitems
 
 import (
-	"time"
-
 	"encoding/json"
+	"time"
 
 	"github.com/tim-online/go-errors"
 	"github.com/tim-online/go-mews/configuration"
