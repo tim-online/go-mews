@@ -34,7 +34,7 @@ func ParseISO8601(from string) (Duration, error) {
 	if pattern.MatchString(from) {
 		match = pattern.FindStringSubmatch(from)
 	} else {
-		return d, errors.New("could not parse duration string")
+		return d, errors.New(fmt.Sprintf("could not parse duration string: %s", from))
 	}
 
 	for i, name := range pattern.SubexpNames() {
