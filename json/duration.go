@@ -24,7 +24,7 @@ type Duration struct {
 	Seconds int
 }
 
-var pattern = regexp.MustCompile(`^P((?P<year>\d+)Y)?((?P<month>\d+)M)?((?P<week>\d+)W)?((?P<day>\d+)D)?(T((?P<hour>\d+)H)?((?P<minute>\d+)M)?((?P<second>\d+)S)?)?$`)
+var pattern = regexp.MustCompile(`P((?P<year>\d+)Y)?((?P<month>\d+)M)?((?P<week>\d+)W)?((?P<day>\d+)D)?(T((?P<hour>\d+)H)?((?P<minute>\d+)M)?((?P<second>\d+)S)?)?`)
 
 // ParseISO8601 parses an ISO8601 duration string.
 func ParseISO8601(from string) (Duration, error) {
