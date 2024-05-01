@@ -59,6 +59,7 @@ type Bill struct {
 	State                 BillState                  `json:"State"`                 // State of the bill.
 	Type                  BillType                   `json:"Type"`                  // Type of the bill.
 	Number                string                     `json:"Number"`                // Number of the bill.
+	VariableSymbol        string                     `json:"VariableSymbol"`        // Unique identifier of the bill.
 	IssuedUTC             time.Time                  `json:"IssuedUtc"`             // Date and time of the bill issuance in UTC timezone in ISO 8601 format.
 	TaxedUTC              base.Date                  `json:"TaxedUtc"`              // Taxation date of the bill in UTC timezone in ISO 8601 format.
 	DueUTC                time.Time                  `json:"DueUtc"`                // Bill due date and time in UTC timezone in ISO 8601 format.
