@@ -40,11 +40,12 @@ func (s *Service) NewAllRequest() *AllRequest {
 
 type AllRequest struct {
 	base.BaseRequest
-	Limitation base.Limitation            `json:"Limitation,omitempty"`
-	IDs        []string                   `json:"Ids,omitempty"`        // Unique identifiers of Companies.
-	Names      []string                   `json:"Names,omitempty"`      // Names of Companies.
-	CreatedUTC configuration.TimeInterval `json:"CreatedUtc,omitempty"` // Interval of Company creation date and time.
-	UpdatedUTC configuration.TimeInterval `json:"UpdatedUtc,omitempty"` // Interval of Company last update date and time.
+	Limitation          base.Limitation            `json:"Limitation,omitempty"`
+	IDs                 []string                   `json:"Ids,omitempty"`   // Unique identifiers of Companies.
+	Names               []string                   `json:"Names,omitempty"` // Names of Companies.
+	ExternalIdentifiers []string                   `json:"ExternalIdentifiers,omitempty"`
+	CreatedUTC          configuration.TimeInterval `json:"CreatedUtc,omitempty"` // Interval of Company creation date and time.
+	UpdatedUTC          configuration.TimeInterval `json:"UpdatedUtc,omitempty"` // Interval of Company last update date and time.
 }
 
 func (r AllRequest) MarshalJSON() ([]byte, error) {
