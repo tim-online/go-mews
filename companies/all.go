@@ -57,6 +57,11 @@ type AllResponse struct {
 	Cursor    string    `json:"Cursor"`
 }
 
+type CompanyOptions struct {
+	Invoiceable       bool `json:"Invoiceable"`
+	AddFeesToInvoices bool `json:"AddFeesToInvoices"`
+}
+
 type Companies []Company
 
 type Company struct {
@@ -83,7 +88,5 @@ type Company struct {
 	Contact                     string                `json:"Contact"`
 	Notes                       string                `json:"Notes"`
 	TaxIdentificationNumber     string                `json:"TaxIdentificationNumber"`
-	Options                     struct {
-		Invoiceable bool `json:"Invoiceable"`
-	} `json:"Options"`
+	Options                     CompanyOptions        `json:"Options"`
 }
