@@ -39,43 +39,43 @@ type AddRequest struct {
 	json.BaseRequest
 
 	// Overwrite existing
-	OverwriteExisting bool `json:"OverwriteExisting"`
+	OverwriteExisting bool `json:"OverwriteExisting,omitempty"`
 	// New first name.
-	FirstName string `json:"FirstName"`
+	FirstName string `json:"FirstName,omitempty"`
 	// New last name.
 	LastName string `json:"LastName"`
 	// New second last name.
-	SecondLastName string `json:"SecondLastName"`
+	SecondLastName string `json:"SecondLastName,omitempty"`
 	// New title.
-	Title string `json:"Title"`
+	Title string `json:"Title,omitempty"`
 	// Sex
-	Sex string `json:"Sex"`
+	Sex string `json:"Sex,omitempty"`
 	// ISO 3166-1 code of the Country.
-	NationalityCode string `json:"NationalityCode"`
+	NationalityCode string `json:"NationalityCode,omitempty"`
 	// New birth date in ISO 8601 format.
-	BirthDate *json.Date `json:"BirthDate"`
+	BirthDate *json.Date `json:"BirthDate,omitempty"`
 	// New birth place.
-	BirthPlace string `json:"BirthPlace"`
+	BirthPlace string `json:"BirthPlace,omitempty"`
 	// New email address.
-	Email string `json:"Email"`
+	Email string `json:"Email,omitempty"`
 	// New phone number.
-	Phone string `json:"Phone"`
+	Phone string `json:"Phone,omitempty"`
 	// Loyalty code of the customer.
-	LoyaltyCode string `json:"LocaltyCode"`
+	LoyaltyCode string `json:"LocaltyCode,omitempty"`
 	// Internal notes about the customer. Old value will be overwritten.
-	Notes string `json:"Notes"`
+	Notes string `json:"Notes,omitempty"`
 	// New identity card details.
-	IdentityCard *Document `json:"IdentityCard"`
+	IdentityCard *Document `json:"IdentityCard,omitempty"`
 	// New passport details.
-	Passport *Document `json:"Passport"`
+	Passport *Document `json:"Passport,omitempty"`
 	// New visa details.
-	Visa *Document `json:"Visa"`
+	Visa *Document `json:"Visa,omitempty"`
 	// New drivers license details.
-	DriversLicense *Document `json:"DriversLicense"`
+	DriversLicense *Document `json:"DriversLicense,omitempty"`
 	// New address details.
-	Address *configuration.Address `json:"Address"`
+	Address *configuration.Address `json:"Address,omitempty"`
 	// Italian Destination Code
-	ItalianDestinationCode string `json:"ItalianDestinationCode"`
+	ItalianDestinationCode string `json:"ItalianDestinationCode,omitempty"`
 }
 
 type AddResponse Customer
