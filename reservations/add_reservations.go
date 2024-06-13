@@ -45,19 +45,19 @@ type AddRequest struct {
 	GroupName             string     `json:"GroupName"`             // Name of the Reservation group which the reservations are added to. If GroupId is specified, this field is ignored. If not specified, the group name is automatically created.
 	SendConfirmationEmail bool       `json:"SendConfirmationEmail"` // Whether the confirmation email is sent. Default value is true.
 	Reservations          []struct { // Parameters of the new reservations.
-		Identifier          string            `json:"Identifier"`          // Identifier of the reservation within the transaction.
-		State               string            `json:"State"`               // State of the newly created reservation (either Optional, Enquired or Confirmed). If not specified, Confirmed is used.
-		StartUtc            time.Time         `json:"StartUtc"`            // Reservation start in UTC timezone in ISO 8601 format.
-		EndUtc              time.Time         `json:"EndUtc"`              // Reservation end in UTC timezone in ISO 8601 format.
-		ReleasedUtc         time.Time         `json:"ReleasedUtc"`         // Release date and time of an unconfirmed reservation in UTC timezone in ISO 8601 format.
-		CustomerID          string            `json:"CustomerId"`          // Unique identifier of the Customer who owns the reservation.
-		BookerID            string            `json:"BookerId"`            // Unique identifier of the Customer on whose behalf the reservation was made.
-		RequestedCategoryID string            `json:"RequestedCategoryId"` // Identifier of the requested Resource category.
-		RateID              string            `json:"RateId"`              // Identifier of the reservation Rate.
-		TravelAgencyID      string            `json:"TravelAgencyId"`      // Identifier of the Company that mediated the reservation.
-		CompanyID           string            `json:"CompanyId"`           // Identifier of the Company on behalf of which the reservation was made.
-		Notes               string            `json:"Notes"`               // Additional notes.
-		TimeUnitAmount      orderitems.Amount `json:"TimeUnitAmount"`      // Amount of each night of the reservation.
+		Identifier          string            `json:"Identifier"`               // Identifier of the reservation within the transaction.
+		State               string            `json:"State"`                    // State of the newly created reservation (either Optional, Enquired or Confirmed). If not specified, Confirmed is used.
+		StartUtc            time.Time         `json:"StartUtc"`                 // Reservation start in UTC timezone in ISO 8601 format.
+		EndUtc              time.Time         `json:"EndUtc"`                   // Reservation end in UTC timezone in ISO 8601 format.
+		ReleasedUtc         time.Time         `json:"ReleasedUtc"`              // Release date and time of an unconfirmed reservation in UTC timezone in ISO 8601 format.
+		CustomerID          string            `json:"CustomerId"`               // Unique identifier of the Customer who owns the reservation.
+		BookerID            string            `json:"BookerId"`                 // Unique identifier of the Customer on whose behalf the reservation was made.
+		RequestedCategoryID string            `json:"RequestedCategoryId"`      // Identifier of the requested Resource category.
+		RateID              string            `json:"RateId"`                   // Identifier of the reservation Rate.
+		TravelAgencyID      string            `json:"TravelAgencyId"`           // Identifier of the Company that mediated the reservation.
+		CompanyID           string            `json:"CompanyId"`                // Identifier of the Company on behalf of which the reservation was made.
+		Notes               string            `json:"Notes"`                    // Additional notes.
+		TimeUnitAmount      orderitems.Amount `json:"TimeUnitAmount,omitempty"` // Amount of each night of the reservation.
 		PersonCounts        []struct {
 			AgeCategoryID string `json:"AgeCategoryId"` // Unique identifier of the Age category.
 			Count         int    `json:"Count"`         // Number of people of a given age category. Only positive value is accepted.

@@ -141,6 +141,10 @@ type Amount struct {
 	Value   float64  `json:"Value"`   // Amount in the currency (including tax if taxed).
 }
 
+func (a Amount) MarshalJSON() ([]byte, error) {
+	return omitempty.MarshalJSON(a)
+}
+
 type TaxValues []TaxValue
 
 type TaxValue struct {
