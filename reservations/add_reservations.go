@@ -60,7 +60,7 @@ type AddRequestReservation struct {
 	State               string            `json:"State,omitempty"`          // State of the newly created reservation (either Optional, Enquired or Confirmed). If not specified, Confirmed is used.
 	StartUtc            time.Time         `json:"StartUtc"`                 // Reservation start in UTC timezone in ISO 8601 format.
 	EndUtc              time.Time         `json:"EndUtc"`                   // Reservation end in UTC timezone in ISO 8601 format.
-	ReleasedUtc         time.Time         `json:"ReleasedUtc,omitempty"`    // Release date and time of an unconfirmed reservation in UTC timezone in ISO 8601 format.
+	ReleasedUtc         *time.Time        `json:"ReleasedUtc,omitempty"`    // Release date and time of an unconfirmed reservation in UTC timezone in ISO 8601 format.
 	CustomerID          string            `json:"CustomerId"`               // Unique identifier of the Customer who owns the reservation.
 	BookerID            string            `json:"BookerId,omitempty"`       // Unique identifier of the Customer on whose behalf the reservation was made.
 	RequestedCategoryID string            `json:"RequestedCategoryId"`      // Identifier of the requested Resource category.
