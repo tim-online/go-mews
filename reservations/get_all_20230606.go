@@ -45,15 +45,17 @@ func (s *APIService) NewGetAll20230606Request() *GetAll20230606Request {
 
 type GetAll20230606Request struct {
 	base.BaseRequest
-	Limitation          base.Limitation            `json:"Limitation,omitempty"`
-	EnterpriseIDs       []string                   `json:"EnterpriseIds,omitempty"`
-	ReservationIDs      []string                   `json:"ReservationIds,omitempty"`
-	AccountIDs          []string                   `json:"AccountIds,omitempty"`
-	CustomerIDs         []string                   `json:"CustomerIds,omitempty"`
-	ReservationGroupIDs []string                   `json:"ReservationGroupIds,omitempty"`
+	Limitation base.Limitation `json:"Limitation,omitempty"`
+
+	EnterpriseIDs       []string                   `json:"EnterpriseIds,omitempty"`       // Unique identifiers of the Enterprises.
+	ReservationIDs      []string                   `json:"ReservationIds,omitempty"`      // Unique identifiers of the Reservations.
+	ServiceIDs          []string                   `json:"ServiceIds"`                    // Unique identifiers of the Services. If not provided, all bookable services are used.
+	AccountIDs          []string                   `json:"AccountIds,omitempty"`          // Unique identifiers of accounts (currently only Customers, in the future also Companies) the reservation is associated with.
+	ReservationGroupIDs []string                   `json:"ReservationGroupIds,omitempty"` // Unique identifiers of Reservation groups.
 	States              []ReservationStates        `json:"States,omitempty"`
-	UpdatedUtc          configuration.TimeInterval `json:"UpdatedUtc,omitempty"`
-	CollidingUtc        configuration.TimeInterval `json:"CollidingUtc,omitempty"`
+	UpdatedUTC          configuration.TimeInterval `json:"UpdatedUtc,omitempty"`
+	ScheduledStartUTC   configuration.TimeInterval `json:"ScheduledStartUtc,omitempty"`
+	CollidingUTC        configuration.TimeInterval `json:"CollidingUtc,omitempty"`
 }
 
 func (r GetAll20230606Request) MarshalJSON() ([]byte, error) {
