@@ -54,7 +54,8 @@ func (r AddRequest) MarshalJSON() ([]byte, error) {
 	return omitempty.MarshalJSON(r)
 }
 
-type AddRequestReservations []struct {
+type AddRequestReservations []AddRequestReservation
+type AddRequestReservation struct {
 	Identifier          string            `json:"Identifier,omitempty"`     // Identifier of the reservation within the transaction.
 	State               string            `json:"State,omitempty"`          // State of the newly created reservation (either Optional, Enquired or Confirmed). If not specified, Confirmed is used.
 	StartUtc            time.Time         `json:"StartUtc"`                 // Reservation start in UTC timezone in ISO 8601 format.
@@ -86,7 +87,7 @@ type AddRequestReservations []struct {
 	VoucherCode         string `json:"VoucherCode,omitempty"`         // Voucher code value providing access to specified private Rate applied to this reservation.
 }
 
-func (r AddRequestReservations) MarshalJSON() ([]byte, error) {
+func (r AddRequestReservation) MarshalJSON() ([]byte, error) {
 	return omitempty.MarshalJSON(r)
 }
 
