@@ -82,4 +82,6 @@ type AddRequest struct {
 	WebsiteURL string `json:"WebsiteUrl,omitempty"`
 }
 
-type AddResponse Company
+type AddResponse struct {
+	Companies Companies `json:"companies"`
+}
