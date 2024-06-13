@@ -3,6 +3,7 @@ package orderitems
 import (
 	"time"
 
+	"github.com/cydev/zero"
 	"github.com/tim-online/go-mews/configuration"
 	base "github.com/tim-online/go-mews/json"
 	"github.com/tim-online/go-mews/omitempty"
@@ -143,6 +144,10 @@ type Amount struct {
 
 func (a Amount) MarshalJSON() ([]byte, error) {
 	return omitempty.MarshalJSON(a)
+}
+
+func (a Amount) IsEmpty() bool {
+	return zero.IsZero(a)
 }
 
 type TaxValues []TaxValue
