@@ -1,4 +1,4 @@
-package enterprises
+package resources
 
 import (
 	"time"
@@ -9,22 +9,22 @@ import (
 )
 
 const (
-	endpointResourceBlocksGetAll = "resourceBlocks/getAll"
+	endpointBlocksAll = "resourceBlocks/getAll"
 )
 
 // List all products
-func (s *APIService) ResourceBlocksGetAll(requestBody *ResourceBlocksGetAllRequest) (*ResourceBlocksGetAllResponse, error) {
+func (s *APIService) BlocksAll(requestBody *BlocksAllRequest) (*BlocksAllResponse, error) {
 	// @TODO: create wrapper?
 	if err := s.Client.CheckTokens(); err != nil {
 		return nil, err
 	}
 
-	apiURL, err := s.Client.GetApiURL(endpointResourceBlocksGetAll)
+	apiURL, err := s.Client.GetApiURL(endpointBlocksAll)
 	if err != nil {
 		return nil, err
 	}
 
-	responseBody := &ResourceBlocksGetAllResponse{}
+	responseBody := &BlocksAllResponse{}
 	httpReq, err := s.Client.NewRequest(apiURL, requestBody)
 	if err != nil {
 		return nil, err
@@ -34,11 +34,11 @@ func (s *APIService) ResourceBlocksGetAll(requestBody *ResourceBlocksGetAllReque
 	return responseBody, err
 }
 
-func (s *APIService) NewResourceBlocksGetAllRequest() *ResourceBlocksGetAllRequest {
-	return &ResourceBlocksGetAllRequest{}
+func (s *APIService) NewBlocksAllRequest() *BlocksAllRequest {
+	return &BlocksAllRequest{}
 }
 
-type ResourceBlocksGetAllRequest struct {
+type BlocksAllRequest struct {
 	json.BaseRequest
 
 	ResourceBlockIDs    []string                   `json:"ResourceBlockIds"`       // Unique identifiers of the requested Resource blocks.
@@ -49,11 +49,11 @@ type ResourceBlocksGetAllRequest struct {
 	Extent              ResourceBlockExtent        `json:"Extent,omitempty"`       // Extent of data to be returned.
 }
 
-func (r ResourceBlocksGetAllRequest) MarshalJSON() ([]byte, error) {
+func (r BlocksAllRequest) MarshalJSON() ([]byte, error) {
 	return omitempty.MarshalJSON(r)
 }
 
-type ResourceBlocksGetAllResponse struct {
+type BlocksAllResponse struct {
 	ResourceBlocks ResourceBlocks `json:"ResourceBlocks"`
 }
 

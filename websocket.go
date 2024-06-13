@@ -13,8 +13,8 @@ import (
 
 	"github.com/gorilla/websocket"
 	"github.com/tim-online/go-mews/commands"
-	"github.com/tim-online/go-mews/enterprises"
 	"github.com/tim-online/go-mews/reservations"
+	"github.com/tim-online/go-mews/resources"
 )
 
 var (
@@ -412,7 +412,7 @@ type ReservationEvent struct {
 type ResourceEvent struct {
 	Event
 
-	State enterprises.ResourceState `json:"State"` // State of the resource.
+	State resources.ResourceState `json:"State"` // State of the resource.
 
 }
 

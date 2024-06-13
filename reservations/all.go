@@ -5,9 +5,9 @@ import (
 
 	"github.com/tim-online/go-mews/accountingitems"
 	"github.com/tim-online/go-mews/customers"
-	"github.com/tim-online/go-mews/enterprises"
 	base "github.com/tim-online/go-mews/json"
 	"github.com/tim-online/go-mews/omitempty"
+	"github.com/tim-online/go-mews/resources"
 )
 
 const (
@@ -49,9 +49,9 @@ type AllResponse struct {
 	ReservationGroups           ReservationGroups                       `json:"ReservationGroups"` // Reservation groups that the reservations are members of.
 	Reservations                Reservations                            `json:"Reservations"`      // The reservations that collide with the specified interval.
 	Services                    Services                                `json:"Services"`          // Services that have been reserved.
-	Resources                   enterprises.Resources                   // Assigned resources of the reservations.
-	ResourceCategories          enterprises.ResourceCategories          // Resource categories of the resources.
-	ResourceCategoryAssignments enterprises.ResourceCategoryAssignments // Assignments of the resources to categories.
+	Resources                   resources.Resources                   // Assigned resources of the reservations.
+	ResourceCategories          resources.ResourceCategories          // Resource categories of the resources.
+	ResourceCategoryAssignments resources.ResourceCategoryAssignments // Assignments of the resources to categories.
 	Notes                       OrderNotes                              `json:"Notes"` // Notes of the reservations.
 	Cursor                      string                                  `json:"Cursor"`
 }
