@@ -38,10 +38,11 @@ func (s *Service) NewAddRequest() *AddRequest {
 
 type AddRequest struct {
 	json.BaseRequest
-	DepartmentID string    `json:"DepartmentId,omitempty"`
-	Name         string    `json:"Name"`
-	Description  string    `json:"Description,omitempty"`
-	DeadlineUTC  time.Time `json:"DeadlineUtc"`
+	Name           string    `json:"Name"`                     // Name (or title) of the task.
+	Description    string    `json:"Description,omitempty"`    // Further decription of the task.
+	DeadlineUTC    time.Time `json:"DeadlineUtc"`              // Deadline of the task in UTC timezone in ISO 8601 format.
+	ServiceOrderID string    `json:"ServiceOrderId,omitempty"` // Unique identifier of the service order (reservation or product service order) the task is linked with.
+	DepartmentID   string    `json:"DepartmentId,omitempty"`   // Unique identifier of the Department the task is addressed to.
 }
 
 type AddResponse struct {
