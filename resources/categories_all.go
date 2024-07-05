@@ -54,8 +54,8 @@ type ActivityStates []ActivityState
 type ActivityState string
 
 type CategoriesAllResponse struct {
-	ResourceBlocks ResourceBlocks `json:"ResourceBlocks"`
-	Cursor         string         `json:"Cursor"` // Unique identifier of the last and hence oldest resource category returned. This can be used in Limitation in a subsequent request to fetch the next batch of older resource categories.
+	ResourceCategories ResourceCategories `json:"ResourceCategories"`
+	Cursor             string             `json:"Cursor"` // Unique identifier of the last and hence oldest resource category returned. This can be used in Limitation in a subsequent request to fetch the next batch of older resource categories.
 }
 
 type ResourceCategories []ResourceCategory
