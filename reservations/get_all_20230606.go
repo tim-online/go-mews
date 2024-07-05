@@ -52,6 +52,7 @@ type GetAll20230606Request struct {
 	ServiceIDs          []string                   `json:"ServiceIds"`                    // Unique identifiers of the Services. If not provided, all bookable services are used.
 	AccountIDs          []string                   `json:"AccountIds,omitempty"`          // Unique identifiers of accounts (currently only Customers, in the future also Companies) the reservation is associated with.
 	ReservationGroupIDs []string                   `json:"ReservationGroupIds,omitempty"` // Unique identifiers of Reservation groups.
+	AssignedResourceIds []string                   `json:"AssignedResourceIds,omitempty"`
 	States              []ReservationStates        `json:"States,omitempty"`
 	UpdatedUTC          configuration.TimeInterval `json:"UpdatedUtc,omitempty"`
 	ScheduledStartUTC   configuration.TimeInterval `json:"ScheduledStartUtc,omitempty"`
