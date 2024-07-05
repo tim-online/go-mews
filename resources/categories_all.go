@@ -39,10 +39,10 @@ func (s *APIService) NewCategoriesAllRequest() *CategoriesAllRequest {
 type CategoriesAllRequest struct {
 	json.BaseRequest
 
-	ResourceCategoryIDs []string                   `json:"ResourceCategoryIds"` // Unique identifiers of Resource categories.
-	ServiceIDs          []string                   `json:"ServiceIds"`          // Unique identifiers of Services to which the resource categories belong.
-	UpdatedUTC          configuration.TimeInterval `json:"UpdatedUtc"`          // Interval in which the resource categories were updated.
-	ActivityStates      ActivityStates             `json:"ActivityStates"`      // Whether to return only active, only deleted or both records.
+	ResourceCategoryIDs []string                   `json:"ResourceCategoryIds,omitempty"` // Unique identifiers of Resource categories.
+	ServiceIDs          []string                   `json:"ServiceIds,omitempty"`          // Unique identifiers of Services to which the resource categories belong.
+	UpdatedUTC          configuration.TimeInterval `json:"UpdatedUtc,omitempty"`          // Interval in which the resource categories were updated.
+	ActivityStates      ActivityStates             `json:"ActivityStates,omitempty"`      // Whether to return only active, only deleted or both records.
 }
 
 func (r CategoriesAllRequest) MarshalJSON() ([]byte, error) {
