@@ -7,7 +7,7 @@ const (
 )
 
 // List all products
-func (s *APIService) AllByIDs(requestBody *AllByIDsRequest) (*AllResponse, error) {
+func (s *Service) AllByIDs(requestBody *AllByIDsRequest) (*AllResponse, error) {
 	// @TODO: create wrapper?
 	if err := s.Client.CheckTokens(); err != nil {
 		return nil, err
@@ -28,7 +28,7 @@ func (s *APIService) AllByIDs(requestBody *AllByIDsRequest) (*AllResponse, error
 	return responseBody, err
 }
 
-func (s *APIService) NewAllByIDsRequest() *AllByIDsRequest {
+func (s *Service) NewAllByIDsRequest() *AllByIDsRequest {
 	return &AllByIDsRequest{}
 }
 

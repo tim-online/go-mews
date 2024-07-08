@@ -14,6 +14,7 @@ import (
 	"github.com/tim-online/go-mews/companies"
 	"github.com/tim-online/go-mews/configuration"
 	"github.com/tim-online/go-mews/countries"
+	"github.com/tim-online/go-mews/creditcards"
 	"github.com/tim-online/go-mews/customers"
 	"github.com/tim-online/go-mews/enterprises"
 	"github.com/tim-online/go-mews/finance"
@@ -114,6 +115,8 @@ func NewClient(httpClient *http.Client, accessToken string, clientToken string) 
 	c.Finance.Client = c.client
 	c.CashierTransactions = cashiertransactions.NewService()
 	c.CashierTransactions.Client = c.client
+	c.CreditCards = creditcards.NewService()
+	c.CreditCards.Client = c.client
 
 	return c
 }
@@ -147,6 +150,7 @@ type Client struct {
 	Tasks                *tasks.Service
 	Finance              *finance.Service
 	CashierTransactions  *cashiertransactions.Service
+	CreditCards  *creditcards.Service
 }
 
 func (c *Client) SetDebug(debug bool) {
