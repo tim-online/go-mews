@@ -3,7 +3,7 @@ package configuration
 import (
 	"time"
 
-	"github.com/tim-online/go-mews/json"
+	base "github.com/tim-online/go-mews/json"
 )
 
 const (
@@ -37,7 +37,7 @@ func (s *Service) NewGetRequest() *GetRequest {
 }
 
 type GetRequest struct {
-	json.BaseRequest
+	base.BaseRequest
 }
 
 type GetResponse struct {
@@ -53,7 +53,7 @@ type Enterprise struct {
 	Email                   string        `json:"Email"`                   // Email address of the enterprise.
 	Phone                   string        `json:"Phone"`                   // Phone number of the enterprise.
 	TimeZoneIdentifier      string        `json:"TimeZoneIdentifier"`      // IANA timezone identifier of the enterprise.
-	EditableHistoryInterval json.Duration `json:"EditableHistoryInterval"` // Editable history interval in ISO 8601 duration format.
+	EditableHistoryInterval base.Duration `json:"EditableHistoryInterval"` // Editable history interval in ISO 8601 duration format.
 	Address                 Address       `json:"Address"`                 // Address of the enterprise.
 	Currencies              Currencies    `json:"Currencies"`              // Currencies accepted by the enterprise.
 	ChainID                 string        `json:"ChainId"`                 // NEW
@@ -112,4 +112,13 @@ type TimeInterval struct {
 
 func (i TimeInterval) IsEmpty() bool {
 	return i.StartUTC.IsZero() && i.EndUTC.IsZero()
+}
+
+type DateInterval struct {
+	Start base.Date `json:"Start"`
+	End   base.Date `json:"End"`
+}
+
+func (i DateInterval) IsEmpty() bool {
+	return i.Start.IsZero() && i.End.IsZero()
 }

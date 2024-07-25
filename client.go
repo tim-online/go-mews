@@ -19,6 +19,7 @@ import (
 	"github.com/tim-online/go-mews/enterprises"
 	"github.com/tim-online/go-mews/finance"
 	"github.com/tim-online/go-mews/json"
+	"github.com/tim-online/go-mews/ledgerbalances"
 	"github.com/tim-online/go-mews/orderitems"
 	"github.com/tim-online/go-mews/outletitems"
 	"github.com/tim-online/go-mews/outlets"
@@ -117,6 +118,8 @@ func NewClient(httpClient *http.Client, accessToken string, clientToken string) 
 	c.CashierTransactions.Client = c.client
 	c.CreditCards = creditcards.NewService()
 	c.CreditCards.Client = c.client
+	c.LedgerBalances = ledgerbalances.NewService()
+	c.LedgerBalances.Client = c.client
 
 	return c
 }
@@ -151,6 +154,7 @@ type Client struct {
 	Finance              *finance.Service
 	CashierTransactions  *cashiertransactions.Service
 	CreditCards  *creditcards.Service
+	LedgerBalances  *ledgerbalances.Service
 }
 
 func (c *Client) SetDebug(debug bool) {

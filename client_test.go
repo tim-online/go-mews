@@ -7,6 +7,8 @@ import (
 
 	mews "github.com/tim-online/go-mews"
 	"github.com/tim-online/go-mews/accountingitems"
+	base "github.com/tim-online/go-mews/json"
+	"github.com/tim-online/go-mews/ledgerbalances"
 	"github.com/tim-online/go-mews/reservations"
 )
 
@@ -72,6 +74,27 @@ func TestConfig(t *testing.T) {
 
 	requestBody := client.Configuration.NewGetRequest()
 	_, err := client.Configuration.Get(requestBody)
+	if err != nil {
+		t.Error(err)
+	}
+}
+
+func TestLedgerBalances(t *testing.T) {
+	client := getClient()
+
+	start := time.Now().AddDate(0, -1, 0)
+	end := time.Now()
+
+	requestBody := &ledgerbalances.AllRequest{}
+	requestBody.Date.Start = base.Date{Time: start}
+	requestBody.Date.End = base.Date{Time: end}
+	requestBody.LedgerTypes = []ledgerbalances.LedgerType{
+		"Deposit",
+		"Guest",
+		"City",
+	}
+	requestBody.Limitation.Count = 100
+	_, err := client.LedgerBalances.All(requestBody)
 	if err != nil {
 		t.Error(err)
 	}
