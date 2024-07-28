@@ -42,15 +42,15 @@ type AllResponse struct {
 type Services []Service
 
 type Service struct {
-	ID         string         `json:"Id"`          // Unique identifier of the service.
-	IsActive   bool           `json:"IsActive"`    // Whether the service is still active.
-	Name       string         `json:"Name"`        // Name of the service.
-	StartTime  string         `json:"StartTime"`   // Default start time of the service orders in ISO 8601 duration format.
-	EndTime    string         `json:"EndTime"`     // Default end time of the service orders in ISO 8601 duration format.
-	Promotions Promotions     `json:"Promotions"`  // Promotions of the service.
-	Type       ServiceType    `json:"ServiceType"` // Type of the service
-	Options    ServiceOptions `json:"Options"`     // Options of the service
-	Data       ServiceData    `json:"Data"`        // Additional information about the specific service
+	ID         string         `json:"Id"`         // Unique identifier of the service.
+	IsActive   bool           `json:"IsActive"`   // Whether the service is still active.
+	Name       string         `json:"Name"`       // Name of the service.
+	StartTime  string         `json:"StartTime"`  // Default start time of the service orders in ISO 8601 duration format.
+	EndTime    string         `json:"EndTime"`    // Default end time of the service orders in ISO 8601 duration format.
+	Promotions Promotions     `json:"Promotions"` // Promotions of the service.
+	Type       ServiceType    `json:"Type"`       // Type of the service
+	Options    ServiceOptions `json:"Options"`    // Options of the service
+	Data       ServiceData    `json:"Data"`       // Additional information about the specific service
 }
 
 func (s *APIService) NewAllRequest() *AllRequest {
