@@ -49,7 +49,7 @@ type AllRequest struct {
 	EnterpriseIDs    []string                   `json:"EnterpriseIDs,omitempty"`
 	OrderItemIDS     []string                   `json:"OrderItemIds,omitempty"`
 	ServiceOrderIDs  []string                   `json:"ServiceOrderIds,omitempty"`
-	ServiceIDsss     []string                   `json:"ServiceIds,omitempty"`
+	ServiceIDs       []string                   `json:"ServiceIds,omitempty"`
 	BillIDs          []string                   `json:"BillIDs,omitempty"`
 	CreatedUTC       configuration.TimeInterval `json:"CreatedUtc,omitempty"`
 	UpdatedUTC       configuration.TimeInterval `json:"UpdatedUtc,omitempty"`
