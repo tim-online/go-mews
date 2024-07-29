@@ -39,10 +39,10 @@ func (s *APIService) NewFeaturesAllRequest() *FeaturesAllRequest {
 type FeaturesAllRequest struct {
 	json.BaseRequest
 
-	ResourceCategoryIDs []string                   `json:"ResourceCategoryIds,omitempty"` // Unique identifiers of Resource categories.
-	ServiceIDs          []string                   `json:"ServiceIds,omitempty"`          // Unique identifiers of Services to which the resource categories belong.
-	UpdatedUTC          configuration.TimeInterval `json:"UpdatedUtc,omitempty"`          // Interval in which the resource categories were updated.
-	ActivityStates      ActivityStates             `json:"ActivityStates,omitempty"`      // Whether to return only active, only deleted or both records.
+	ServiceIDs         []string                   `json:"ServiceIds,omitempty"`         // Unique identifiers of Services to which the resource features belong.
+	ResourceFeatureIDs []string                   `json:"ResourceFeatureIds,omitempty"` // Unique identifiers of Resource features.
+	UpdatedUTC         configuration.TimeInterval `json:"UpdatedUtc,omitempty"`         // Interval in which the resource features were updated.
+	ActivityStates     ActivityStates             `json:"ActivityStates,omitempty"`     // Whether to return only active, only deleted or both records.
 }
 
 func (r FeaturesAllRequest) MarshalJSON() ([]byte, error) {
@@ -50,14 +50,14 @@ func (r FeaturesAllRequest) MarshalJSON() ([]byte, error) {
 }
 
 type FeaturesAllResponse struct {
-	ResourceFeatures ResourceFeatures `json:"ResourceCategories"`
-	Cursor           string           `json:"Cursor"` // Unique identifier of the last and hence oldest resource category returned. This can be used in Limitation in a subsequent request to fetch the next batch of older resource categories.
+	ResourceFeatures ResourceFeatures `json:"ResourceFeatures"`
+	Cursor           string           `json:"Cursor"` // Unique identifier of the last and hence oldest resource feature returned. This can be used in Limitation in a subsequent request to fetch the next batch of older resource features.
 }
 
 type ResourceFeatures []ResourceFeature
 
 type ResourceFeature struct {
-	ID             string                 `json:"Id"`             // Unique identifier of the category.
+	ID             string                 `json:"Id"`             // Unique identifier of the feature.
 	ServiceID      string                 `json:"ServiceId"`      // Unique identifier of the Service.
 	IsActive       bool                   `json:"IsActive"`       // Whether the resource feature is still active.
 	Classification ResourceClassification `json:"Classification"` // Classification of the feature.
