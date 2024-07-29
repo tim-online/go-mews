@@ -1,6 +1,9 @@
 package accountingcategories
 
-import "github.com/tim-online/go-mews/json"
+import (
+	"github.com/tim-online/go-mews/configuration"
+	"github.com/tim-online/go-mews/json"
+)
 
 const (
 	endpointAll = "accountingCategories/getAll"
@@ -38,6 +41,12 @@ func (s *Service) NewAllRequest() *AllRequest {
 
 type AllRequest struct {
 	json.BaseRequest
+
+	EnterpriseIDs         []string                    `json:"EnterpriseIds,omitempty"`         // Unique identifiers of the Enterprises. If not specified, the operation returns data for all enterprises within scope of the Access Token.
+	AccountingCategoryIDs []string                    `json:"AccountingCategoryIds,omitempty"` // Unique identifiers of the requested Accounting categories.
+	UpdatedUTC            *configuration.TimeInterval `json:"UpdatedUtc,omitempty"`            // Interval in which Accounting category was updated.
+	ActivityStates        []string                    `json:"ActivityStates,omitempty"`        // Whether to return only active, only deleted or both records.
+	Limitation            json.Limitation             `json:"Limitation,omitempty"`
 }
 
 type AccountingCategory struct {
