@@ -33,6 +33,7 @@ func (s *Service) All(requestBody *AllRequest) (*AllResponse, error) {
 
 type AllResponse struct {
 	AccountingCategories []AccountingCategory
+	Cursor               string `json:"Cursor"`
 }
 
 func (s *Service) NewAllRequest() *AllRequest {
