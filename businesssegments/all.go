@@ -42,6 +42,7 @@ type AllRequest struct {
 	ServiceIDs     []string                    `json:"ServiceIds,omitempty"`     // Unique identifiers of the Services from which the business segments are requested.
 	UpdatedUTC     *configuration.TimeInterval `json:"UpdatedUtc,omitempty"`     // Interval in which Business segment was updated.
 	ActivityStates ActivityStates              `json:"ActivityStates,omitempty"` // Whether to return only active, only deleted or both records.
+	Limitation     json.Limitation             `json:"Limitation,omitempty"`
 }
 
 type ActivityStates []ActivityState
@@ -50,6 +51,7 @@ type ActivityState string
 
 type AllResponse struct {
 	BusinessSegments BusinessSegments `json:"BusinessSegments"`
+	Cursor           string           `json:"Cursor"`
 }
 
 type BusinessSegments []BusinessSegment
