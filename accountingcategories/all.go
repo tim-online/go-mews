@@ -47,7 +47,7 @@ type AllRequest struct {
 	AccountingCategoryIDs []string                    `json:"AccountingCategoryIds,omitempty"` // Unique identifiers of the requested Accounting categories.
 	UpdatedUTC            *configuration.TimeInterval `json:"UpdatedUtc,omitempty"`            // Interval in which Accounting category was updated.
 	ActivityStates        []string                    `json:"ActivityStates,omitempty"`        // Whether to return only active, only deleted or both records.
-	Limitation            json.Limitation             `json:"Limitation,omitempty"`
+	Limitation            *json.Limitation            `json:"Limitation,omitempty"`
 }
 
 type AccountingCategory struct {
