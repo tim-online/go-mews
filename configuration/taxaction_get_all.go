@@ -59,7 +59,7 @@ type TaxRate struct {
 }
 
 type TaxRateStrategy struct {
-	Discriminator TaxRateStrategyDiscriminator `json:"TaxRateStrategyDiscriminator"` // If tax rate is flat or relative.
+	Discriminator TaxRateStrategyDiscriminator `json:"Discriminator"` // If tax rate is flat or relative.
 	// Value         interface{}                  `json:"Value"`                        // Structure of the object depends on Tax rate strategy discriminator.
 	Value FlatTaxRateStrategyData `json:"Value"` // Structure of the object depends on Tax rate strategy discriminator.
 }
