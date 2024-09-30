@@ -38,7 +38,7 @@ func (s *Service) NewAllRequest() *AllRequest {
 
 type AllRequest struct {
 	base.BaseRequest
-	EnterpriseIDs []string                   `json:"EnterpriseIds"` // Unique identifiers of the Enterprises. If not specified, the operation returns data for all enterprises within scope of the Access Token.
+	EnterpriseIDs []string                   `json:"EnterpriseIds,omitempty"` // Unique identifiers of the Enterprises. If not specified, the operation returns data for all enterprises within scope of the Access Token.
 	LedgerTypes   []LedgerType               `json:"LedgerTypes"`
 	Date          configuration.DateInterval `json:"Date,omitempty"` // Interval in which Credit card was updated.
 	Limitation    base.Limitation            `json:"Limitation,omitempty"`
