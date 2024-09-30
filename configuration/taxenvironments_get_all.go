@@ -1,6 +1,10 @@
 package configuration
 
-import "github.com/tim-online/go-mews/json"
+import (
+	"time"
+
+	"github.com/tim-online/go-mews/json"
+)
 
 const (
 	endpointTaxenvironmentsGetAll = "taxenvironments/getAll"
@@ -40,10 +44,17 @@ type TaxenvironmentsGetAllResponse struct {
 type TaxEnvironments []TaxEnvironment
 
 type TaxEnvironment struct {
-	Code        string `json:"Code"`        // Code of the tax environment.
-	CountryCode string `json:"CountryCode"` // ISO 3166-1 alpha-3 code, e.g. USA or GBR.
+	Code             string        `json:"Code"`             // Code of the tax environment.
+	CountryCode      string        `json:"CountryCode"`      // ISO 3166-1 alpha-3 code, e.g. USA or GBR.
+	TaxationCodes    TaxationCodes `json:"TaxationCodes"`    // Codes of the Taxations that are used by this environment.
+	ValidityStartUtc time.Time     `json:"ValidityStartUtc"` // If specified, marks the start of the validity interval in UTC timezone in ISO 8601 format.
+	ValidityEndUtc   time.Time     `json:"ValidityEndUtc"`   // If specified, marks the end of the validity interval in UTC timezone in ISO 8601 format.
 
 }
+
+type TaxationCodes []string
+
+type TaxationCode string
 
 func (s *Service) NewTaxenvironmentsGetAllRequest() *TaxenvironmentsGetAllRequest {
 	return &TaxenvironmentsGetAllRequest{}
