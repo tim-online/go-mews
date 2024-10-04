@@ -58,8 +58,9 @@ type AllResponse struct {
 }
 
 type CompanyOptions struct {
-	Invoiceable       bool `json:"Invoiceable"`
-	AddFeesToInvoices bool `json:"AddFeesToInvoices"`
+	Invoiceable                     bool `json:"Invoiceable"`
+	AddFeesToInvoices               bool `json:"AddFeesToInvoices"`
+	AddTaxDeductedPaymentToInvoices bool `json:"AddTaxDeductedPaymentToInvoices"` // Whether tax-deducted payments should be automatically added to invoices.
 }
 
 type Companies []Company
