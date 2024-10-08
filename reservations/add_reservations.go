@@ -41,6 +41,7 @@ func (s *APIService) NewAddRequest() *AddRequest {
 type AddRequest struct {
 	json.BaseRequest
 
+	EnterpriseId           string                 `json:"EnterpriseId"`                     // Unique identifier of the enterprise. Required when using Portfolio Access Tokens, ignored otherwise.
 	ServiceID              string                 `json:"ServiceId"`                        // Unique identifier of the Service to be reserved.
 	GroupID                string                 `json:"GroupId,omitempty"`                // Unique identifier of the Reservation group where the reservations are added. If not specified, a new group is created.
 	GroupName              string                 `json:"GroupName,omitempty"`              // Name of the Reservation group which the reservations are added to. If GroupId is specified, this field is ignored. If not specified, the group name is automatically created.
@@ -85,6 +86,9 @@ type AddRequestReservation struct {
 	CreditCardID        string `json:"CreditCardId,omitempty"`        // Identifier of Credit card belonging to Customer who owns the reservation.
 	AvailabilityBlockID string `json:"AvailabilityBlockId,omitempty"` // Unique identifier of the Availability block the reservation is assigned to.
 	VoucherCode         string `json:"VoucherCode,omitempty"`         // Voucher code value providing access to specified private Rate applied to this reservation.
+	ChannelNumber       string `json:"ChannelNumber,omitempty"`       // Channel number of the reservation.
+	BusinessSegmentID   string `json:"BusinessSegmentId,omitempty"`   // Identifier of the reservation BusinessSegment.
+	Origin              string `json:"Origin,omitempty"`              // Origin of the reservation.
 }
 
 func (r AddRequestReservation) MarshalJSON() ([]byte, error) {

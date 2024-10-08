@@ -134,6 +134,7 @@ type Amount struct {
 	NetValue   float64   `json:"NetValue"`   // Net value in case the item is taxed.
 	GrossValue float64   `json:"GrossValue"` // Gross value including all taxes.
 	TaxValues  TaxValues `json:"TaxValues"`  // The tax values applied.
+	TaxCodes   []string  `json:"TaxCodes"`   // Codes of Tax rates to be applied to the item. (Note, you can only define one tax when sending GrossValue. For multiple taxes, use NetValue)
 
 	// Deprecated?
 	Net     float64  `json:"Net"`     // Net value in case the item is taxed.
