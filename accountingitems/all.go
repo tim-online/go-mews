@@ -141,6 +141,7 @@ type AccountingItem struct {
 	ClosedUTC            time.Time             `json:"ClosedUtc"`              // Date and time of the item bill closure in UTC timezone in ISO 8601 format.
 	SubType              AccountingItemSubtype `json:"SubType"`                // subtype of the item. Note that the subtype depends on the Type of the item.
 	State                string                `json:"State"`
+	RebatedItemID        string                `json:"RebatedItemId"` // Unique identifier of Order item which has been rebated by current item.
 }
 
 type OrderItems []OrderItem
@@ -172,8 +173,8 @@ type PaymentItem struct {
 	OriginalAmount       Amount           `json:"OriginalAmount"`       // Amount of item; note a negative amount represents a rebate or payment. Contains the earliest known value in conversion chain.
 	Notes                string           `json:"Notes"`                // Additional notes.
 	SettlementID         string           `json:"SettlementId"`         // Identifier of the settled payment from the external system (ApplePay/GooglePay).
-	ConsumedUTC          time.Time           `json:"ConsumedUtc"`          // Date and time of the item consumption in UTC timezone in ISO 8601 format.
-	ClosedUTC            time.Time           `json:"ClosedUtc"`            // Date and time of the item bill closure in UTC timezone in ISO 8601 format.
+	ConsumedUTC          time.Time        `json:"ConsumedUtc"`          // Date and time of the item consumption in UTC timezone in ISO 8601 format.
+	ClosedUTC            time.Time        `json:"ClosedUtc"`            // Date and time of the item bill closure in UTC timezone in ISO 8601 format.
 	AccountingState      AccountingState  `json:"AccountingState"`      // Accounting state of the item.
 	State                PaymentItemState `json:"State"`                // Payment state of the item.
 	Data                 PaymentItemData  `json:"Data"`                 // Additional data specific to particular payment item.
