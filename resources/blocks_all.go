@@ -5,6 +5,7 @@ import (
 
 	"github.com/tim-online/go-mews/configuration"
 	"github.com/tim-online/go-mews/json"
+	base "github.com/tim-online/go-mews/json"
 	"github.com/tim-online/go-mews/omitempty"
 )
 
@@ -40,6 +41,7 @@ func (s *APIService) NewBlocksAllRequest() *BlocksAllRequest {
 
 type BlocksAllRequest struct {
 	json.BaseRequest
+	Limitation base.Limitation `json:"Limitation,omitempty"`
 
 	ResourceBlockIDs    []string                   `json:"ResourceBlockIds"`       // Unique identifiers of the requested Resource blocks.
 	AssignedResourceIDs []string                   `json:"AssignedResourceIds"`    // Unique identifiers of the requested Assigned Resources.
