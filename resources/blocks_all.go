@@ -43,12 +43,12 @@ type BlocksAllRequest struct {
 	json.BaseRequest
 	Limitation base.Limitation `json:"Limitation,omitempty"`
 
-	ResourceBlockIDs    []string                   `json:"ResourceBlockIds"`       // Unique identifiers of the requested Resource blocks.
-	AssignedResourceIDs []string                   `json:"AssignedResourceIds"`    // Unique identifiers of the requested Assigned Resources.
-	CollidingUTC        configuration.TimeInterval `json:"CollidingUtc,omitempty"` // Interval in which the Resource block is active.
-	CreatedUTC          configuration.TimeInterval `json:"CreatedUtc,omitempty"`   // Interval in which the Resource block was created.
-	UpdatedUTC          configuration.TimeInterval `json:"UpdatedUtc,omitempty"`   // Interval in which the Resource block was updated.
-	Extent              ResourceBlockExtent        `json:"Extent,omitempty"`       // Extent of data to be returned.
+	ResourceBlockIDs    []string                   `json:"ResourceBlockIds,omitempty"`    // Unique identifiers of the requested Resource blocks.
+	AssignedResourceIDs []string                   `json:"AssignedResourceIds,omitempty"` // Unique identifiers of the requested Assigned Resources.
+	CollidingUTC        configuration.TimeInterval `json:"CollidingUtc,omitempty"`        // Interval in which the Resource block is active.
+	CreatedUTC          configuration.TimeInterval `json:"CreatedUtc,omitempty"`          // Interval in which the Resource block was created.
+	UpdatedUTC          configuration.TimeInterval `json:"UpdatedUtc,omitempty"`          // Interval in which the Resource block was updated.
+	Extent              ResourceBlockExtent        `json:"Extent,omitempty"`              // Extent of data to be returned.
 }
 
 func (r BlocksAllRequest) MarshalJSON() ([]byte, error) {
