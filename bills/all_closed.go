@@ -62,7 +62,7 @@ type Bill struct {
 	VariableSymbol        string                     `json:"VariableSymbol"`        // Unique identifier of the bill.
 	IssuedUTC             time.Time                  `json:"IssuedUtc"`             // Date and time of the bill issuance in UTC timezone in ISO 8601 format.
 	TaxedUTC              base.Date                  `json:"TaxedUtc"`              // Taxation date of the bill in UTC timezone in ISO 8601 format.
-	DueUTC                time.Time                  `json:"DueUtc"`                // Bill due date and time in UTC timezone in ISO 8601 format.
+	DueUTC                *time.Time                 `json:"DueUtc"`                // Bill due date and time in UTC timezone in ISO 8601 format.
 	Notes                 string                     `json:"Notes"`                 // Additional notes.
 	OrderItems            accountingitems.OrderItems `json:"OrderItems"`            // The revenue items on the bill.
 	Revenue               Revenue                    `json:"Revenue"`               // The revenue items on the bill.
