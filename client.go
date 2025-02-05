@@ -12,6 +12,7 @@ import (
 	"github.com/tim-online/go-mews/cashiertransactions"
 	"github.com/tim-online/go-mews/commands"
 	"github.com/tim-online/go-mews/companies"
+	"github.com/tim-online/go-mews/companionships"
 	"github.com/tim-online/go-mews/configuration"
 	"github.com/tim-online/go-mews/countries"
 	"github.com/tim-online/go-mews/creditcards"
@@ -83,6 +84,8 @@ func NewClient(httpClient *http.Client, accessToken string, clientToken string) 
 	c.AccountingCategories.Client = c.client
 	c.Companies = companies.NewService()
 	c.Companies.Client = c.client
+	c.Companionships = companionships.NewService()
+	c.Companionships.Client = c.client
 	c.Countries = countries.NewService()
 	c.Countries.Client = c.client
 	c.Customers = customers.NewService()
@@ -139,6 +142,7 @@ type Client struct {
 	OutletItems          *outletitems.Service
 	AccountingCategories *accountingcategories.Service
 	Companies            *companies.Service
+	Companionships       *companionships.Service
 	Countries            *countries.Service
 	Customers            *customers.Service
 	Outlets              *outlets.APIService
